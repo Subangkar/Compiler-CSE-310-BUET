@@ -14,7 +14,9 @@ ScopeTable::ScopeTable(ScopeTable *parentScope) {
 
 ScopeTable::ScopeTable(ScopeTable *parentScope, int id) : parentScope(parentScope), id(id) {}
 
-ScopeTable::~ScopeTable() = default;
+ScopeTable::~ScopeTable(){
+
+};
 
 ScopeTable *ScopeTable::getParentScope() const {
 	return parentScope;

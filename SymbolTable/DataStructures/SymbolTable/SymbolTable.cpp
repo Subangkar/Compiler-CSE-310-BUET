@@ -4,7 +4,12 @@
 
 #include "SymbolTable.h"
 
-SymbolTable::SymbolTable() {}
+SymbolTable::SymbolTable() {
+	max_id = EOF;
+	currentScope = NULL;
+
+	EnterScope();
+}
 
 SymbolTable::~SymbolTable() {
 
