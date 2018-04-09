@@ -4,6 +4,7 @@
 
 #include <cmath>
 #include "SymbolInfo.h"
+
 using std::abs;
 
 const string &SymbolInfo::getName() const {

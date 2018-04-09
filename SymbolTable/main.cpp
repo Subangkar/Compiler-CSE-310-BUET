@@ -4,7 +4,6 @@
 #include "DataStructures/ScopeTable/ScopeTable.h"
 
 
-#include "DataTypes/SymbolInfo/SymbolInfo.h"
 #include "DataStructures/SymbolTable/SymbolTable.h"
 
 using namespace std;
@@ -232,6 +231,7 @@ int main() {
 	freopen("input.txt", "r", stdin);
 	freopen("output.txt", "w", stdout);
 	symbolTableTest();
+
 
 	return 0;
 }

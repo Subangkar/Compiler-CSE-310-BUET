@@ -25,6 +25,7 @@ SymbolTable::~SymbolTable() {
 	}
 }
 
+
 void SymbolTable::EnterScope() {
 	ScopeTable *scopeTable = new ScopeTable(currentScope, max_id + 1, tableSize);
 	currentScope = scopeTable;

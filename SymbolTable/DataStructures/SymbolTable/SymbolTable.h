@@ -35,6 +35,7 @@ public:
 
 	SymbolInfo *LookUp(const string &symbol);
 
+
 	void printCurrentScope();
 
 	void printAllScope();

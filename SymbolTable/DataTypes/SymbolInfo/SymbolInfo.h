@@ -2,15 +2,17 @@
 // Created by SubangkarKr on 07-Apr-18.
 //
 
+#ifndef SYMBOLTABLE_SYMBOLINFO_H
+#define SYMBOLTABLE_SYMBOLINFO_H
+
+
+
 #include <string>
 #include <ostream>
 #include "../TypeDefn.h"
 
 using std::string;
 
-
-#ifndef SYMBOLTABLE_SYMBOLINFO_H
-#define SYMBOLTABLE_SYMBOLINFO_H
 
 
 class SymbolInfo {
