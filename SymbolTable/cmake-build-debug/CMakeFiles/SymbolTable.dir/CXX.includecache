@@ -55,6 +55,8 @@ SymbolTable.h
 C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/DataStructures/SymbolTable/SymbolTable.h
 
 C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/DataStructures/SymbolTable/SymbolTable.h
+../ScopeTable/ScopeTable.h
+C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/DataStructures/ScopeTable/ScopeTable.h
 
 C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/DataTypes/SymbolInfo/SymbolInfo.cpp
 cmath
@@ -77,20 +79,12 @@ ostream
 C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/main.cpp
 iostream
 -
-string
--
 cmath
 -
 DataStructures/ScopeTable/ScopeTable.h
 C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/DataStructures/ScopeTable/ScopeTable.h
 DataTypes/SymbolInfo/SymbolInfo.h
 C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/DataTypes/SymbolInfo/SymbolInfo.h
-DataStructures/HashTable/HashTable.h
-C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/DataStructures/HashTable/HashTable.h
-DataStructures/HashTable/HashTable.cpp
-C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/DataStructures/HashTable/HashTable.cpp
-DataStructures/LinkedList/LinkedList.h
-C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/DataStructures/LinkedList/LinkedList.h
-DataStructures/LinkedList/LinkedList.cpp
-C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/DataStructures/LinkedList/LinkedList.cpp
+DataStructures/SymbolTable/SymbolTable.h
+C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/DataStructures/SymbolTable/SymbolTable.h
 

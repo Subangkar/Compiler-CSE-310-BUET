@@ -14,8 +14,9 @@ ScopeTable::ScopeTable(ScopeTable *parentScope) {
 
 ScopeTable::ScopeTable(ScopeTable *parentScope, int id) : parentScope(parentScope), id(id) {}
 
-ScopeTable::~ScopeTable(){
-
+ScopeTable::~ScopeTable() {
+	id = -1;
+	parentScope = NULL;
 };
 
 ScopeTable *ScopeTable::getParentScope() const {
@@ -51,7 +52,7 @@ bool ScopeTable::Delete(const string &symbol) {
 }
 
 void ScopeTable::Print() {
-	cout << "Scope #" << id << endl;
+	cout << " ScopeTable # " << id << endl;
 	printTable();
 }
 
