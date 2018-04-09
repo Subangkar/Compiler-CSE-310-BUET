@@ -163,12 +163,47 @@ void symInfo_httest()
 	cout<<*s<<endl;
 }
 
+void scopeTableTest()
+{
+	ScopeTable st;
+
+	st.Insert("x","int");
+	st.Insert("name","char*");
+
+	cout<<*st.LookUp("x")<<endl;
+	if(st.LookUp("y"))
+	{
+		cout<<*st.LookUp("y")<<endl;
+	}
+	st.Insert("y","int");
+	if(st.LookUp("y"))
+	{
+		cout<<*st.LookUp("y")<<endl;
+	}
+	st.Insert("x","char");
+	if(st.LookUp("x"))
+	{
+		cout<<*st.LookUp("x")<<endl;
+	}
+	st.Delete("x");
+	if(st.LookUp("x"))
+	{
+		cout<<*st.LookUp("x")<<endl;
+	}
+	st.Insert("x","array");
+	if(st.LookUp("x"))
+	{
+		cout<<*st.LookUp("x")<<endl;
+	}
+}
+
+
 int main() {
 //    std::cout << "Hello, World!" << std::endl;
 
 //    ScopeTable scopeTable;
 
-	symInfo_httest();
+	scopeTableTest();
 
 
     return 0;

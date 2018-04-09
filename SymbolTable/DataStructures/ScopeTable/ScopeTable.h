@@ -20,7 +20,7 @@ class ScopeTable : private HashTable<SymbolInfo> {
 
 public:
 
-	explicit ScopeTable(ScopeTable *parentScope = NULL);
+	explicit ScopeTable(ScopeTable *parentScope = nullptr);
 
 	ScopeTable(ScopeTable *parentScope, int id);
 
@@ -37,6 +37,7 @@ public:
 
 
 	bool Insert(const SymbolInfo &s);
+	bool Insert(const string& name,const string& type);
 
 	// returns the original data pointer if exists otherwise NULL
 	SymbolInfo *LookUp(const SymbolInfo &symbol);
