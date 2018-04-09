@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="SymbolTable"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/PROGRA~2/CODEBL~1/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="C:/PROGRA~2/CODEBL~1/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/PROGRA~2/CODEBL~1/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/PROGRA~2/CODEBL~1/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="SymbolTable">
+				<Option output="C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/cmake-build-debug/SymbolTable.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="C:/Program Files (x86)/CodeBlocks/MinGW/bin/../lib/gcc/mingw32/4.9.2/include/c++"/>
+					<Add directory="C:/Program Files (x86)/CodeBlocks/MinGW/bin/../lib/gcc/mingw32/4.9.2/include/c++/mingw32"/>
+					<Add directory="C:/Program Files (x86)/CodeBlocks/MinGW/bin/../lib/gcc/mingw32/4.9.2/include/c++/backward"/>
+					<Add directory="C:/Program Files (x86)/CodeBlocks/MinGW/bin/../lib/gcc/mingw32/4.9.2/include"/>
+					<Add directory="C:/Program Files (x86)/CodeBlocks/MinGW/bin/../lib/gcc/mingw32/4.9.2/../../../../include"/>
+					<Add directory="C:/Program Files (x86)/CodeBlocks/MinGW/bin/../lib/gcc/mingw32/4.9.2/include-fixed"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="C:/PROGRA~2/CODEBL~1/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/cmake-build-debug/Makefile&quot;  VERBOSE=1 SymbolTable"/>
+					<CompileFile command="C:/PROGRA~2/CODEBL~1/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/PROGRA~2/CODEBL~1/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/PROGRA~2/CODEBL~1/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="SymbolTable/fast">
+				<Option output="C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/cmake-build-debug/SymbolTable.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="C:/Program Files (x86)/CodeBlocks/MinGW/bin/../lib/gcc/mingw32/4.9.2/include/c++"/>
+					<Add directory="C:/Program Files (x86)/CodeBlocks/MinGW/bin/../lib/gcc/mingw32/4.9.2/include/c++/mingw32"/>
+					<Add directory="C:/Program Files (x86)/CodeBlocks/MinGW/bin/../lib/gcc/mingw32/4.9.2/include/c++/backward"/>
+					<Add directory="C:/Program Files (x86)/CodeBlocks/MinGW/bin/../lib/gcc/mingw32/4.9.2/include"/>
+					<Add directory="C:/Program Files (x86)/CodeBlocks/MinGW/bin/../lib/gcc/mingw32/4.9.2/../../../../include"/>
+					<Add directory="C:/Program Files (x86)/CodeBlocks/MinGW/bin/../lib/gcc/mingw32/4.9.2/include-fixed"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="C:/PROGRA~2/CODEBL~1/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/cmake-build-debug/Makefile&quot;  VERBOSE=1 SymbolTable/fast"/>
+					<CompileFile command="C:/PROGRA~2/CODEBL~1/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/PROGRA~2/CODEBL~1/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/PROGRA~2/CODEBL~1/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/PROGRA~2/CODEBL~1/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="C:/PROGRA~2/CODEBL~1/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/PROGRA~2/CODEBL~1/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/PROGRA~2/CODEBL~1/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/PROGRA~2/CODEBL~1/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="C:/PROGRA~2/CODEBL~1/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/PROGRA~2/CODEBL~1/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/PROGRA~2/CODEBL~1/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/Data/Const.h">
+			<Option target="SymbolTable"/>
+		</Unit>
+		<Unit filename="C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/DataStructures/HashTable/HashTable.cpp">
+			<Option target="SymbolTable"/>
+		</Unit>
+		<Unit filename="C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/DataStructures/HashTable/HashTable.h">
+			<Option target="SymbolTable"/>
+		</Unit>
+		<Unit filename="C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/DataStructures/LinkedList/LinkedList.cpp">
+			<Option target="SymbolTable"/>
+		</Unit>
+		<Unit filename="C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/DataStructures/LinkedList/LinkedList.h">
+			<Option target="SymbolTable"/>
+		</Unit>
+		<Unit filename="C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/DataStructures/ScopeTable/ScopeTable.cpp">
+			<Option target="SymbolTable"/>
+		</Unit>
+		<Unit filename="C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/DataStructures/ScopeTable/ScopeTable.h">
+			<Option target="SymbolTable"/>
+		</Unit>
+		<Unit filename="C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/DataStructures/SymbolTable/SymbolTable.cpp">
+			<Option target="SymbolTable"/>
+		</Unit>
+		<Unit filename="C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/DataStructures/SymbolTable/SymbolTable.h">
+			<Option target="SymbolTable"/>
+		</Unit>
+		<Unit filename="C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/DataTypes/SymbolInfo/SymbolInfo.cpp">
+			<Option target="SymbolTable"/>
+		</Unit>
+		<Unit filename="C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/DataTypes/SymbolInfo/SymbolInfo.h">
+			<Option target="SymbolTable"/>
+		</Unit>
+		<Unit filename="C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/DataTypes/TypeDefn.h">
+			<Option target="SymbolTable"/>
+		</Unit>
+		<Unit filename="C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/main.cpp">
+			<Option target="SymbolTable"/>
+		</Unit>
+		<Unit filename="C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>
