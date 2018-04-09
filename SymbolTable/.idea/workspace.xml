@@ -11,18 +11,8 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="62ca0814-d530-4c9a-a079-721a3fea9fa3" name="Default" comment="Position for ScopeTable @ SymbolTable">
+    <list default="true" id="62ca0814-d530-4c9a-a079-721a3fea9fa3" name="Default" comment="Position Done for ScopeTable @ SymbolTable">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Data/Const.h" beforeDir="false" afterPath="$PROJECT_DIR$/Data/Const.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataStructures/HashTable/HashTable.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/DataStructures/HashTable/HashTable.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataStructures/HashTable/HashTable.h" beforeDir="false" afterPath="$PROJECT_DIR$/DataStructures/HashTable/HashTable.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataStructures/LinkedList/LinkedList.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/DataStructures/LinkedList/LinkedList.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataStructures/LinkedList/LinkedList.h" beforeDir="false" afterPath="$PROJECT_DIR$/DataStructures/LinkedList/LinkedList.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataStructures/ScopeTable/ScopeTable.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/DataStructures/ScopeTable/ScopeTable.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataStructures/ScopeTable/ScopeTable.h" beforeDir="false" afterPath="$PROJECT_DIR$/DataStructures/ScopeTable/ScopeTable.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataTypes/TypeDefn.h" beforeDir="false" afterPath="$PROJECT_DIR$/DataTypes/TypeDefn.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/SymbolTable.dir/objects.a" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/SymbolTable.dir/objects.a" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -38,8 +28,8 @@
       <file leaf-file-name="main.cpp" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="308">
-              <caret line="201" column="31" selection-start-line="201" selection-start-column="31" selection-end-line="201" selection-end-column="31" />
+            <state relative-caret-position="198">
+              <caret line="207" lean-forward="true" selection-start-line="207" selection-end-line="207" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
                 <element signature="e#832#1138#0" />
@@ -93,7 +83,7 @@
         <entry file="file://$PROJECT_DIR$/DataTypes/TypeDefn.h">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="145">
-              <caret line="31" lean-forward="true" selection-start-line="31" selection-end-line="31" />
+              <caret line="29" lean-forward="true" selection-start-line="29" selection-end-line="29" />
               <folding>
                 <element signature="e#122#136#0" expanded="true" />
               </folding>
@@ -194,6 +184,11 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$/.." value="master" />
+      </map>
+    </option>
     <option name="PUSH_TAGS">
       <GitPushTagMode />
     </option>
@@ -345,7 +340,7 @@
       <workItem from="1523196725443" duration="8054000" />
       <workItem from="1523270913643" duration="13915000" />
       <workItem from="1523287056319" duration="378000" />
-      <workItem from="1523288360616" duration="5541000" />
+      <workItem from="1523288360616" duration="6083000" />
     </task>
     <task id="LOCAL-00001" summary="ScopeTable @ SymbolTable Done">
       <created>1523288743540</created>
@@ -361,11 +356,18 @@
       <option name="project" value="LOCAL" />
       <updated>1523289695085</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Position Done for ScopeTable @ SymbolTable">
+      <created>1523294814042</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1523294814042</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="31465000" />
+    <option name="totallyTimeSpent" value="32007000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
@@ -426,7 +428,10 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="ScopeTable @ SymbolTable Done" />
     <MESSAGE value="Position for ScopeTable @ SymbolTable" />
-    <option name="LAST_COMMIT_MESSAGE" value="Position for ScopeTable @ SymbolTable" />
+    <MESSAGE value="Position Done for ScopeTable @ SymbolTable" />
+    <option name="LAST_COMMIT_MESSAGE" value="Position Done for ScopeTable @ SymbolTable" />
+    <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
+    <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -787,7 +792,7 @@
     <entry file="file://$PROJECT_DIR$/DataTypes/TypeDefn.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="145">
-          <caret line="31" lean-forward="true" selection-start-line="31" selection-end-line="31" />
+          <caret line="29" lean-forward="true" selection-start-line="29" selection-end-line="29" />
           <folding>
             <element signature="e#122#136#0" expanded="true" />
           </folding>
@@ -796,8 +801,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/main.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="308">
-          <caret line="201" column="31" selection-start-line="201" selection-start-column="31" selection-end-line="201" selection-end-column="31" />
+        <state relative-caret-position="198">
+          <caret line="207" lean-forward="true" selection-start-line="207" selection-end-line="207" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
             <element signature="e#832#1138#0" />
