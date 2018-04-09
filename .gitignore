@@ -72,3 +72,5 @@ iOSInjectionProject/
 
 #Exclutable
 *.exe
+output.txt
+*.cpp.obj
