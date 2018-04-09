@@ -4,21 +4,19 @@
 #include "DataStructures/ScopeTable/ScopeTable.h"
 
 
-
 #include "DataTypes/SymbolInfo/SymbolInfo.h"
+#include "DataStructures/SymbolTable/SymbolTable.h"
 
 using namespace std;
 
 
-
-class A
-{
+class A {
 
 
 	string name;
 
 
-	int64_p reverseDigits( int64_p n ) const {
+	int64_p reverseDigits(int64_p n) const {
 		int64_p revN = 0;
 		while (n > 0) {
 			revN = revN * 10 + n % 10;
@@ -41,19 +39,18 @@ public:
 		return !(rhs == *this);
 	}
 
-	A(string s) : name(s){};
+	A(string s) : name(s) {};
 
-	int64_p hashValue() const
-	{
+	int64_p hashValue() const {
 		string key = this->name;
 
 		int64_p value = 0;
 
 		for (int i = 0; i < key.length(); i++) {
 			if (i % 2 == 0) {
-				value += abs( reverseDigits( key[i] ) ) * (int64_p) pow( 19 , i );
+				value += abs(reverseDigits(key[i])) * (int64_p) pow(19, i);
 			} else {
-				value += abs( (key[i]) * (int) pow( 23 , i ) );
+				value += abs((key[i]) * (int) pow(23, i));
 			}
 		}
 
@@ -62,52 +59,47 @@ public:
 };
 
 
+void string_lltest() {
+	LinkedList<string> ll;
 
+	string s = "abc";
+	ll.insert(s);
 
-void string_lltest()
-{
-    LinkedList<string> ll;
+	s = "def";
+	ll.insert(s);
 
-    string s = "abc";
-    ll.insert(s);
+	if (ll.search("de")) {
+		cout << "Found de" << endl;
+	}
+	if (ll.search("abc")) {
+		cout << "Found abc" << endl;
+	}
 
-    s="def";
-    ll.insert(s);
+	ll.remove("def");
+	if (ll.search("abc")) {
+		cout << "Found abc" << endl;
+	}
+	ll.remove("der");
+	ll.remove("abc");
+	if (ll.search("abc")) {
+		cout << "Found abc" << endl;
+	}
 
-    if(ll.search("de")){
-        cout<<"Found de"<<endl;
-    }
-    if(ll.search("abc")){
-        cout<<"Found abc"<<endl;
-    }
+	ll.Print();
 
-    ll.remove("def");
-    if(ll.search("abc")){
-        cout<<"Found abc"<<endl;
-    }
-    ll.remove("der");
-    ll.remove("abc");
-    if(ll.search("abc")){
-        cout<<"Found abc"<<endl;
-    }
+	ll.remove("abc");
+	ll.remove("de");
+	ll.search("abc");
 
-    ll.Print();
-
-    ll.remove("abc");
-    ll.remove("de");
-    ll.search("abc");
-
-    ll.insert("abc");
-    if(ll.search("abc")){
-        cout<<"Found abc"<<endl;
-    }
+	ll.insert("abc");
+	if (ll.search("abc")) {
+		cout << "Found abc" << endl;
+	}
 
 }
 
-void string_httest()
-{
+void string_httest() {
 	HashTable<A> hashTable;
-
 
 
 	hashTable.insert(A("av"));
@@ -116,10 +108,10 @@ void string_httest()
 	hashTable.insert(A("av"));
 	hashTable.insert(A("avd"));
 
-	cout<<hashTable.size()<<endl;
+	cout << hashTable.size() << endl;
 
 
-	cout<<hashTable.get().size()<<endl;
+	cout << hashTable.get().size() << endl;
 
 	hashTable.printTable();
 
@@ -130,66 +122,59 @@ void string_httest()
 	hashTable.insert(A("ave"));
 	hashTable.insert(A("asad"));
 
-	cout<<hashTable.size()<<endl;
+	cout << hashTable.size() << endl;
 
 
-	cout<<hashTable.get().size()<<endl;
+	cout << hashTable.get().size() << endl;
 
 	hashTable.printTable();
 
 
 }
 
-void symInfo_httest()
-{
+void symInfo_httest() {
 	HashTable<SymbolInfo> ht;
 
-	SymbolInfo sm = SymbolInfo("name","string");
+	SymbolInfo sm = SymbolInfo("name", "string");
 	ht.insert(sm);
 	sm = SymbolInfo("name");
 	ht.insert(sm);
 	ht.remove(sm);
-	ht.insert(SymbolInfo("name","array"));
+	ht.insert(SymbolInfo("name", "array"));
 
 	SymbolInfo *s = ht.get(SymbolInfo("name"));
 
 	//ht.printTable();
 //	string x = s->getName();
-	cout<<*s<<endl;
+	cout << *s << endl;
 }
 
-void scopeTableTest()
-{
+void scopeTableTest() {
 	ScopeTable st(NULL, 0, 7);
 
 	st.Insert("d", "int");
-	st.Insert("name","char*");
+	st.Insert("name", "char*");
 	st.Insert("n", "char*");
 	st.Insert("s", "char*");
 
-	if(st.LookUp("y"))
-	{
-		cout<<*st.LookUp("y")<<endl;
+	if (st.LookUp("y")) {
+		cout << *st.LookUp("y") << endl;
 	}
-	st.Insert("y","int");
-	if(st.LookUp("y"))
-	{
-		cout<<*st.LookUp("y")<<endl;
+	st.Insert("y", "int");
+	if (st.LookUp("y")) {
+		cout << *st.LookUp("y") << endl;
 	}
-	st.Insert("x","char");
-	if(st.LookUp("x"))
-	{
-		cout<<*st.LookUp("x")<<endl;
+	st.Insert("x", "char");
+	if (st.LookUp("x")) {
+		cout << *st.LookUp("x") << endl;
 	}
 	st.Delete("x");
-	if(st.LookUp("x"))
-	{
-		cout<<*st.LookUp("x")<<endl;
+	if (st.LookUp("x")) {
+		cout << *st.LookUp("x") << endl;
 	}
-	st.Insert("x","array");
-	if(st.LookUp("x"))
-	{
-		cout<<*st.LookUp("x")<<endl;
+	st.Insert("x", "array");
+	if (st.LookUp("x")) {
+		cout << *st.LookUp("x") << endl;
 	}
 
 	st.Print();
@@ -198,13 +183,55 @@ void scopeTableTest()
 }
 
 
+void symbolTableTest() {
+	int size = 0;
+	cin >> size;
+//	cout <<size<<endl;
+	SymbolTable *symbolTable = new SymbolTable(size);
+	string op, sym, typ;
+//	symbolTable->EnterScope();
+	while (cin >> op) {
+		if (op == "I") {
+			cin >> sym >> typ;
+			cout << endl << op << " " << sym << " " << typ << endl << endl;
+			symbolTable->Insert(sym, typ);
+		} else if (op == "D") {
+			cin >> sym;
+			cout << endl << op << " " << sym << " " << typ << endl << endl;
+			symbolTable->Remove(sym);
+		} else if (op == "L") {
+			cin >> sym;
+			cout << endl << op << " " << sym << " " << typ << endl << endl;
+			symbolTable->LookUp(sym);
+		} else if (op == "S") {
+			cout << endl << op << " " << sym << " " << typ << endl << endl;
+			symbolTable->EnterScope();
+		} else if (op == "E") {
+			cout << endl << op << " " << sym << " " << typ << endl << endl;
+			symbolTable->ExitScope();
+		} else if (op == "P") {
+			cin >> sym;
+			cout << endl << op << " " << sym << " " << typ << endl << endl;
+			if (sym == "A") symbolTable->printAllScope();
+			else if (sym == "C") symbolTable->printCurrentScope();
+		}
+
+		sym="";
+		typ="";
+	}
+	symbolTable->ExitScope();
+}
+
 int main() {
 //    std::cout << "Hello, World!" << std::endl;
 
 //    ScopeTable scopeTable;
 
-	scopeTableTest();
+//	scopeTableTest();
 
+	freopen("input.txt", "r", stdin);
+	freopen("output.txt", "w", stdout);
+	symbolTableTest();
 
-    return 0;
+	return 0;
 }

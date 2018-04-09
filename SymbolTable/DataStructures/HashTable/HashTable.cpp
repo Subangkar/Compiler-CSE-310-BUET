@@ -172,8 +172,9 @@ template<typename T>
 void HashTable<T>::printTable() {
 	for (int i = 0; i < arrSize; ++i) {
 
-		if (arr[i].length()) {
-			cout << i << " :: ";
+//		if (arr[i].length())
+		{
+			cout << " " << i << " --> ";
 
 			vector<T> vc = arr[i].get();
 

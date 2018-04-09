@@ -21,8 +21,16 @@ CMakeFiles/SymbolTable.dir/DataStructures/ScopeTable/ScopeTable.cpp.obj: ../Data
 CMakeFiles/SymbolTable.dir/DataStructures/ScopeTable/ScopeTable.cpp.obj: ../DataTypes/SymbolInfo/SymbolInfo.h
 CMakeFiles/SymbolTable.dir/DataStructures/ScopeTable/ScopeTable.cpp.obj: ../DataTypes/TypeDefn.h
 
+CMakeFiles/SymbolTable.dir/DataStructures/SymbolTable/SymbolTable.cpp.obj: ../Data/Const.h
+CMakeFiles/SymbolTable.dir/DataStructures/SymbolTable/SymbolTable.cpp.obj: ../DataStructures/HashTable/HashTable.cpp
+CMakeFiles/SymbolTable.dir/DataStructures/SymbolTable/SymbolTable.cpp.obj: ../DataStructures/HashTable/HashTable.h
+CMakeFiles/SymbolTable.dir/DataStructures/SymbolTable/SymbolTable.cpp.obj: ../DataStructures/LinkedList/LinkedList.cpp
+CMakeFiles/SymbolTable.dir/DataStructures/SymbolTable/SymbolTable.cpp.obj: ../DataStructures/LinkedList/LinkedList.h
+CMakeFiles/SymbolTable.dir/DataStructures/SymbolTable/SymbolTable.cpp.obj: ../DataStructures/ScopeTable/ScopeTable.h
 CMakeFiles/SymbolTable.dir/DataStructures/SymbolTable/SymbolTable.cpp.obj: ../DataStructures/SymbolTable/SymbolTable.cpp
 CMakeFiles/SymbolTable.dir/DataStructures/SymbolTable/SymbolTable.cpp.obj: ../DataStructures/SymbolTable/SymbolTable.h
+CMakeFiles/SymbolTable.dir/DataStructures/SymbolTable/SymbolTable.cpp.obj: ../DataTypes/SymbolInfo/SymbolInfo.h
+CMakeFiles/SymbolTable.dir/DataStructures/SymbolTable/SymbolTable.cpp.obj: ../DataTypes/TypeDefn.h
 
 CMakeFiles/SymbolTable.dir/DataTypes/SymbolInfo/SymbolInfo.cpp.obj: ../DataTypes/SymbolInfo/SymbolInfo.cpp
 CMakeFiles/SymbolTable.dir/DataTypes/SymbolInfo/SymbolInfo.cpp.obj: ../DataTypes/SymbolInfo/SymbolInfo.h
@@ -34,6 +42,7 @@ CMakeFiles/SymbolTable.dir/main.cpp.obj: ../DataStructures/HashTable/HashTable.h
 CMakeFiles/SymbolTable.dir/main.cpp.obj: ../DataStructures/LinkedList/LinkedList.cpp
 CMakeFiles/SymbolTable.dir/main.cpp.obj: ../DataStructures/LinkedList/LinkedList.h
 CMakeFiles/SymbolTable.dir/main.cpp.obj: ../DataStructures/ScopeTable/ScopeTable.h
+CMakeFiles/SymbolTable.dir/main.cpp.obj: ../DataStructures/SymbolTable/SymbolTable.h
 CMakeFiles/SymbolTable.dir/main.cpp.obj: ../DataTypes/SymbolInfo/SymbolInfo.h
 CMakeFiles/SymbolTable.dir/main.cpp.obj: ../DataTypes/TypeDefn.h
 CMakeFiles/SymbolTable.dir/main.cpp.obj: ../main.cpp

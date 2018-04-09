@@ -10,28 +10,34 @@
 
 class SymbolTable {
 
-	ScopeTable* currentScope;
+	ScopeTable *currentScope;
 
 	int max_id;
+	int64_p tableSize;
 
 public:
-    SymbolTable();
+	SymbolTable(int64_p size = HASH_TABLE_MAXSIZE);
 
-    virtual ~SymbolTable();
+	virtual ~SymbolTable();
 
 
-    void EnterScope();
-    void ExitScope();
+	void EnterScope();
 
-    bool Insert();
+	void ExitScope();
 
-    bool Remove();
+	bool Insert(const SymbolInfo &symbol);
 
-    SymbolInfo* LookUp(const string& symbol);
+	bool Insert(const string &name, const string &type);
 
-    void printCurrentScope();
+	bool Remove(const SymbolInfo &symbol);
 
-    void printAllScope();
+	bool Remove(const string &name);
+
+	SymbolInfo *LookUp(const string &symbol);
+
+	void printCurrentScope();
+
+	void printAllScope();
 
 };
 

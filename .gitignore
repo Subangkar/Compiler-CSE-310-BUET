@@ -68,4 +68,7 @@ iOSInjectionProject/
 
 
 #Object
-.obj
+
+
+#Exclutable
+*.exe

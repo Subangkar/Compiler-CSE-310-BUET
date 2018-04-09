@@ -63,7 +63,7 @@ int64_p SymbolInfo::hashValue() const {
 }
 
 std::ostream &operator<<(std::ostream &os, const SymbolInfo &info) {
-	os << "<" << info.name << " , " << info.type << "> ";
+	os << "<" << info.name << " : " << info.type << "> ";
 	return os;
 }
 
