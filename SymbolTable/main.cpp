@@ -219,7 +219,7 @@ void symbolTableTest() {
 		sym="";
 		typ="";
 	}
-	symbolTable->ExitScope();
+//	symbolTable->ExitScope();
 }
 
 int main() {

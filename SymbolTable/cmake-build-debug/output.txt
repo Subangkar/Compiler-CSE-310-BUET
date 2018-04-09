@@ -22,13 +22,14 @@ I 5 NUMBER
 P A 
 
  ScopeTable # 0
- 0 --> <foo : FUNCTION> <5 : NUMBER> 
+ 0 --> < foo : FUNCTION > < 5 : NUMBER > 
  1 --> 
  2 --> 
  3 --> 
- 4 --> <i : VAR> 
+ 4 --> < i : VAR > 
  5 --> 
  6 --> 
+
 
 D j 
 
@@ -41,13 +42,14 @@ D i
 P A 
 
  ScopeTable # 0
- 0 --> <foo : FUNCTION> <5 : NUMBER> 
+ 0 --> < foo : FUNCTION > < 5 : NUMBER > 
  1 --> 
  2 --> 
  3 --> 
  4 --> 
  5 --> 
  6 --> 
+
 
 S  
 
@@ -64,15 +66,16 @@ I == RELOP
 P A 
 
  ScopeTable # 1
- 0 --> <== : RELOP> 
+ 0 --> < == : RELOP > 
  1 --> 
  2 --> 
  3 --> 
- 4 --> <<= : RELOP> 
+ 4 --> < <= : RELOP > 
  5 --> 
  6 --> 
+
  ScopeTable # 0
- 0 --> <foo : FUNCTION> <5 : NUMBER> 
+ 0 --> < foo : FUNCTION > < 5 : NUMBER > 
  1 --> 
  2 --> 
  3 --> 
@@ -80,9 +83,47 @@ P A
  5 --> 
  6 --> 
 
+
 I <= RELOP
 
- <= already exists in current ScopeTable
+ < <= : RELOP >  already exists in current ScopeTable
+
+L 5 
+
+ Found in ScopeTable# 0 at position (0,1)
+
+I 5 D
+
+ Inserted in ScopeTable# 1 at position (0,1)
+
+I 5 I
+
+ < 5 : I >  already exists in current ScopeTable
+
+P A 
+
+ ScopeTable # 1
+ 0 --> < == : RELOP > < 5 : D > 
+ 1 --> 
+ 2 --> 
+ 3 --> 
+ 4 --> < <= : RELOP > 
+ 5 --> 
+ 6 --> 
+
+ ScopeTable # 0
+ 0 --> < foo : FUNCTION > < 5 : NUMBER > 
+ 1 --> 
+ 2 --> 
+ 3 --> 
+ 4 --> 
+ 5 --> 
+ 6 --> 
+
+
+D 5 
+
+ Deleted From ScopeTable# 1 at position (0,1)
 
 I foo FUNCTION
 
@@ -95,15 +136,16 @@ D ==
 P A 
 
  ScopeTable # 1
- 0 --> <foo : FUNCTION> 
+ 0 --> < foo : FUNCTION > 
  1 --> 
  2 --> 
  3 --> 
- 4 --> <<= : RELOP> 
+ 4 --> < <= : RELOP > 
  5 --> 
  6 --> 
+
  ScopeTable # 0
- 0 --> <foo : FUNCTION> <5 : NUMBER> 
+ 0 --> < foo : FUNCTION > < 5 : NUMBER > 
  1 --> 
  2 --> 
  3 --> 
@@ -111,8 +153,10 @@ P A
  5 --> 
  6 --> 
 
+
 E  
 
+ ScopeTable with id 1 removed
 
 I t t
 
@@ -125,10 +169,11 @@ I k k
 P A 
 
  ScopeTable # 0
- 0 --> <foo : FUNCTION> <5 : NUMBER> 
- 1 --> <k : k> 
- 2 --> <t : t> 
+ 0 --> < foo : FUNCTION > < 5 : NUMBER > 
+ 1 --> < k : k > 
+ 2 --> < t : t > 
  3 --> 
  4 --> 
  5 --> 
  6 --> 
+

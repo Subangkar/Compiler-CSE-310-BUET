@@ -13,6 +13,13 @@ I <= RELOP
 I == RELOP
 P A
 I <= RELOP
+L 5
+I 5
+D 5
+I 5
+I 5
+P A
+D 5
 I foo FUNCTION
 D ==
 P A

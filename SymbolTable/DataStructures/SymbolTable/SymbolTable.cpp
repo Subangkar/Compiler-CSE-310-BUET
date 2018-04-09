@@ -35,6 +35,7 @@ void SymbolTable::EnterScope() {
 void SymbolTable::ExitScope() {
 	if (currentScope) {
 		ScopeTable *p = currentScope->getParentScope();
+		cout << " ScopeTable with id " << currentScope->getId() << " removed" << endl;
 		delete currentScope;
 		currentScope = p;
 	}
@@ -44,7 +45,7 @@ bool SymbolTable::Insert(const SymbolInfo &symbol) {
 	HASH_POS symbolPos = currentScope->Insert(symbol);
 	if (symbolPos.isValid())
 		cout << " Inserted in ScopeTable# " << currentScope->getId() << " at position " << symbolPos << endl;
-	else cout << " " << symbol.getName() << " already exists in current ScopeTable" << endl;
+	else cout << " " << symbol << " already exists in current ScopeTable" << endl;
 	return symbolPos.isValid();
 }
 
@@ -92,6 +93,7 @@ void SymbolTable::printCurrentScope() {
 void SymbolTable::printAllScope() {
 	for (ScopeTable *scope = currentScope; scope; scope = scope->getParentScope()) {
 		scope->Print();
+		cout << endl;
 	}
 }
 
