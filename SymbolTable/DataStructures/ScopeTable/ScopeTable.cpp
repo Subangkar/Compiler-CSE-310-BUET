@@ -38,3 +38,20 @@ bool ScopeTable::Insert(const SymbolInfo &s) {
 	return insert(s);
 }
 
+SymbolInfo *ScopeTable::LookUp(const SymbolInfo &symbol) {
+	return get(symbol);
+}
+
+SymbolInfo *ScopeTable::LookUp(const string &symbol) {
+	return LookUp(SymbolInfo(symbol));
+}
+
+bool ScopeTable::Delete(const string &symbol) {
+	return remove(SymbolInfo(symbol));
+}
+
+void ScopeTable::Print() {
+	cout << "Scope #"<<id<<endl;
+	printTable();
+}
+
