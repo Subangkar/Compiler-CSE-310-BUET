@@ -24,6 +24,8 @@ public:
 
 	ScopeTable(ScopeTable *parentScope, int id);
 
+	ScopeTable(ScopeTable *parentScope, int id, int64_p size);
+
 	~ScopeTable() override;
 
 
@@ -36,8 +38,9 @@ public:
 	void setId(int id);
 
 
-	bool Insert(const SymbolInfo &s);
-	bool Insert(const string& name,const string& type);
+	HASH_POS Insert(const SymbolInfo &s);
+
+	HASH_POS Insert(const string &name, const string &type);
 
 	// returns the original data pointer if exists otherwise NULL
 	SymbolInfo *LookUp(const SymbolInfo &symbol);
@@ -48,6 +51,11 @@ public:
 	bool Delete(const string &symbol);
 
 	void Print();
+
+
+	HASH_POS GetPos(const string &key);
+
+	HASH_POS GetPos(const SymbolInfo &key);
 };
 
 

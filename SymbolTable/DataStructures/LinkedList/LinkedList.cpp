@@ -199,7 +199,7 @@ bool LinkedList<T>::Delete(const int &position) {
 }
 
 template<class T>
-int LinkedList<T>::Find(const T &value) const {
+int LinkedList<T>::findPos(const T &value) const {
 	int position = -1;
 
 	Node<T> *e = head;
@@ -238,12 +238,12 @@ bool LinkedList<T>::Insert(const T &value) {
 
 //template<class T>
 //bool LinkedList<T>::Delete(const T &value) {
-//    return Delete(Find(value));
+//    return Delete(findPos(value));
 //}
 
 template<class T>
 bool LinkedList<T>::remove(const T &value) {
-	return Delete(Find(value));
+	return Delete(findPos(value));
 }
 
 template<class T>
@@ -256,7 +256,7 @@ bool LinkedList<T>::insert(const T &value) {
 
 template<class T>
 bool LinkedList<T>::search(const T &value) const {
-//    return Find(value)!=-1;
+//    return findPos(value)!=-1;
 
 	for (Node<T> *e = head; e; e = e->GetNext()) {
 		if (e->GetValue() == value) {
@@ -290,7 +290,7 @@ T *LinkedList<T>::getData(const T &value) {
 }
 
 //template<class T>
-//int LinkedList<T>::Find(const T &value) const {
+//int LinkedList<T>::findPos(const T &value) const {
 //    int position = -1;
 //
 //    Node<T>* e = head;

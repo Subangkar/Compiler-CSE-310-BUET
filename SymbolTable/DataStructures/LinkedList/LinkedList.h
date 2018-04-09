@@ -13,7 +13,7 @@
 template<class T>
 class Node {
 public:
-    Node(const T &value) : data(value), next(NULL) {}
+	explicit Node(const T &value) : data(value), next(NULL) {}
 
     ~Node() {}
 
@@ -31,7 +31,7 @@ public:
     void Print() const { std::cout << data << std::endl; }
 
 private:
-    Node();  // Prevent calling the default ctor
+//    Node();  // Prevent calling the default ctor
 
     T data;
     Node<T> *next;
@@ -63,8 +63,8 @@ public:
 
     bool remove(const T& value);
 
-//    int  Find(const int& value) const;
-    int  Find(const T& value) const;
+//    int  findPos(const int& value) const;
+	int findPos(const T &value) const;
     bool search(const T& value) const;
 
 	// returns the original data pointer if exists otherwise NULL

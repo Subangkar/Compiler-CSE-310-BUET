@@ -6,7 +6,7 @@
 
 ScopeTable::ScopeTable(ScopeTable *parentScope) {
 
-	this->parentScope=parentScope;
+	this->parentScope = parentScope;
 
 	if (!parentScope) id = 0;
 	else id = parentScope->id + 1;
@@ -32,7 +32,7 @@ void ScopeTable::setId(int id) {
 	ScopeTable::id = id;
 }
 
-bool ScopeTable::Insert(const SymbolInfo &s) {
+HASH_POS ScopeTable::Insert(const SymbolInfo &s) {
 	return insert(s);
 }
 
@@ -49,11 +49,25 @@ bool ScopeTable::Delete(const string &symbol) {
 }
 
 void ScopeTable::Print() {
-	cout << "Scope #"<<id<<endl;
+	cout << "Scope #" << id << endl;
 	printTable();
 }
 
-bool ScopeTable::Insert(const string &name, const string &type) {
-	return Insert(SymbolInfo(name,type));
+HASH_POS ScopeTable::Insert(const string &name, const string &type) {
+	return Insert(SymbolInfo(name, type));
 }
+
+ScopeTable::ScopeTable(ScopeTable *parentScope, int id, int64_p size)
+		: HashTable(size), parentScope(parentScope), id(id) {}
+
+HASH_POS ScopeTable::GetPos(const string &key) {
+	return GetPos(SymbolInfo(key));
+}
+
+HASH_POS ScopeTable::GetPos(const SymbolInfo &key) {
+	return HASH_POS(getLOC(key), getPOS(key));
+}
+
+
+
 

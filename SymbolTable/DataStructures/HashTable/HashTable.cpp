@@ -26,24 +26,6 @@ int64_p HashTable<T>::hashFunc(const T &s) const //hash function (utilizes horne
 	return s.hashValue() % arrSize;
 }
 
-template<typename T>
-int HashTable<T>::getPrime(int n) const //return the smallest prime number >= 2*n
-{
-	int i = 2 * n;
-	while (!isPrime(i))
-		i++;
-	return i;
-}
-
-template<typename T>
-bool HashTable<T>::isPrime(int n) const //check whether n is prime, helper function for getPrime()
-{
-	bool isPrime = true;
-	for (int count = 2; count < n && isPrime; count++)
-		if (n % count == 0)
-			isPrime = false;
-	return isPrime;
-}
 
 template<typename T>
 void HashTable<T>::deepCopy(const HashTable &h) {
@@ -84,7 +66,7 @@ template<typename T>
 HashTable<T>::HashTable(
 		int n) //creates a hash table to store n items where the size of the array is the smallest prime number >= 2*n
 {
-	arrSize = getPrime(n);
+	arrSize = n;
 	arr = new LinkedList<T>[arrSize];
 	numOfItems = 0;
 }
@@ -157,14 +139,14 @@ double HashTable<T>::loadFactor() const //returns the load factor of the hash ta
 }
 
 template<typename T>
-bool HashTable<T>::insert(const T &s) {
+HASH_POS HashTable<T>::insert(const T &s) {
 	int64_p hash = hashFunc(s);
 
 	if (arr[hash].insert(s)) {
 		numOfItems++;
-		return true;
+		return HASH_POS(hash, arr[hash].length() - 1);
 	}
-	return false;
+	return HASH_POS(EOF, EOF);
 
 //	bool successOrFail = arr[hash].insert(s);
 //	if (successOrFail) numOfItems++;
@@ -213,6 +195,15 @@ T *HashTable<T>::get(const T &key) {
 
 }
 
+template<typename T>
+int64_t HashTable<T>::getLOC(const T &key) {
+	return arr[hashFunc(key)].search(key) ? hashFunc(key) : EOF;
+}
+
+template<typename T>
+int64_t HashTable<T>::getPOS(const T &key) {
+	return arr[hashFunc(key)].findPos(key);
+}
 
 
 #endif //SYMBOLTABLE_HASHTABLE_CPP

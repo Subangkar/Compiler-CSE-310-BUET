@@ -1,5 +1,4 @@
 #include <iostream>
-#include <string>
 #include <cmath>
 
 #include "DataStructures/ScopeTable/ScopeTable.h"
@@ -7,10 +6,6 @@
 
 
 #include "DataTypes/SymbolInfo/SymbolInfo.h"
-#include "DataStructures/HashTable/HashTable.h"
-#include "DataStructures/HashTable/HashTable.cpp"
-#include "DataStructures/LinkedList/LinkedList.h"
-#include "DataStructures/LinkedList/LinkedList.cpp"
 
 using namespace std;
 
@@ -165,12 +160,13 @@ void symInfo_httest()
 
 void scopeTableTest()
 {
-	ScopeTable st;
+	ScopeTable st(NULL, 0, 7);
 
-	st.Insert("x","int");
+	st.Insert("d", "int");
 	st.Insert("name","char*");
+	st.Insert("n", "char*");
+	st.Insert("s", "char*");
 
-	cout<<*st.LookUp("x")<<endl;
 	if(st.LookUp("y"))
 	{
 		cout<<*st.LookUp("y")<<endl;
@@ -195,6 +191,10 @@ void scopeTableTest()
 	{
 		cout<<*st.LookUp("x")<<endl;
 	}
+
+	st.Print();
+
+	cout << st.GetPos("t") << endl;
 }
 
 

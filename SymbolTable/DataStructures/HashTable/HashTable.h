@@ -28,11 +28,11 @@ class HashTable
 {
 public:
 	HashTable(); //default constructor
-	HashTable(int); //one parameter constructor
+	explicit HashTable(int); //one parameter constructor
 	HashTable(const HashTable&); //copy constructor
 	virtual ~HashTable(); //destructor
 	HashTable& operator=(const HashTable&); //assignment operator
-	bool insert(const T&);
+	HASH_POS insert(const T &);
 //	bool remove(const string&);
 	bool remove(const T&);
 //	bool search(const string&) const;
@@ -46,13 +46,16 @@ public:
 
 	// returns the original data pointer if exists otherwise NULL
 	T* get(const T&key);
+
+	int64_t getLOC(const T &key); // index of table
+
+	int64_t getPOS(const T &key); // position in chain
 private:
 	LinkedList<T>* arr;
 	int arrSize;
 	int numOfItems;
 	int64_p hashFunc(const T&) const;
-	int getPrime(int) const;
-	bool isPrime(int) const;
+
 	void deepCopy(const HashTable& h);
 };
 

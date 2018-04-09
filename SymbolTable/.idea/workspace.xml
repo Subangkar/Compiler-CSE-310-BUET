@@ -11,10 +11,16 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="62ca0814-d530-4c9a-a079-721a3fea9fa3" name="Default" comment="ScopeTable @ SymbolTable Done">
+    <list default="true" id="62ca0814-d530-4c9a-a079-721a3fea9fa3" name="Default" comment="Position for ScopeTable @ SymbolTable">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Data/Const.h" beforeDir="false" afterPath="$PROJECT_DIR$/Data/Const.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DataStructures/HashTable/HashTable.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/DataStructures/HashTable/HashTable.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DataStructures/HashTable/HashTable.h" beforeDir="false" afterPath="$PROJECT_DIR$/DataStructures/HashTable/HashTable.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DataStructures/LinkedList/LinkedList.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/DataStructures/LinkedList/LinkedList.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DataStructures/LinkedList/LinkedList.h" beforeDir="false" afterPath="$PROJECT_DIR$/DataStructures/LinkedList/LinkedList.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DataStructures/ScopeTable/ScopeTable.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/DataStructures/ScopeTable/ScopeTable.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DataStructures/ScopeTable/ScopeTable.h" beforeDir="false" afterPath="$PROJECT_DIR$/DataStructures/ScopeTable/ScopeTable.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DataTypes/TypeDefn.h" beforeDir="false" afterPath="$PROJECT_DIR$/DataTypes/TypeDefn.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/SymbolTable.dir/objects.a" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/SymbolTable.dir/objects.a" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
     </list>
@@ -32,12 +38,22 @@
       <file leaf-file-name="main.cpp" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="145">
-              <caret line="49" lean-forward="true" selection-start-line="49" selection-end-line="49" />
+            <state relative-caret-position="308">
+              <caret line="201" column="31" selection-start-line="201" selection-start-column="31" selection-end-line="201" selection-end-column="31" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
+                <element signature="e#832#1138#0" />
                 <element signature="e#2311#2636#0" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Const.h" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Data/Const.h">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="189">
+              <caret line="9" lean-forward="true" selection-start-line="9" selection-end-line="9" />
             </state>
           </provider>
         </entry>
@@ -46,10 +62,20 @@
         <entry file="file://$PROJECT_DIR$/DataStructures/ScopeTable/ScopeTable.cpp">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="124">
-              <caret line="16" column="36" lean-forward="true" selection-start-line="16" selection-start-column="36" selection-end-line="16" selection-end-column="36" />
+              <caret line="35" selection-start-line="35" selection-end-line="35" />
               <folding>
                 <element signature="e#72#216#0" />
+                <element signature="e#958#987#0" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SymbolInfo.h" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/DataTypes/SymbolInfo/SymbolInfo.h">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="21">
+              <caret line="6" selection-start-line="6" selection-end-line="6" />
             </state>
           </provider>
         </entry>
@@ -57,10 +83,100 @@
       <file leaf-file-name="ScopeTable.h" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/DataStructures/ScopeTable/ScopeTable.h">
           <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="124">
+              <caret line="11" selection-start-line="11" selection-end-line="11" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TypeDefn.h" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/DataTypes/TypeDefn.h">
+          <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="145">
-              <caret line="23" lean-forward="true" selection-start-line="23" selection-end-line="23" />
+              <caret line="31" lean-forward="true" selection-start-line="31" selection-end-line="31" />
               <folding>
-                <element signature="e#116#166#0" expanded="true" />
+                <element signature="e#122#136#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="HashTable.h" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/DataStructures/HashTable/HashTable.h">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="124">
+              <caret line="30" column="18" selection-start-line="30" selection-start-column="18" selection-end-line="30" selection-end-column="18" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="LinkedList.h" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/DataStructures/LinkedList/LinkedList.h">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="124">
+              <caret line="15" column="4" selection-start-line="15" selection-start-column="4" selection-end-line="15" selection-end-column="4" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="LinkedList.cpp" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/DataStructures/LinkedList/LinkedList.cpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="149">
+              <caret line="232" selection-start-line="232" selection-end-line="232" />
+              <folding>
+                <element signature="e#0#2#0" />
+                <element signature="e#148#345#0" />
+                <element signature="e#347#712#0" />
+                <element signature="e#714#1051#0" />
+                <element signature="e#1053#1338#0" />
+                <element signature="e#1340#1901#0" />
+                <element signature="e#1903#2030#0" />
+                <element signature="e#2032#2187#0" />
+                <element signature="e#2189#2914#0" />
+                <element signature="e#2916#3622#0" />
+                <element signature="e#3624#3875#0" />
+                <element signature="e#3877#4175#0" />
+                <element signature="e#4177#4272#0" />
+                <element signature="e#4274#4293#0" />
+                <element signature="e#4380#4473#0" />
+                <element signature="e#4475#4604#0" />
+                <element signature="e#4606#4826#0" />
+                <element signature="e#4828#5008#0" />
+                <element signature="e#5010#5193#0" />
+                <element signature="e#5195#5214#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="HashTable.cpp" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/DataStructures/HashTable/HashTable.cpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="124">
+              <caret line="11" selection-start-line="11" selection-end-line="11" />
+              <folding>
+                <element signature="e#0#2#0" />
+                <element signature="e#200#376#0" />
+                <element signature="e#200#564#0" />
+                <element signature="e#987#1228#0" />
+                <element signature="e#1230#1511#0" />
+                <element signature="e#1513#1688#0" />
+                <element signature="e#1513#1845#0" />
+                <element signature="e#1847#2085#0" />
+                <element signature="e#2087#2188#0" />
+                <element signature="e#2190#2269#0" />
+                <element signature="e#2271#2468#0" />
+                <element signature="e#2470#2493#0" />
+                <element signature="e#3266#3362#0" />
+                <element signature="e#3364#3457#0" />
+                <element signature="e#3459#3605#0" />
+                <element signature="e#3885#4053#0" />
+                <element signature="e#4055#4198#0" />
+                <element signature="e#4200#4469#0" />
+                <element signature="e#4471#4594#0" />
+                <element signature="e#4163#4241#0" />
+                <element signature="e#4243#4321#0" />
               </folding>
             </state>
           </provider>
@@ -78,6 +194,9 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+    <option name="PUSH_TAGS">
+      <GitPushTagMode />
+    </option>
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
@@ -96,17 +215,17 @@
         <option value="$PROJECT_DIR$/SymbolInfo.h" />
         <option value="$PROJECT_DIR$/SymbolInfo.cpp" />
         <option value="$PROJECT_DIR$/HashTable/HashTable.h" />
-        <option value="$PROJECT_DIR$/DataStructures/LinkedList/LinkedList.h" />
         <option value="$PROJECT_DIR$/Data/ConstAndDefn.h" />
-        <option value="$PROJECT_DIR$/DataTypes/TypeDefn.h" />
-        <option value="$PROJECT_DIR$/Data/Const.h" />
         <option value="$PROJECT_DIR$/DataTypes/SymbolInfo/SymbolInfo.h" />
-        <option value="$PROJECT_DIR$/DataStructures/HashTable/HashTable.cpp" />
+        <option value="$PROJECT_DIR$/Data/Const.h" />
         <option value="$PROJECT_DIR$/DataStructures/LinkedList/LinkedList.cpp" />
-        <option value="$PROJECT_DIR$/DataStructures/HashTable/HashTable.h" />
-        <option value="$PROJECT_DIR$/main.cpp" />
         <option value="$PROJECT_DIR$/DataStructures/ScopeTable/ScopeTable.h" />
+        <option value="$PROJECT_DIR$/DataStructures/HashTable/HashTable.h" />
+        <option value="$PROJECT_DIR$/DataStructures/LinkedList/LinkedList.h" />
         <option value="$PROJECT_DIR$/DataStructures/ScopeTable/ScopeTable.cpp" />
+        <option value="$PROJECT_DIR$/DataStructures/HashTable/HashTable.cpp" />
+        <option value="$PROJECT_DIR$/DataTypes/TypeDefn.h" />
+        <option value="$PROJECT_DIR$/main.cpp" />
       </list>
     </option>
   </component>
@@ -146,6 +265,27 @@
             <path>
               <item name="Root" type="cbb8eebc:String" user="Root" />
               <item name="SymbolTable" type="cbb8eebc:String" user="SymbolTable" />
+            </path>
+            <path>
+              <item name="Root" type="cbb8eebc:String" user="Root" />
+              <item name="SymbolTable" type="cbb8eebc:String" user="SymbolTable" />
+              <item name="Data" type="cbb8eebc:String" user="Data" />
+            </path>
+            <path>
+              <item name="Root" type="cbb8eebc:String" user="Root" />
+              <item name="SymbolTable" type="cbb8eebc:String" user="SymbolTable" />
+              <item name="DataStructures" type="cbb8eebc:String" user="DataStructures" />
+            </path>
+            <path>
+              <item name="Root" type="cbb8eebc:String" user="Root" />
+              <item name="SymbolTable" type="cbb8eebc:String" user="SymbolTable" />
+              <item name="DataStructures" type="cbb8eebc:String" user="DataStructures" />
+              <item name="HashTable" type="cbb8eebc:String" user="HashTable" />
+            </path>
+            <path>
+              <item name="Root" type="cbb8eebc:String" user="Root" />
+              <item name="SymbolTable" type="cbb8eebc:String" user="SymbolTable" />
+              <item name="DataTypes" type="cbb8eebc:String" user="DataTypes" />
             </path>
           </expand>
           <select />
@@ -205,7 +345,7 @@
       <workItem from="1523196725443" duration="8054000" />
       <workItem from="1523270913643" duration="13915000" />
       <workItem from="1523287056319" duration="378000" />
-      <workItem from="1523288360616" duration="1212000" />
+      <workItem from="1523288360616" duration="5541000" />
     </task>
     <task id="LOCAL-00001" summary="ScopeTable @ SymbolTable Done">
       <created>1523288743540</created>
@@ -214,11 +354,18 @@
       <option name="project" value="LOCAL" />
       <updated>1523288743540</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="ScopeTable @ SymbolTable Done">
+      <created>1523289695085</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1523289695085</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="27136000" />
+    <option name="totallyTimeSpent" value="31465000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
@@ -226,11 +373,11 @@
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.15959005" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info active="true" anchor="bottom" id="Messages" order="7" visible="true" weight="0.3290938" />
+      <window_info active="true" anchor="bottom" id="Messages" order="7" sideWeight="0.49926794" visible="true" weight="0.3290938" />
       <window_info anchor="bottom" id="CMake" order="7" weight="0.3290938" />
-      <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
+      <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.50073206" side_tool="true" weight="0.3163752" />
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.3290938" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.3163752" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49926794" weight="0.3163752" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Terminal" order="7" weight="0.2400636" />
       <window_info id="Favorites" order="2" side_tool="true" />
@@ -278,7 +425,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="ScopeTable @ SymbolTable Done" />
-    <option name="LAST_COMMIT_MESSAGE" value="ScopeTable @ SymbolTable Done" />
+    <MESSAGE value="Position for ScopeTable @ SymbolTable" />
+    <option name="LAST_COMMIT_MESSAGE" value="Position for ScopeTable @ SymbolTable" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -292,6 +440,7 @@
           <caret line="71" column="20" selection-start-line="71" selection-start-column="20" selection-end-line="71" selection-end-column="20" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
+            <element signature="e#832#1138#0" />
             <element signature="e#2311#2636#0" />
           </folding>
         </state>
@@ -301,9 +450,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="861">
           <caret line="41" column="18" selection-start-line="41" selection-start-column="18" selection-end-line="41" selection-end-column="18" />
-          <folding>
-            <element signature="e#116#166#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -323,6 +469,7 @@
           <caret line="29" column="14" lean-forward="true" selection-start-line="29" selection-start-column="14" selection-end-line="29" selection-end-column="14" />
           <folding>
             <element signature="e#72#216#0" />
+            <element signature="e#958#987#0" />
           </folding>
         </state>
       </provider>
@@ -333,6 +480,7 @@
           <caret line="71" column="20" lean-forward="true" selection-start-line="71" selection-start-column="20" selection-end-line="71" selection-end-column="20" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
+            <element signature="e#832#1138#0" />
             <element signature="e#2311#2636#0" />
           </folding>
         </state>
@@ -342,9 +490,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="861">
           <caret line="41" column="18" selection-start-line="41" selection-start-column="18" selection-end-line="41" selection-end-column="18" />
-          <folding>
-            <element signature="e#116#166#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -364,6 +509,7 @@
           <caret line="39" lean-forward="true" selection-start-line="39" selection-end-line="39" />
           <folding>
             <element signature="e#72#216#0" />
+            <element signature="e#958#987#0" />
           </folding>
         </state>
       </provider>
@@ -374,6 +520,7 @@
           <caret line="67" column="17" selection-start-line="67" selection-start-column="17" selection-end-line="67" selection-end-column="17" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
+            <element signature="e#832#1138#0" />
             <element signature="e#2311#2636#0" />
           </folding>
         </state>
@@ -433,6 +580,7 @@
           <caret line="10" column="1" selection-start-line="10" selection-start-column="1" selection-end-line="10" selection-end-column="1" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
+            <element signature="e#832#1138#0" />
             <element signature="e#2311#2636#0" />
           </folding>
         </state>
@@ -524,61 +672,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Data/Const.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="252">
-          <caret line="12" lean-forward="true" selection-start-line="12" selection-end-line="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/DataTypes/TypeDefn.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="147">
-          <caret line="7" lean-forward="true" selection-start-line="7" selection-end-line="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/DataStructures/HashTable/HashTable.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="168">
-          <caret line="8" selection-start-line="8" selection-end-line="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/DataStructures/LinkedList/LinkedList.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="27" column="7" lean-forward="true" selection-start-line="27" selection-start-column="7" selection-end-line="27" selection-end-column="7" />
-          <folding>
-            <element signature="e#288#297#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/DataStructures/LinkedList/LinkedList.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret line="15" column="32" lean-forward="true" selection-start-line="15" selection-start-column="32" selection-end-line="15" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/DataStructures/HashTable/HashTable.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="143">
-          <caret line="24" selection-start-line="24" selection-end-line="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/DataTypes/SymbolInfo/SymbolInfo.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-336">
-          <caret line="11" column="24" selection-start-line="11" selection-start-column="24" selection-end-line="11" selection-end-column="24" />
-          <folding>
-            <element signature="e#47#64#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/DataTypes/SymbolInfo/SymbolInfo.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="483">
@@ -586,32 +679,128 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/DataStructures/LinkedList/LinkedList.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="149">
+          <caret line="232" selection-start-line="232" selection-end-line="232" />
+          <folding>
+            <element signature="e#0#2#0" />
+            <element signature="e#148#345#0" />
+            <element signature="e#347#712#0" />
+            <element signature="e#714#1051#0" />
+            <element signature="e#1053#1338#0" />
+            <element signature="e#1340#1901#0" />
+            <element signature="e#1903#2030#0" />
+            <element signature="e#2032#2187#0" />
+            <element signature="e#2189#2914#0" />
+            <element signature="e#2916#3622#0" />
+            <element signature="e#3624#3875#0" />
+            <element signature="e#3877#4175#0" />
+            <element signature="e#4177#4272#0" />
+            <element signature="e#4274#4293#0" />
+            <element signature="e#4380#4473#0" />
+            <element signature="e#4475#4604#0" />
+            <element signature="e#4606#4826#0" />
+            <element signature="e#4828#5008#0" />
+            <element signature="e#5010#5193#0" />
+            <element signature="e#5195#5214#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Data/Const.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="189">
+          <caret line="9" lean-forward="true" selection-start-line="9" selection-end-line="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DataStructures/HashTable/HashTable.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="124">
+          <caret line="30" column="18" selection-start-line="30" selection-start-column="18" selection-end-line="30" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DataStructures/LinkedList/LinkedList.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="124">
+          <caret line="15" column="4" selection-start-line="15" selection-start-column="4" selection-end-line="15" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DataTypes/SymbolInfo/SymbolInfo.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="21">
+          <caret line="6" selection-start-line="6" selection-end-line="6" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/DataStructures/ScopeTable/ScopeTable.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="145">
-          <caret line="23" lean-forward="true" selection-start-line="23" selection-end-line="23" />
-          <folding>
-            <element signature="e#116#166#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="124">
+          <caret line="11" selection-start-line="11" selection-end-line="11" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/DataStructures/ScopeTable/ScopeTable.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="124">
-          <caret line="16" column="36" lean-forward="true" selection-start-line="16" selection-start-column="36" selection-end-line="16" selection-end-column="36" />
+          <caret line="35" selection-start-line="35" selection-end-line="35" />
           <folding>
             <element signature="e#72#216#0" />
+            <element signature="e#958#987#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DataStructures/HashTable/HashTable.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="124">
+          <caret line="11" selection-start-line="11" selection-end-line="11" />
+          <folding>
+            <element signature="e#0#2#0" />
+            <element signature="e#200#376#0" />
+            <element signature="e#200#564#0" />
+            <element signature="e#987#1228#0" />
+            <element signature="e#1230#1511#0" />
+            <element signature="e#1513#1688#0" />
+            <element signature="e#1513#1845#0" />
+            <element signature="e#1847#2085#0" />
+            <element signature="e#2087#2188#0" />
+            <element signature="e#2190#2269#0" />
+            <element signature="e#2271#2468#0" />
+            <element signature="e#2470#2493#0" />
+            <element signature="e#3266#3362#0" />
+            <element signature="e#3364#3457#0" />
+            <element signature="e#3459#3605#0" />
+            <element signature="e#3885#4053#0" />
+            <element signature="e#4055#4198#0" />
+            <element signature="e#4200#4469#0" />
+            <element signature="e#4471#4594#0" />
+            <element signature="e#4163#4241#0" />
+            <element signature="e#4243#4321#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DataTypes/TypeDefn.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="145">
+          <caret line="31" lean-forward="true" selection-start-line="31" selection-end-line="31" />
+          <folding>
+            <element signature="e#122#136#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/main.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="145">
-          <caret line="49" lean-forward="true" selection-start-line="49" selection-end-line="49" />
+        <state relative-caret-position="308">
+          <caret line="201" column="31" selection-start-line="201" selection-start-column="31" selection-end-line="201" selection-end-column="31" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
+            <element signature="e#832#1138#0" />
             <element signature="e#2311#2636#0" />
           </folding>
         </state>
