@@ -38,9 +38,9 @@ public:
 	void setId(int id);
 
 
-	HASH_POS Insert(const SymbolInfo &s);
+	bool Insert(const SymbolInfo &s);
 
-	HASH_POS Insert(const string &name, const string &type);
+	bool Insert(const string &name, const string &type);
 
 	// returns the original data pointer if exists otherwise NULL
 	SymbolInfo *LookUp(const SymbolInfo &symbol);

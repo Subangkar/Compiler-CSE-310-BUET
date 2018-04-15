@@ -43,11 +43,20 @@ void SymbolTable::ExitScope() {
 }
 
 bool SymbolTable::Insert(const SymbolInfo &symbol) {
-	HASH_POS symbolPos = currentScope->Insert(symbol);
-	if (symbolPos.isValid())
-		cout << " Inserted in ScopeTable# " << currentScope->getId() << " at position " << symbolPos << endl;
-	else cout << " " << symbol << " already exists in current ScopeTable" << endl;
-	return symbolPos.isValid();
+//	HASH_POS symbolPos = currentScope->Insert(symbol);
+//	if (symbolPos.isValid())
+//		cout << " Inserted in ScopeTable# " << currentScope->getId() << " at position " << symbolPos << endl;
+//	else cout << " " << symbol << " already exists in current ScopeTable" << endl;
+//	return symbolPos.isValid();
+
+
+	if (currentScope->Insert(symbol)) {
+		cout << " Inserted in ScopeTable# " << currentScope->getId() << " at position " << currentScope->GetPos(symbol)
+		     << endl;
+		return true;
+	}
+	cout << " " << symbol << " already exists in current ScopeTable" << endl;
+	return false;
 }
 
 bool SymbolTable::Insert(const string &name, const string &type) {
@@ -57,14 +66,22 @@ bool SymbolTable::Insert(const string &name, const string &type) {
 bool SymbolTable::Remove(const SymbolInfo &symbol) {
 	ScopeTable *scope = currentScope;
 
-	while (scope && !scope->GetPos(symbol).isValid()) {
-		scope = scope->getParentScope();
+//	while (scope && !scope->GetPos(symbol).isValid()) {
+//		scope = scope->getParentScope();
+//	}
+
+//	if (scope) {
+//		cout << " Deleted From ScopeTable# " << scope->getId() << " at position " << scope->GetPos(symbol) << endl;
+//		return scope->Delete(symbol.getName());
+//	}
+
+
+	if (scope && scope->Delete(symbol.getName())) {
+//		cout << " Deleted From ScopeTable# " << scope->getId() << " at position " << scope->GetPos(symbol) << endl;
+		cout << " Deleted From current ScopeTable " << endl;
+		return true;
 	}
 
-	if (scope) {
-		cout << " Deleted From ScopeTable# " << scope->getId() << " at position " << scope->GetPos(symbol) << endl;
-		return scope->Delete(symbol.getName());
-	}
 
 	cout << symbol.getName() << " not found" << endl;
 	return false;

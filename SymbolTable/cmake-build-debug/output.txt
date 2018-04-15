@@ -37,7 +37,7 @@ j not found
 
 D i 
 
- Deleted From ScopeTable# 0 at position (4,0)
+ Deleted From current ScopeTable 
 
 P A 
 
@@ -123,7 +123,7 @@ P A
 
 D 5 
 
- Deleted From ScopeTable# 1 at position (0,1)
+ Deleted From current ScopeTable 
 
 I foo FUNCTION
 
@@ -131,7 +131,7 @@ I foo FUNCTION
 
 D == 
 
- Deleted From ScopeTable# 1 at position (0,0)
+ Deleted From current ScopeTable 
 
 P A 
 

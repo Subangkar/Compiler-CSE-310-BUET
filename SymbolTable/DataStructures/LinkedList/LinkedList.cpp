@@ -161,10 +161,10 @@ bool LinkedList<T>::Insert(const T &value, const int &position) {
 template<class T>
 bool LinkedList<T>::Delete(const int &position) {
 	if (position < 0)
-		return true;
+		return false;
 
 	if (!head)
-		return true; // LinkedList empty
+		return false; // LinkedList empty
 
 	Node<T> *target = head;
 
@@ -172,7 +172,7 @@ bool LinkedList<T>::Delete(const int &position) {
 		head = head->GetNext();
 		delete target;
 
-		return false;
+		return true;
 	}
 
 	Node<T> *element_before = head;
@@ -180,13 +180,13 @@ bool LinkedList<T>::Delete(const int &position) {
 		element_before = element_before->GetNext();
 
 		if (!element_before)
-			return true; // Out of bounds
+			return false; // Out of bounds
 	}
 
 	target = element_before->GetNext();
 
 	if (!target)
-		return true; // Out of bounds
+		return false; // Out of bounds
 
 	element_before->SetNext(target->GetNext());
 
@@ -195,7 +195,7 @@ bool LinkedList<T>::Delete(const int &position) {
 
 	delete target;
 
-	return false;
+	return true;
 }
 
 template<class T>

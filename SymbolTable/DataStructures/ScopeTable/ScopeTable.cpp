@@ -35,7 +35,7 @@ void ScopeTable::setId(int id) {
 	ScopeTable::id = id;
 }
 
-HASH_POS ScopeTable::Insert(const SymbolInfo &s) {
+bool ScopeTable::Insert(const SymbolInfo &s) {
 	return insert(s);
 }
 
@@ -56,7 +56,7 @@ void ScopeTable::Print() {
 	printTable();
 }
 
-HASH_POS ScopeTable::Insert(const string &name, const string &type) {
+bool ScopeTable::Insert(const string &name, const string &type) {
 	return Insert(SymbolInfo(name, type));
 }
 
