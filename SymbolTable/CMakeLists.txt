@@ -3,4 +3,4 @@ project(SymbolTable)
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_executable(SymbolTable main.cpp DataStructures/ScopeTable/ScopeTable.cpp DataStructures/ScopeTable/ScopeTable.h DataTypes/SymbolInfo/SymbolInfo.cpp DataTypes/SymbolInfo/SymbolInfo.h DataStructures/SymbolTable/SymbolTable.cpp DataStructures/SymbolTable/SymbolTable.h DataStructures/LinkedList/LinkedList.cpp DataStructures/LinkedList/LinkedList.h DataStructures/HashTable/HashTable.cpp DataStructures/HashTable/HashTable.h Data/Const.h DataTypes/TypeDefn.h)
+add_executable(SymbolTable 1505015_main.cpp 1505015_ScopeTable.cpp 1505015_ScopeTable.h DataTypes/SymbolInfo/1505015_SymbolInfo.cpp DataTypes/SymbolInfo/1505015_SymbolInfo.h 1505015_SymbolTable.cpp 1505015_SymbolTable.h 1505015_LinkedList.cpp 1505015_LinkedList.h 1505015_HashTable.cpp 1505015_HashTable.h 1505015_Const.h DataTypes/1505015_TypeDefn.h)

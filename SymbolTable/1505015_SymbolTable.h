@@ -6,7 +6,7 @@
 #define SYMBOLTABLE_SYMBOLTABLE_H
 
 
-#include "../ScopeTable/ScopeTable.h"
+#include "1505015_ScopeTable.h"
 
 class SymbolTable {
 

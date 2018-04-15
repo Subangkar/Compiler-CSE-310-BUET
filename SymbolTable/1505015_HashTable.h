@@ -13,10 +13,10 @@
 
 #include <vector>
 
-#include "../../Data/Const.h"
-#include "../LinkedList/LinkedList.h"
-#include "../LinkedList/LinkedList.cpp"
-#include "../../DataTypes/TypeDefn.h"
+#include "1505015_Const.h"
+#include "1505015_LinkedList.h"
+#include "1505015_LinkedList.cpp"
+#include "DataTypes/1505015_TypeDefn.h"
 
 
 using std::vector;

@@ -3,7 +3,7 @@
 //
 
 #include <cmath>
-#include "SymbolInfo.h"
+#include "1505015_SymbolInfo.h"
 
 using std::abs;
 

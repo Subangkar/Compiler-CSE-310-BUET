@@ -6,7 +6,7 @@
 #define SYMBOLTABLE_SYMBOLTABLE_CPP
 
 
-#include "SymbolTable.h"
+#include "1505015_SymbolTable.h"
 
 SymbolTable::SymbolTable(int64_p size) {
 	max_id = 0;

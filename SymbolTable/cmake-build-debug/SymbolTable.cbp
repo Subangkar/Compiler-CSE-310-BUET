@@ -80,43 +80,43 @@
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/Data/Const.h">
+		<Unit filename="C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/1505015_Const.h">
 			<Option target="SymbolTable"/>
 		</Unit>
-		<Unit filename="C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/DataStructures/HashTable/HashTable.cpp">
+		<Unit filename="C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/1505015_HashTable.cpp">
 			<Option target="SymbolTable"/>
 		</Unit>
-		<Unit filename="C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/DataStructures/HashTable/HashTable.h">
+		<Unit filename="C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/1505015_HashTable.h">
 			<Option target="SymbolTable"/>
 		</Unit>
-		<Unit filename="C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/DataStructures/LinkedList/LinkedList.cpp">
+		<Unit filename="C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/1505015_LinkedList.cpp">
 			<Option target="SymbolTable"/>
 		</Unit>
-		<Unit filename="C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/DataStructures/LinkedList/LinkedList.h">
+		<Unit filename="C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/1505015_LinkedList.h">
 			<Option target="SymbolTable"/>
 		</Unit>
-		<Unit filename="C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/DataStructures/ScopeTable/ScopeTable.cpp">
+		<Unit filename="C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/1505015_ScopeTable.cpp">
 			<Option target="SymbolTable"/>
 		</Unit>
-		<Unit filename="C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/DataStructures/ScopeTable/ScopeTable.h">
+		<Unit filename="C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/1505015_ScopeTable.h">
 			<Option target="SymbolTable"/>
 		</Unit>
-		<Unit filename="C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/DataStructures/SymbolTable/SymbolTable.cpp">
+		<Unit filename="C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/1505015_SymbolTable.cpp">
 			<Option target="SymbolTable"/>
 		</Unit>
-		<Unit filename="C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/DataStructures/SymbolTable/SymbolTable.h">
+		<Unit filename="C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/1505015_SymbolTable.h">
 			<Option target="SymbolTable"/>
 		</Unit>
-		<Unit filename="C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/DataTypes/SymbolInfo/SymbolInfo.cpp">
+		<Unit filename="C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/1505015_main.cpp">
 			<Option target="SymbolTable"/>
 		</Unit>
-		<Unit filename="C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/DataTypes/SymbolInfo/SymbolInfo.h">
+		<Unit filename="C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/DataTypes/1505015_TypeDefn.h">
 			<Option target="SymbolTable"/>
 		</Unit>
-		<Unit filename="C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/DataTypes/TypeDefn.h">
+		<Unit filename="C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/DataTypes/SymbolInfo/1505015_SymbolInfo.cpp">
 			<Option target="SymbolTable"/>
 		</Unit>
-		<Unit filename="C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/main.cpp">
+		<Unit filename="C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/DataTypes/SymbolInfo/1505015_SymbolInfo.h">
 			<Option target="SymbolTable"/>
 		</Unit>
 		<Unit filename="C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/CMakeLists.txt">

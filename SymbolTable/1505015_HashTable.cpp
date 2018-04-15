@@ -9,7 +9,7 @@
 
 
 #include <iostream>
-#include "HashTable.h"
+#include "1505015_HashTable.h"
 
 
 using std::cout;
