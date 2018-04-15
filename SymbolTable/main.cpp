@@ -188,26 +188,26 @@ void symbolTableTest() {
 //	cout <<size<<endl;
 	SymbolTable *symbolTable = new SymbolTable(size);
 	string op, sym, typ;
-//	symbolTable->EnterScope();
+//	symbolTable->enterScope();
 	while (cin >> op) {
 		if (op == "I") {
 			cin >> sym >> typ;
 			cout << endl << op << " " << sym << " " << typ << endl << endl;
-			symbolTable->Insert(sym, typ);
+			symbolTable->insert(sym, typ);
 		} else if (op == "D") {
 			cin >> sym;
 			cout << endl << op << " " << sym << " " << typ << endl << endl;
-			symbolTable->Remove(sym);
+			symbolTable->remove(sym);
 		} else if (op == "L") {
 			cin >> sym;
 			cout << endl << op << " " << sym << " " << typ << endl << endl;
-			symbolTable->LookUp(sym);
+			symbolTable->lookUp(sym);
 		} else if (op == "S") {
 			cout << endl << op << " " << sym << " " << typ << endl << endl;
-			symbolTable->EnterScope();
+			symbolTable->enterScope();
 		} else if (op == "E") {
 			cout << endl << op << " " << sym << " " << typ << endl << endl;
-			symbolTable->ExitScope();
+			symbolTable->exitScope();
 		} else if (op == "P") {
 			cin >> sym;
 			cout << endl << op << " " << sym << " " << typ << endl << endl;
@@ -218,7 +218,7 @@ void symbolTableTest() {
 		sym="";
 		typ="";
 	}
-//	symbolTable->ExitScope();
+//	symbolTable->exitScope();
 }
 
 int main() {

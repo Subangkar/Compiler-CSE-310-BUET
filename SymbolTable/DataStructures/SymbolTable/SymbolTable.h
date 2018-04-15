@@ -21,19 +21,19 @@ public:
 	virtual ~SymbolTable();
 
 
-	void EnterScope();
+	void enterScope();
 
-	void ExitScope();
+	void exitScope();
 
-	bool Insert(const SymbolInfo &symbol);
+	bool insert(const SymbolInfo &symbol);
 
-	bool Insert(const string &name, const string &type);
+	bool insert(const string &name, const string &type);
 
-	bool Remove(const SymbolInfo &symbol);
+	bool remove(const SymbolInfo &symbol);
 
-	bool Remove(const string &name);
+	bool remove(const string &name);
 
-	SymbolInfo *LookUp(const string &symbol);
+	SymbolInfo *lookUp(const string &symbol);
 
 
 	void printCurrentScope();
