@@ -16,7 +16,7 @@
 #include "1505015_Const.h"
 #include "1505015_LinkedList.h"
 #include "1505015_LinkedList.cpp"
-#include "DataTypes/1505015_TypeDefn.h"
+#include "1505015_TypeDefn.h"
 
 
 using std::vector;

@@ -9,7 +9,7 @@
 
 #include <string>
 #include <ostream>
-#include "../1505015_TypeDefn.h"
+#include "1505015_TypeDefn.h"
 
 using std::string;
 
