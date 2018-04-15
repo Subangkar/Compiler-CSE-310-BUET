@@ -6,7 +6,7 @@ CMakeFiles/SymbolTable.dir/1505015_HashTable.cpp.obj: ../1505015_HashTable.cpp
 CMakeFiles/SymbolTable.dir/1505015_HashTable.cpp.obj: ../1505015_HashTable.h
 CMakeFiles/SymbolTable.dir/1505015_HashTable.cpp.obj: ../1505015_LinkedList.cpp
 CMakeFiles/SymbolTable.dir/1505015_HashTable.cpp.obj: ../1505015_LinkedList.h
-CMakeFiles/SymbolTable.dir/1505015_HashTable.cpp.obj: ../DataTypes/1505015_TypeDefn.h
+CMakeFiles/SymbolTable.dir/1505015_HashTable.cpp.obj: ../1505015_TypeDefn.h
 
 CMakeFiles/SymbolTable.dir/1505015_LinkedList.cpp.obj: ../1505015_LinkedList.cpp
 CMakeFiles/SymbolTable.dir/1505015_LinkedList.cpp.obj: ../1505015_LinkedList.h
@@ -18,8 +18,12 @@ CMakeFiles/SymbolTable.dir/1505015_ScopeTable.cpp.obj: ../1505015_LinkedList.cpp
 CMakeFiles/SymbolTable.dir/1505015_ScopeTable.cpp.obj: ../1505015_LinkedList.h
 CMakeFiles/SymbolTable.dir/1505015_ScopeTable.cpp.obj: ../1505015_ScopeTable.cpp
 CMakeFiles/SymbolTable.dir/1505015_ScopeTable.cpp.obj: ../1505015_ScopeTable.h
-CMakeFiles/SymbolTable.dir/1505015_ScopeTable.cpp.obj: ../DataTypes/1505015_TypeDefn.h
-CMakeFiles/SymbolTable.dir/1505015_ScopeTable.cpp.obj: ../DataTypes/SymbolInfo/1505015_SymbolInfo.h
+CMakeFiles/SymbolTable.dir/1505015_ScopeTable.cpp.obj: ../1505015_SymbolInfo.h
+CMakeFiles/SymbolTable.dir/1505015_ScopeTable.cpp.obj: ../1505015_TypeDefn.h
+
+CMakeFiles/SymbolTable.dir/1505015_SymbolInfo.cpp.obj: ../1505015_SymbolInfo.cpp
+CMakeFiles/SymbolTable.dir/1505015_SymbolInfo.cpp.obj: ../1505015_SymbolInfo.h
+CMakeFiles/SymbolTable.dir/1505015_SymbolInfo.cpp.obj: ../1505015_TypeDefn.h
 
 CMakeFiles/SymbolTable.dir/1505015_SymbolTable.cpp.obj: ../1505015_Const.h
 CMakeFiles/SymbolTable.dir/1505015_SymbolTable.cpp.obj: ../1505015_HashTable.cpp
@@ -27,10 +31,10 @@ CMakeFiles/SymbolTable.dir/1505015_SymbolTable.cpp.obj: ../1505015_HashTable.h
 CMakeFiles/SymbolTable.dir/1505015_SymbolTable.cpp.obj: ../1505015_LinkedList.cpp
 CMakeFiles/SymbolTable.dir/1505015_SymbolTable.cpp.obj: ../1505015_LinkedList.h
 CMakeFiles/SymbolTable.dir/1505015_SymbolTable.cpp.obj: ../1505015_ScopeTable.h
+CMakeFiles/SymbolTable.dir/1505015_SymbolTable.cpp.obj: ../1505015_SymbolInfo.h
 CMakeFiles/SymbolTable.dir/1505015_SymbolTable.cpp.obj: ../1505015_SymbolTable.cpp
 CMakeFiles/SymbolTable.dir/1505015_SymbolTable.cpp.obj: ../1505015_SymbolTable.h
-CMakeFiles/SymbolTable.dir/1505015_SymbolTable.cpp.obj: ../DataTypes/1505015_TypeDefn.h
-CMakeFiles/SymbolTable.dir/1505015_SymbolTable.cpp.obj: ../DataTypes/SymbolInfo/1505015_SymbolInfo.h
+CMakeFiles/SymbolTable.dir/1505015_SymbolTable.cpp.obj: ../1505015_TypeDefn.h
 
 CMakeFiles/SymbolTable.dir/1505015_main.cpp.obj: ../1505015_Const.h
 CMakeFiles/SymbolTable.dir/1505015_main.cpp.obj: ../1505015_HashTable.cpp
@@ -38,12 +42,8 @@ CMakeFiles/SymbolTable.dir/1505015_main.cpp.obj: ../1505015_HashTable.h
 CMakeFiles/SymbolTable.dir/1505015_main.cpp.obj: ../1505015_LinkedList.cpp
 CMakeFiles/SymbolTable.dir/1505015_main.cpp.obj: ../1505015_LinkedList.h
 CMakeFiles/SymbolTable.dir/1505015_main.cpp.obj: ../1505015_ScopeTable.h
+CMakeFiles/SymbolTable.dir/1505015_main.cpp.obj: ../1505015_SymbolInfo.h
 CMakeFiles/SymbolTable.dir/1505015_main.cpp.obj: ../1505015_SymbolTable.h
+CMakeFiles/SymbolTable.dir/1505015_main.cpp.obj: ../1505015_TypeDefn.h
 CMakeFiles/SymbolTable.dir/1505015_main.cpp.obj: ../1505015_main.cpp
-CMakeFiles/SymbolTable.dir/1505015_main.cpp.obj: ../DataTypes/1505015_TypeDefn.h
-CMakeFiles/SymbolTable.dir/1505015_main.cpp.obj: ../DataTypes/SymbolInfo/1505015_SymbolInfo.h
-
-CMakeFiles/SymbolTable.dir/DataTypes/SymbolInfo/1505015_SymbolInfo.cpp.obj: ../DataTypes/1505015_TypeDefn.h
-CMakeFiles/SymbolTable.dir/DataTypes/SymbolInfo/1505015_SymbolInfo.cpp.obj: ../DataTypes/SymbolInfo/1505015_SymbolInfo.cpp
-CMakeFiles/SymbolTable.dir/DataTypes/SymbolInfo/1505015_SymbolInfo.cpp.obj: ../DataTypes/SymbolInfo/1505015_SymbolInfo.h
 

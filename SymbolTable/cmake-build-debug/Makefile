@@ -203,6 +203,33 @@ SymbolTable/fast:
 	$(MAKE) -f CMakeFiles\SymbolTable.dir\build.make CMakeFiles/SymbolTable.dir/1505015_ScopeTable.cpp.s
 .PHONY : 1505015_ScopeTable.cpp.s
 
+1505015_SymbolInfo.obj: 1505015_SymbolInfo.cpp.obj
+
+.PHONY : 1505015_SymbolInfo.obj
+
+# target to build an object file
+1505015_SymbolInfo.cpp.obj:
+	$(MAKE) -f CMakeFiles\SymbolTable.dir\build.make CMakeFiles/SymbolTable.dir/1505015_SymbolInfo.cpp.obj
+.PHONY : 1505015_SymbolInfo.cpp.obj
+
+1505015_SymbolInfo.i: 1505015_SymbolInfo.cpp.i
+
+.PHONY : 1505015_SymbolInfo.i
+
+# target to preprocess a source file
+1505015_SymbolInfo.cpp.i:
+	$(MAKE) -f CMakeFiles\SymbolTable.dir\build.make CMakeFiles/SymbolTable.dir/1505015_SymbolInfo.cpp.i
+.PHONY : 1505015_SymbolInfo.cpp.i
+
+1505015_SymbolInfo.s: 1505015_SymbolInfo.cpp.s
+
+.PHONY : 1505015_SymbolInfo.s
+
+# target to generate assembly for a file
+1505015_SymbolInfo.cpp.s:
+	$(MAKE) -f CMakeFiles\SymbolTable.dir\build.make CMakeFiles/SymbolTable.dir/1505015_SymbolInfo.cpp.s
+.PHONY : 1505015_SymbolInfo.cpp.s
+
 1505015_SymbolTable.obj: 1505015_SymbolTable.cpp.obj
 
 .PHONY : 1505015_SymbolTable.obj
@@ -257,33 +284,6 @@ SymbolTable/fast:
 	$(MAKE) -f CMakeFiles\SymbolTable.dir\build.make CMakeFiles/SymbolTable.dir/1505015_main.cpp.s
 .PHONY : 1505015_main.cpp.s
 
-DataTypes/SymbolInfo/1505015_SymbolInfo.obj: DataTypes/SymbolInfo/1505015_SymbolInfo.cpp.obj
-
-.PHONY : DataTypes/SymbolInfo/1505015_SymbolInfo.obj
-
-# target to build an object file
-DataTypes/SymbolInfo/1505015_SymbolInfo.cpp.obj:
-	$(MAKE) -f CMakeFiles\SymbolTable.dir\build.make CMakeFiles/SymbolTable.dir/DataTypes/SymbolInfo/1505015_SymbolInfo.cpp.obj
-.PHONY : DataTypes/SymbolInfo/1505015_SymbolInfo.cpp.obj
-
-DataTypes/SymbolInfo/1505015_SymbolInfo.i: DataTypes/SymbolInfo/1505015_SymbolInfo.cpp.i
-
-.PHONY : DataTypes/SymbolInfo/1505015_SymbolInfo.i
-
-# target to preprocess a source file
-DataTypes/SymbolInfo/1505015_SymbolInfo.cpp.i:
-	$(MAKE) -f CMakeFiles\SymbolTable.dir\build.make CMakeFiles/SymbolTable.dir/DataTypes/SymbolInfo/1505015_SymbolInfo.cpp.i
-.PHONY : DataTypes/SymbolInfo/1505015_SymbolInfo.cpp.i
-
-DataTypes/SymbolInfo/1505015_SymbolInfo.s: DataTypes/SymbolInfo/1505015_SymbolInfo.cpp.s
-
-.PHONY : DataTypes/SymbolInfo/1505015_SymbolInfo.s
-
-# target to generate assembly for a file
-DataTypes/SymbolInfo/1505015_SymbolInfo.cpp.s:
-	$(MAKE) -f CMakeFiles\SymbolTable.dir\build.make CMakeFiles/SymbolTable.dir/DataTypes/SymbolInfo/1505015_SymbolInfo.cpp.s
-.PHONY : DataTypes/SymbolInfo/1505015_SymbolInfo.cpp.s
-
 # Help Target
 help:
 	@echo The following are some of the valid targets for this Makefile:
@@ -302,15 +302,15 @@ help:
 	@echo ... 1505015_ScopeTable.obj
 	@echo ... 1505015_ScopeTable.i
 	@echo ... 1505015_ScopeTable.s
+	@echo ... 1505015_SymbolInfo.obj
+	@echo ... 1505015_SymbolInfo.i
+	@echo ... 1505015_SymbolInfo.s
 	@echo ... 1505015_SymbolTable.obj
 	@echo ... 1505015_SymbolTable.i
 	@echo ... 1505015_SymbolTable.s
 	@echo ... 1505015_main.obj
 	@echo ... 1505015_main.i
 	@echo ... 1505015_main.s
-	@echo ... DataTypes/SymbolInfo/1505015_SymbolInfo.obj
-	@echo ... DataTypes/SymbolInfo/1505015_SymbolInfo.i
-	@echo ... DataTypes/SymbolInfo/1505015_SymbolInfo.s
 .PHONY : help
 
 

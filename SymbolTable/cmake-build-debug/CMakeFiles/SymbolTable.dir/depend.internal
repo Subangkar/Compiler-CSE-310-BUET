@@ -7,7 +7,7 @@ CMakeFiles/SymbolTable.dir/1505015_HashTable.cpp.obj
  C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/1505015_HashTable.h
  C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/1505015_LinkedList.cpp
  C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/1505015_LinkedList.h
- C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/DataTypes/1505015_TypeDefn.h
+ C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/1505015_TypeDefn.h
 CMakeFiles/SymbolTable.dir/1505015_LinkedList.cpp.obj
  C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/1505015_LinkedList.cpp
  C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/1505015_LinkedList.h
@@ -19,8 +19,12 @@ CMakeFiles/SymbolTable.dir/1505015_ScopeTable.cpp.obj
  C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/1505015_LinkedList.h
  C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/1505015_ScopeTable.cpp
  C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/1505015_ScopeTable.h
- C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/DataTypes/1505015_TypeDefn.h
- C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/DataTypes/SymbolInfo/1505015_SymbolInfo.h
+ C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/1505015_SymbolInfo.h
+ C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/1505015_TypeDefn.h
+CMakeFiles/SymbolTable.dir/1505015_SymbolInfo.cpp.obj
+ C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/1505015_SymbolInfo.cpp
+ C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/1505015_SymbolInfo.h
+ C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/1505015_TypeDefn.h
 CMakeFiles/SymbolTable.dir/1505015_SymbolTable.cpp.obj
  C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/1505015_Const.h
  C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/1505015_HashTable.cpp
@@ -28,10 +32,10 @@ CMakeFiles/SymbolTable.dir/1505015_SymbolTable.cpp.obj
  C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/1505015_LinkedList.cpp
  C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/1505015_LinkedList.h
  C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/1505015_ScopeTable.h
+ C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/1505015_SymbolInfo.h
  C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/1505015_SymbolTable.cpp
  C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/1505015_SymbolTable.h
- C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/DataTypes/1505015_TypeDefn.h
- C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/DataTypes/SymbolInfo/1505015_SymbolInfo.h
+ C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/1505015_TypeDefn.h
 CMakeFiles/SymbolTable.dir/1505015_main.cpp.obj
  C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/1505015_Const.h
  C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/1505015_HashTable.cpp
@@ -39,11 +43,7 @@ CMakeFiles/SymbolTable.dir/1505015_main.cpp.obj
  C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/1505015_LinkedList.cpp
  C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/1505015_LinkedList.h
  C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/1505015_ScopeTable.h
+ C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/1505015_SymbolInfo.h
  C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/1505015_SymbolTable.h
+ C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/1505015_TypeDefn.h
  C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/1505015_main.cpp
- C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/DataTypes/1505015_TypeDefn.h
- C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/DataTypes/SymbolInfo/1505015_SymbolInfo.h
-CMakeFiles/SymbolTable.dir/DataTypes/SymbolInfo/1505015_SymbolInfo.cpp.obj
- C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/DataTypes/1505015_TypeDefn.h
- C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/DataTypes/SymbolInfo/1505015_SymbolInfo.cpp
- C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/DataTypes/SymbolInfo/1505015_SymbolInfo.h

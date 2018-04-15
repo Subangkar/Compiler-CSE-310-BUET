@@ -23,8 +23,8 @@ C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/1505015_Const.h
 C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/1505015_LinkedList.h
 1505015_LinkedList.cpp
 C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/1505015_LinkedList.cpp
-DataTypes/1505015_TypeDefn.h
-C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/DataTypes/1505015_TypeDefn.h
+1505015_TypeDefn.h
+C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/1505015_TypeDefn.h
 
 C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/1505015_LinkedList.cpp
 1505015_LinkedList.h
@@ -43,12 +43,26 @@ C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/1505015_ScopeTable.cpp
 C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/1505015_ScopeTable.h
 
 C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/1505015_ScopeTable.h
-DataTypes/SymbolInfo/1505015_SymbolInfo.h
-C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/DataTypes/SymbolInfo/1505015_SymbolInfo.h
+1505015_SymbolInfo.h
+C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/1505015_SymbolInfo.h
 1505015_HashTable.h
 C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/1505015_HashTable.h
 1505015_HashTable.cpp
 C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/1505015_HashTable.cpp
+
+C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/1505015_SymbolInfo.cpp
+cmath
+-
+1505015_SymbolInfo.h
+C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/1505015_SymbolInfo.h
+
+C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/1505015_SymbolInfo.h
+string
+-
+ostream
+-
+1505015_TypeDefn.h
+C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/1505015_TypeDefn.h
 
 C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/1505015_SymbolTable.cpp
 1505015_SymbolTable.h
@@ -58,31 +72,15 @@ C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/1505015_SymbolTable.h
 1505015_ScopeTable.h
 C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/1505015_ScopeTable.h
 
+C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/1505015_TypeDefn.h
+ostream
+-
+
 C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/1505015_main.cpp
 iostream
--
-cmath
 -
 1505015_ScopeTable.h
 C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/1505015_ScopeTable.h
 1505015_SymbolTable.h
 C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/1505015_SymbolTable.h
-
-C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/DataTypes/1505015_TypeDefn.h
-ostream
--
-
-C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/DataTypes/SymbolInfo/1505015_SymbolInfo.cpp
-cmath
--
-1505015_SymbolInfo.h
-C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/DataTypes/SymbolInfo/1505015_SymbolInfo.h
-
-C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/DataTypes/SymbolInfo/1505015_SymbolInfo.h
-string
--
-ostream
--
-../1505015_TypeDefn.h
-C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/DataTypes/1505015_TypeDefn.h
 

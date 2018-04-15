@@ -1,7 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/SymbolTable.dir/1505015_main.cpp.obj"
   "CMakeFiles/SymbolTable.dir/1505015_ScopeTable.cpp.obj"
-  "CMakeFiles/SymbolTable.dir/DataTypes/SymbolInfo/1505015_SymbolInfo.cpp.obj"
+  "CMakeFiles/SymbolTable.dir/1505015_SymbolInfo.cpp.obj"
   "CMakeFiles/SymbolTable.dir/1505015_SymbolTable.cpp.obj"
   "CMakeFiles/SymbolTable.dir/1505015_LinkedList.cpp.obj"
   "CMakeFiles/SymbolTable.dir/1505015_HashTable.cpp.obj"

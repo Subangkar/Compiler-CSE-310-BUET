@@ -104,28 +104,28 @@ CMakeFiles/SymbolTable.dir/1505015_ScopeTable.cpp.obj.provides: CMakeFiles/Symbo
 CMakeFiles/SymbolTable.dir/1505015_ScopeTable.cpp.obj.provides.build: CMakeFiles/SymbolTable.dir/1505015_ScopeTable.cpp.obj
 
 
-CMakeFiles/SymbolTable.dir/DataTypes/SymbolInfo/1505015_SymbolInfo.cpp.obj: CMakeFiles/SymbolTable.dir/flags.make
-CMakeFiles/SymbolTable.dir/DataTypes/SymbolInfo/1505015_SymbolInfo.cpp.obj: ../DataTypes/SymbolInfo/1505015_SymbolInfo.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\SubangkarKr\CLionProjects\Compiler\SymbolTable\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/SymbolTable.dir/DataTypes/SymbolInfo/1505015_SymbolInfo.cpp.obj"
-	C:\PROGRA~2\CODEBL~1\MinGW\bin\G__~1.EXE  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\SymbolTable.dir\DataTypes\SymbolInfo\1505015_SymbolInfo.cpp.obj -c C:\Users\SubangkarKr\CLionProjects\Compiler\SymbolTable\DataTypes\SymbolInfo\1505015_SymbolInfo.cpp
+CMakeFiles/SymbolTable.dir/1505015_SymbolInfo.cpp.obj: CMakeFiles/SymbolTable.dir/flags.make
+CMakeFiles/SymbolTable.dir/1505015_SymbolInfo.cpp.obj: ../1505015_SymbolInfo.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\SubangkarKr\CLionProjects\Compiler\SymbolTable\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/SymbolTable.dir/1505015_SymbolInfo.cpp.obj"
+	C:\PROGRA~2\CODEBL~1\MinGW\bin\G__~1.EXE  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\SymbolTable.dir\1505015_SymbolInfo.cpp.obj -c C:\Users\SubangkarKr\CLionProjects\Compiler\SymbolTable\1505015_SymbolInfo.cpp
 
-CMakeFiles/SymbolTable.dir/DataTypes/SymbolInfo/1505015_SymbolInfo.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/SymbolTable.dir/DataTypes/SymbolInfo/1505015_SymbolInfo.cpp.i"
-	C:\PROGRA~2\CODEBL~1\MinGW\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\SubangkarKr\CLionProjects\Compiler\SymbolTable\DataTypes\SymbolInfo\1505015_SymbolInfo.cpp > CMakeFiles\SymbolTable.dir\DataTypes\SymbolInfo\1505015_SymbolInfo.cpp.i
+CMakeFiles/SymbolTable.dir/1505015_SymbolInfo.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/SymbolTable.dir/1505015_SymbolInfo.cpp.i"
+	C:\PROGRA~2\CODEBL~1\MinGW\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\SubangkarKr\CLionProjects\Compiler\SymbolTable\1505015_SymbolInfo.cpp > CMakeFiles\SymbolTable.dir\1505015_SymbolInfo.cpp.i
 
-CMakeFiles/SymbolTable.dir/DataTypes/SymbolInfo/1505015_SymbolInfo.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/SymbolTable.dir/DataTypes/SymbolInfo/1505015_SymbolInfo.cpp.s"
-	C:\PROGRA~2\CODEBL~1\MinGW\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\SubangkarKr\CLionProjects\Compiler\SymbolTable\DataTypes\SymbolInfo\1505015_SymbolInfo.cpp -o CMakeFiles\SymbolTable.dir\DataTypes\SymbolInfo\1505015_SymbolInfo.cpp.s
+CMakeFiles/SymbolTable.dir/1505015_SymbolInfo.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/SymbolTable.dir/1505015_SymbolInfo.cpp.s"
+	C:\PROGRA~2\CODEBL~1\MinGW\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\SubangkarKr\CLionProjects\Compiler\SymbolTable\1505015_SymbolInfo.cpp -o CMakeFiles\SymbolTable.dir\1505015_SymbolInfo.cpp.s
 
-CMakeFiles/SymbolTable.dir/DataTypes/SymbolInfo/1505015_SymbolInfo.cpp.obj.requires:
+CMakeFiles/SymbolTable.dir/1505015_SymbolInfo.cpp.obj.requires:
 
-.PHONY : CMakeFiles/SymbolTable.dir/DataTypes/SymbolInfo/1505015_SymbolInfo.cpp.obj.requires
+.PHONY : CMakeFiles/SymbolTable.dir/1505015_SymbolInfo.cpp.obj.requires
 
-CMakeFiles/SymbolTable.dir/DataTypes/SymbolInfo/1505015_SymbolInfo.cpp.obj.provides: CMakeFiles/SymbolTable.dir/DataTypes/SymbolInfo/1505015_SymbolInfo.cpp.obj.requires
-	$(MAKE) -f CMakeFiles\SymbolTable.dir\build.make CMakeFiles/SymbolTable.dir/DataTypes/SymbolInfo/1505015_SymbolInfo.cpp.obj.provides.build
-.PHONY : CMakeFiles/SymbolTable.dir/DataTypes/SymbolInfo/1505015_SymbolInfo.cpp.obj.provides
+CMakeFiles/SymbolTable.dir/1505015_SymbolInfo.cpp.obj.provides: CMakeFiles/SymbolTable.dir/1505015_SymbolInfo.cpp.obj.requires
+	$(MAKE) -f CMakeFiles\SymbolTable.dir\build.make CMakeFiles/SymbolTable.dir/1505015_SymbolInfo.cpp.obj.provides.build
+.PHONY : CMakeFiles/SymbolTable.dir/1505015_SymbolInfo.cpp.obj.provides
 
-CMakeFiles/SymbolTable.dir/DataTypes/SymbolInfo/1505015_SymbolInfo.cpp.obj.provides.build: CMakeFiles/SymbolTable.dir/DataTypes/SymbolInfo/1505015_SymbolInfo.cpp.obj
+CMakeFiles/SymbolTable.dir/1505015_SymbolInfo.cpp.obj.provides.build: CMakeFiles/SymbolTable.dir/1505015_SymbolInfo.cpp.obj
 
 
 CMakeFiles/SymbolTable.dir/1505015_SymbolTable.cpp.obj: CMakeFiles/SymbolTable.dir/flags.make
@@ -204,7 +204,7 @@ CMakeFiles/SymbolTable.dir/1505015_HashTable.cpp.obj.provides.build: CMakeFiles/
 SymbolTable_OBJECTS = \
 "CMakeFiles/SymbolTable.dir/1505015_main.cpp.obj" \
 "CMakeFiles/SymbolTable.dir/1505015_ScopeTable.cpp.obj" \
-"CMakeFiles/SymbolTable.dir/DataTypes/SymbolInfo/1505015_SymbolInfo.cpp.obj" \
+"CMakeFiles/SymbolTable.dir/1505015_SymbolInfo.cpp.obj" \
 "CMakeFiles/SymbolTable.dir/1505015_SymbolTable.cpp.obj" \
 "CMakeFiles/SymbolTable.dir/1505015_LinkedList.cpp.obj" \
 "CMakeFiles/SymbolTable.dir/1505015_HashTable.cpp.obj"
@@ -214,7 +214,7 @@ SymbolTable_EXTERNAL_OBJECTS =
 
 SymbolTable.exe: CMakeFiles/SymbolTable.dir/1505015_main.cpp.obj
 SymbolTable.exe: CMakeFiles/SymbolTable.dir/1505015_ScopeTable.cpp.obj
-SymbolTable.exe: CMakeFiles/SymbolTable.dir/DataTypes/SymbolInfo/1505015_SymbolInfo.cpp.obj
+SymbolTable.exe: CMakeFiles/SymbolTable.dir/1505015_SymbolInfo.cpp.obj
 SymbolTable.exe: CMakeFiles/SymbolTable.dir/1505015_SymbolTable.cpp.obj
 SymbolTable.exe: CMakeFiles/SymbolTable.dir/1505015_LinkedList.cpp.obj
 SymbolTable.exe: CMakeFiles/SymbolTable.dir/1505015_HashTable.cpp.obj
@@ -232,7 +232,7 @@ CMakeFiles/SymbolTable.dir/build: SymbolTable.exe
 
 CMakeFiles/SymbolTable.dir/requires: CMakeFiles/SymbolTable.dir/1505015_main.cpp.obj.requires
 CMakeFiles/SymbolTable.dir/requires: CMakeFiles/SymbolTable.dir/1505015_ScopeTable.cpp.obj.requires
-CMakeFiles/SymbolTable.dir/requires: CMakeFiles/SymbolTable.dir/DataTypes/SymbolInfo/1505015_SymbolInfo.cpp.obj.requires
+CMakeFiles/SymbolTable.dir/requires: CMakeFiles/SymbolTable.dir/1505015_SymbolInfo.cpp.obj.requires
 CMakeFiles/SymbolTable.dir/requires: CMakeFiles/SymbolTable.dir/1505015_SymbolTable.cpp.obj.requires
 CMakeFiles/SymbolTable.dir/requires: CMakeFiles/SymbolTable.dir/1505015_LinkedList.cpp.obj.requires
 CMakeFiles/SymbolTable.dir/requires: CMakeFiles/SymbolTable.dir/1505015_HashTable.cpp.obj.requires
