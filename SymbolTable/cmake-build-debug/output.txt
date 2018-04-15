@@ -31,9 +31,9 @@ P A
  6 --> 
 
 
-D j 
+D foo 
 
-j not found
+ Deleted From current ScopeTable 
 
 D i 
 
@@ -42,7 +42,7 @@ D i
 P A 
 
  ScopeTable # 0
- 0 --> < foo : FUNCTION > < 5 : NUMBER > 
+ 0 --> < 5 : NUMBER > 
  1 --> 
  2 --> 
  3 --> 
@@ -75,7 +75,7 @@ P A
  6 --> 
 
  ScopeTable # 0
- 0 --> < foo : FUNCTION > < 5 : NUMBER > 
+ 0 --> < 5 : NUMBER > 
  1 --> 
  2 --> 
  3 --> 
@@ -90,7 +90,7 @@ I <= RELOP
 
 L 5 
 
- Found in ScopeTable# 0 at position (0,1)
+ Found in ScopeTable# 0 at position (0,0)
 
 I 5 D
 
@@ -112,7 +112,7 @@ P A
  6 --> 
 
  ScopeTable # 0
- 0 --> < foo : FUNCTION > < 5 : NUMBER > 
+ 0 --> < 5 : NUMBER > 
  1 --> 
  2 --> 
  3 --> 
@@ -124,6 +124,10 @@ P A
 D 5 
 
  Deleted From current ScopeTable 
+
+D 5 
+
+5 not found
 
 I foo FUNCTION
 
@@ -145,7 +149,7 @@ P A
  6 --> 
 
  ScopeTable # 0
- 0 --> < foo : FUNCTION > < 5 : NUMBER > 
+ 0 --> < 5 : NUMBER > 
  1 --> 
  2 --> 
  3 --> 
@@ -169,7 +173,7 @@ I k k
 P A 
 
  ScopeTable # 0
- 0 --> < foo : FUNCTION > < 5 : NUMBER > 
+ 0 --> < 5 : NUMBER > 
  1 --> < k : k > 
  2 --> < t : t > 
  3 --> 
