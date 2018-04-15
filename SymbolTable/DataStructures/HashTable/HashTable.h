@@ -32,7 +32,7 @@ public:
 	HashTable(const HashTable&); //copy constructor
 	virtual ~HashTable(); //destructor
 	HashTable& operator=(const HashTable&); //assignment operator
-	HASH_POS insert(const T &);
+	bool insert(const T &);
 //	bool remove(const string&);
 	bool remove(const T&);
 //	bool search(const string&) const;
@@ -50,6 +50,8 @@ public:
 	int64_t getLOC(const T &key); // index of table
 
 	int64_t getPOS(const T &key); // position in chain
+
+	HASH_POS getHASHPOS(const T& key);
 private:
 	LinkedList<T>* arr;
 	int arrSize;

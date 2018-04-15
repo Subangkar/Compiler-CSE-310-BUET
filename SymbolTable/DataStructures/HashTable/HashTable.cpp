@@ -139,18 +139,18 @@ double HashTable<T>::loadFactor() const //returns the load factor of the hash ta
 }
 
 template<typename T>
-HASH_POS HashTable<T>::insert(const T &s) {
+bool HashTable<T>::insert(const T &s) {
 	int64_p hash = hashFunc(s);
+//
+//	if (arr[hash].insert(s)) {
+//		numOfItems++;
+//		return HASH_POS(hash, arr[hash].length() - 1);
+//	}
+//	return HASH_POS(EOF, EOF);
 
-	if (arr[hash].insert(s)) {
-		numOfItems++;
-		return HASH_POS(hash, arr[hash].length() - 1);
-	}
-	return HASH_POS(EOF, EOF);
-
-//	bool successOrFail = arr[hash].insert(s);
-//	if (successOrFail) numOfItems++;
-//	return successOrFail;
+	bool successOrFail = arr[hash].insert(s);
+	if (successOrFail) numOfItems++;
+	return successOrFail;
 }
 
 template<typename T>
@@ -204,6 +204,11 @@ int64_t HashTable<T>::getLOC(const T &key) {
 template<typename T>
 int64_t HashTable<T>::getPOS(const T &key) {
 	return arr[hashFunc(key)].findPos(key);
+}
+
+template<typename T>
+HASH_POS HashTable<T>::getHASHPOS(const T &key) {
+	return HASH_POS(getLOC(key),getPOS(key));
 }
 
 
