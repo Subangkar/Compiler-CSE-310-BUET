@@ -4,12 +4,12 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/DataStructures/HashTable/HashTable.cpp" "C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/cmake-build-debug/CMakeFiles/SymbolTable.dir/DataStructures/HashTable/HashTable.cpp.obj"
-  "C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/DataStructures/LinkedList/LinkedList.cpp" "C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/cmake-build-debug/CMakeFiles/SymbolTable.dir/DataStructures/LinkedList/LinkedList.cpp.obj"
-  "C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/DataStructures/ScopeTable/ScopeTable.cpp" "C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/cmake-build-debug/CMakeFiles/SymbolTable.dir/DataStructures/ScopeTable/ScopeTable.cpp.obj"
-  "C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/DataStructures/SymbolTable/SymbolTable.cpp" "C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/cmake-build-debug/CMakeFiles/SymbolTable.dir/DataStructures/SymbolTable/SymbolTable.cpp.obj"
-  "C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/DataTypes/SymbolInfo/SymbolInfo.cpp" "C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/cmake-build-debug/CMakeFiles/SymbolTable.dir/DataTypes/SymbolInfo/SymbolInfo.cpp.obj"
-  "C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/main.cpp" "C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/cmake-build-debug/CMakeFiles/SymbolTable.dir/main.cpp.obj"
+  "/home/subangkar/Desktop/Compiler/SymbolTable/DataStructures/HashTable/HashTable.cpp" "/home/subangkar/Desktop/Compiler/SymbolTable/cmake-build-debug/CMakeFiles/SymbolTable.dir/DataStructures/HashTable/HashTable.cpp.o"
+  "/home/subangkar/Desktop/Compiler/SymbolTable/DataStructures/LinkedList/LinkedList.cpp" "/home/subangkar/Desktop/Compiler/SymbolTable/cmake-build-debug/CMakeFiles/SymbolTable.dir/DataStructures/LinkedList/LinkedList.cpp.o"
+  "/home/subangkar/Desktop/Compiler/SymbolTable/DataStructures/ScopeTable/ScopeTable.cpp" "/home/subangkar/Desktop/Compiler/SymbolTable/cmake-build-debug/CMakeFiles/SymbolTable.dir/DataStructures/ScopeTable/ScopeTable.cpp.o"
+  "/home/subangkar/Desktop/Compiler/SymbolTable/DataStructures/SymbolTable/SymbolTable.cpp" "/home/subangkar/Desktop/Compiler/SymbolTable/cmake-build-debug/CMakeFiles/SymbolTable.dir/DataStructures/SymbolTable/SymbolTable.cpp.o"
+  "/home/subangkar/Desktop/Compiler/SymbolTable/DataTypes/SymbolInfo/SymbolInfo.cpp" "/home/subangkar/Desktop/Compiler/SymbolTable/cmake-build-debug/CMakeFiles/SymbolTable.dir/DataTypes/SymbolInfo/SymbolInfo.cpp.o"
+  "/home/subangkar/Desktop/Compiler/SymbolTable/main.cpp" "/home/subangkar/Desktop/Compiler/SymbolTable/cmake-build-debug/CMakeFiles/SymbolTable.dir/main.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

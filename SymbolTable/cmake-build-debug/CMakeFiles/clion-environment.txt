@@ -1,4 +1,3 @@
-ToolSet: 3.20@C:\Program Files (x86)\CodeBlocks\MinGW
 Options: 
 
 Options:

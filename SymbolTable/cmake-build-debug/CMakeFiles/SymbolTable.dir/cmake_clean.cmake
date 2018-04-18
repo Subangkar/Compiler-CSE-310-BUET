@@ -1,14 +1,12 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/SymbolTable.dir/main.cpp.obj"
-  "CMakeFiles/SymbolTable.dir/DataStructures/ScopeTable/ScopeTable.cpp.obj"
-  "CMakeFiles/SymbolTable.dir/DataTypes/SymbolInfo/SymbolInfo.cpp.obj"
-  "CMakeFiles/SymbolTable.dir/DataStructures/SymbolTable/SymbolTable.cpp.obj"
-  "CMakeFiles/SymbolTable.dir/DataStructures/LinkedList/LinkedList.cpp.obj"
-  "CMakeFiles/SymbolTable.dir/DataStructures/HashTable/HashTable.cpp.obj"
+  "CMakeFiles/SymbolTable.dir/main.cpp.o"
+  "CMakeFiles/SymbolTable.dir/DataStructures/ScopeTable/ScopeTable.cpp.o"
+  "CMakeFiles/SymbolTable.dir/DataTypes/SymbolInfo/SymbolInfo.cpp.o"
+  "CMakeFiles/SymbolTable.dir/DataStructures/SymbolTable/SymbolTable.cpp.o"
+  "CMakeFiles/SymbolTable.dir/DataStructures/LinkedList/LinkedList.cpp.o"
+  "CMakeFiles/SymbolTable.dir/DataStructures/HashTable/HashTable.cpp.o"
   "SymbolTable.pdb"
-  "SymbolTable.exe"
-  "SymbolTable.exe.manifest"
-  "libSymbolTable.dll.a"
+  "SymbolTable"
 )
 
 # Per-language clean rules from dependency scanning.

@@ -1,3 +1,3 @@
-C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/cmake-build-debug/CMakeFiles/SymbolTable.dir
-C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/SubangkarKr/CLionProjects/Compiler/SymbolTable/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/subangkar/Desktop/Compiler/SymbolTable/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/subangkar/Desktop/Compiler/SymbolTable/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/subangkar/Desktop/Compiler/SymbolTable/cmake-build-debug/CMakeFiles/SymbolTable.dir

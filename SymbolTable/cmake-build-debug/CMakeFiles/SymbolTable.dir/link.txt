@@ -1,3 +1,1 @@
-"C:\Program Files\JetBrains\CLion 2018.1\bin\cmake\bin\cmake.exe" -E remove -f CMakeFiles\SymbolTable.dir/objects.a
-C:\PROGRA~2\CODEBL~1\MinGW\bin\ar.exe cr CMakeFiles\SymbolTable.dir/objects.a @CMakeFiles\SymbolTable.dir\objects1.rsp
-C:\PROGRA~2\CODEBL~1\MinGW\bin\G__~1.EXE -g   -Wl,--whole-archive CMakeFiles\SymbolTable.dir/objects.a -Wl,--no-whole-archive  -o SymbolTable.exe -Wl,--out-implib,libSymbolTable.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\SymbolTable.dir\linklibs.rsp
+/usr/bin/c++  -g  -rdynamic CMakeFiles/SymbolTable.dir/main.cpp.o CMakeFiles/SymbolTable.dir/DataStructures/ScopeTable/ScopeTable.cpp.o CMakeFiles/SymbolTable.dir/DataTypes/SymbolInfo/SymbolInfo.cpp.o CMakeFiles/SymbolTable.dir/DataStructures/SymbolTable/SymbolTable.cpp.o CMakeFiles/SymbolTable.dir/DataStructures/LinkedList/LinkedList.cpp.o CMakeFiles/SymbolTable.dir/DataStructures/HashTable/HashTable.cpp.o  -o SymbolTable 
