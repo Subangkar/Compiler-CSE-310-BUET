@@ -49,6 +49,7 @@ bool SymbolTable::insert(const SymbolInfo &symbol) {
 //	else cout << " " << symbol << " already exists in current ScopeTable" << endl;
 //	return symbolPos.isValid();
 
+	if (currentScope == nullptr) return false;
 
 	if (currentScope->Insert(symbol)) {
 		cout << " Inserted in ScopeTable# " << currentScope->getId() << " at position " << currentScope->GetPos(symbol)
