@@ -12,10 +12,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="62ca0814-d530-4c9a-a079-721a3fea9fa3" name="Default" comment="HASH TABLE bool insert&#10;&amp;&amp; insertion in null currentScope Handled">
-      <change beforePath="$PROJECT_DIR$/../.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/SymbolTable.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/SymbolTable.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Makefile.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Makefile.cmake" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/clion-log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/clion-log.txt" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -57,34 +56,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="SymbolTable.cpp" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/DataStructures/SymbolTable/SymbolTable.cpp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="274">
-              <caret line="90" column="30" selection-start-line="90" selection-start-column="30" selection-end-line="90" selection-end-column="30" />
-              <folding>
-                <element signature="e#0#2#0" />
-                <element signature="e#147#302#0" />
-                <element signature="e#304#471#0" />
-                <element signature="e#474#710#0" />
-                <element signature="e#712#943#0" />
-                <element signature="e#945#1577#0" />
-                <element signature="e#1579#1687#0" />
-                <element signature="e#1689#2358#0" />
-                <element signature="e#2360#2442#0" />
-                <element signature="e#2444#2843#0" />
-                <element signature="e#2845#2910#0" />
-                <element signature="e#2912#3068#0" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="SymbolTable.h" pinned="false" current-in-tab="false">
+      <file leaf-file-name="SymbolTable.h" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/DataStructures/SymbolTable/SymbolTable.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="558">
-              <caret line="31" column="11" selection-start-line="31" selection-start-column="11" selection-end-line="31" selection-end-column="11" />
+            <state relative-caret-position="108">
+              <caret line="6" lean-forward="true" selection-start-line="6" selection-end-line="6" />
             </state>
           </provider>
         </entry>
@@ -318,9 +294,10 @@
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/CMakeLists.txt" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
-    <property name="settings.editor.selected.configurable" value="preferences.sourceCode.C/C++" />
+    <property name="settings.editor.selected.configurable" value="preferences.editor" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -371,7 +348,7 @@
       <workItem from="1523288360616" duration="15790000" />
       <workItem from="1523375441671" duration="5000" />
       <workItem from="1523780009798" duration="584000" />
-      <workItem from="1524065143603" duration="1676000" />
+      <workItem from="1524065143603" duration="2029000" />
     </task>
     <task id="LOCAL-00001" summary="ScopeTable @ SymbolTable Done">
       <created>1523288743540</created>
@@ -447,7 +424,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="44916000" />
+    <option name="totallyTimeSpent" value="45269000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="26" width="1366" height="709" extended-state="6" />
@@ -593,7 +570,7 @@
             <element signature="e#712#943#0" />
             <element signature="e#945#1577#0" />
             <element signature="e#1579#1687#0" />
-            <element signature="e#1689#2358#0" />
+            <element signature="e#1733#2402#0" />
             <element signature="e#2360#2442#0" />
             <element signature="e#2444#2843#0" />
             <element signature="e#2845#2910#0" />
@@ -668,7 +645,7 @@
             <element signature="e#712#943#0" />
             <element signature="e#945#1577#0" />
             <element signature="e#1579#1687#0" />
-            <element signature="e#1689#2358#0" />
+            <element signature="e#1733#2402#0" />
             <element signature="e#2360#2442#0" />
             <element signature="e#2444#2843#0" />
             <element signature="e#2845#2910#0" />
@@ -952,13 +929,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/DataStructures/SymbolTable/SymbolTable.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="558">
-          <caret line="31" column="11" selection-start-line="31" selection-start-column="11" selection-end-line="31" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/main.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2736">
@@ -1039,8 +1009,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/DataStructures/SymbolTable/SymbolTable.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="274">
-          <caret line="90" column="30" selection-start-line="90" selection-start-column="30" selection-end-line="90" selection-end-column="30" />
+        <state relative-caret-position="170">
+          <caret line="119" column="22" selection-start-line="119" selection-start-column="22" selection-end-line="119" selection-end-column="23" />
           <folding>
             <element signature="e#0#2#0" />
             <element signature="e#147#302#0" />
@@ -1049,12 +1019,19 @@
             <element signature="e#712#943#0" />
             <element signature="e#945#1577#0" />
             <element signature="e#1579#1687#0" />
-            <element signature="e#1689#2358#0" />
+            <element signature="e#1733#2402#0" />
             <element signature="e#2360#2442#0" />
             <element signature="e#2444#2843#0" />
             <element signature="e#2845#2910#0" />
             <element signature="e#2912#3068#0" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DataStructures/SymbolTable/SymbolTable.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="108">
+          <caret line="6" lean-forward="true" selection-start-line="6" selection-end-line="6" />
         </state>
       </provider>
     </entry>
