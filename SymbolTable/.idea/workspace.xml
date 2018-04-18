@@ -11,11 +11,7 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="62ca0814-d530-4c9a-a079-721a3fea9fa3" name="Default" comment="HASH TABLE bool insert&#10;&amp;&amp; insertion in null currentScope Handled">
-      <change beforePath="$PROJECT_DIR$/.idea/SymbolTable.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/SymbolTable.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="62ca0814-d530-4c9a-a079-721a3fea9fa3" name="Default" comment="HASH TABLE bool insert&#10;&amp;&amp; insertion in null currentScope Handled" />
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -59,8 +55,8 @@
       <file leaf-file-name="SymbolTable.h" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/DataStructures/SymbolTable/SymbolTable.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="108">
-              <caret line="6" lean-forward="true" selection-start-line="6" selection-end-line="6" />
+            <state relative-caret-position="252">
+              <caret line="14" column="15" lean-forward="true" selection-start-line="14" selection-start-column="15" selection-end-line="14" selection-end-column="15" />
             </state>
           </provider>
         </entry>
@@ -348,7 +344,7 @@
       <workItem from="1523288360616" duration="15790000" />
       <workItem from="1523375441671" duration="5000" />
       <workItem from="1523780009798" duration="584000" />
-      <workItem from="1524065143603" duration="2029000" />
+      <workItem from="1524065143603" duration="2420000" />
     </task>
     <task id="LOCAL-00001" summary="ScopeTable @ SymbolTable Done">
       <created>1523288743540</created>
@@ -424,11 +420,10 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="45269000" />
+    <option name="totallyTimeSpent" value="45660000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="26" width="1366" height="709" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.15959005" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -1030,8 +1025,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/DataStructures/SymbolTable/SymbolTable.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="108">
-          <caret line="6" lean-forward="true" selection-start-line="6" selection-end-line="6" />
+        <state relative-caret-position="252">
+          <caret line="14" column="15" lean-forward="true" selection-start-line="14" selection-start-column="15" selection-end-line="14" selection-end-column="15" />
         </state>
       </provider>
     </entry>
