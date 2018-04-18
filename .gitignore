@@ -89,6 +89,17 @@ output.txt
 
 
 
+#SymbolTable/cmake-build-debug/
+#cmake-build-debug/
+#cmake-build-debug/*.*
+#cmake-build-debug/*.txt
+cmake-build-debug/
+SymbolTable/cmake-build-debug/CMakeFiles/
+*.cmake
 
 
-cmake-build-debug/*
+
+**/cmake-build-debug/
+**/CMakeFiles/
+
+
