@@ -1,0 +1,39 @@
+
+Error at line 1: Too many decimal point 1.2.345 
+
+Error at line 2: Ill formed number 1E10.7 
+
+Error at line 3: Invalid prefix on ID or invalid suffix on Number 12abcd		
+
+Error at line 4: Multi character constant error 'ab'
+
+Error at line 5: Unterminated character 'a
+
+Error at line 6: Unterminated character '
+
+Error at line 7: Multi character constant error 'ab cd'
+
+Error at line 8: Unterminated character '\'
+
+Error at line 9: Empty character constant error ''
+
+Error at line 10: Unterminated String "abcd
+
+Error at line 11: Unterminated String "abcd\
+efgh
+
+Line No. 13: Token <ID> Lexeme ijk found
+
+ ScopeTable # 1
+ 3 --> <ijk, ID> 
+
+Error at line 13: Unterminated String "
+
+Error at line 14: Unterminated comment /**abc
+def
+
+ ScopeTable # 1
+ 3 --> <ijk, ID> 
+
+Total Lines: 15
+Total Errors: 13
