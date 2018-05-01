@@ -2,15 +2,9 @@
 
 %{
 
-#include <iostream>
-#include <cmath>
-
-#include "DataStructures/ScopeTable/ScopeTable.h"
-
-
-#include "DataStructures/SymbolTable/SymbolTable.h"
-
-using namespace std;
+#include "DataStructure.h"
+SymbolTable st;
+FILE *logout,*tokenout;
 
 %}
 
@@ -35,12 +29,12 @@ int main(int argc,char *argv[]){
 		return 0;
 	}
 	
-	logout= fopen("log.txt","w");
-	tokenout= fopen("token.txt","w");
+	logout = fopen("log.txt","w");
+	tokenout = fopen("token.txt","w");
 
 	yyin= fin;
 	yylex();
-	st.print();
+	st.printAllScope();
 	fclose(yyin);
 	fclose(tokenout);
 	fclose(logout);
