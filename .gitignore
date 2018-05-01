@@ -111,3 +111,11 @@ SymbolTable/cmake-build-debug/CMakeFiles/
 
 **/desktop.ini
 *.driveupload
+
+
+
+
+
+
+
+*.o

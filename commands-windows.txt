@@ -1,0 +1,8 @@
+Generate All linked files with gcc @ windows :: 
+	g++ *.cpp -o out.exe
+
+Generate all object files from cpp ::
+	g++ -c *.cpp
+
+Link all object files ::
+	g++ *.o -o a.exe
