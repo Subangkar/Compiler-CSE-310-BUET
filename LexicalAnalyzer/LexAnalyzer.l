@@ -76,7 +76,7 @@ ILL_NUM ({DIGITS}|{FLOATING_POINT})[E]*{FLOATING_POINT}*
 CHARACTER ('(\\.|[^\\'])')
 ILL_CHARACTER ('(')?')
 MULTI_CHARACTER '.(.)+'
-UNFINISHED_CHARACTER '[^']*|'\\'
+UNFINISHED_CHARACTER '[.]*|'[\\]'
 
 
 
@@ -122,7 +122,9 @@ ADDOP ("+"|"-")
 {ILL_NUM}				{printError("Ill formed number");}
 {ILL_CHARACTER}			{printError("Invalid character");}
 {MULTI_CHARACTER}		{printError("Multi character constant ");}
-{UNFINISHED_CHARACTER}	{printError("Unfinished character");}
+{UNFINISHED_CHARACTER}	{
+	//printError("Unfinished character");
+	}
 {UNFINISHED_STRING}		{printError("Unfinished string");}
 
 

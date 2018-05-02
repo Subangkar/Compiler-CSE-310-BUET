@@ -2,16 +2,14 @@
 << Line no 2: Ill formed number >>
 << Line no 3: Invalid numeric constant or identifier >>
 << Line no 4: Multi character constant  >>
-<< Line no 5: Unfinished character >>
-<< Line no 6: Invalid character >>
-<< Line no 7: Multi character constant  >>
-<< Line no 8: Unfinished character >>
-<< Line no 9: Invalid character >>
+Line no 5: TOKEN <ID> Lexeme a found
+<< Line no 6: Multi character constant  >>
+<< Line no 8: Invalid character >>
+<< Line no 9: Unfinished string >>
 << Line no 10: Unfinished string >>
-<< Line no 11: Unfinished string >>
-Line no 13: TOKEN <ID> Lexeme ijk found
-<< Line no 13: Unfinished string >>
-<< Line no 14: Unfinished comment >>
+Line no 12: TOKEN <ID> Lexeme ijk found
+<< Line no 12: Unfinished string >>
+<< Line no 13: Unfinished comment >>
 
 Total Line Number: 15
-Total Errors: 13
+Total Errors: 10
