@@ -1,29 +1,29 @@
 int main(){
+	x+++;
 	int a,b;
-	a=a+1;
-	char ch='a';
+	a=a+.1;
+	char ch='xy';
 	ch='\t';
-	char c[]="ab\td";
+	char c[]="ab\td;
 	printf("abc\
-def\
+		def\
 ghi");
-
+.45
 // multi\line /**/ \
 cont\
 con2\
 /**/
 
 // x
-double x;
+double x = 5.34.2;//
 
-int cont;/**/ float inue;
-
+int cont;/* float inue;
 // a comment
 /** /* another *
-*** // comment \  ***/
+*** // "comment" \  **
 	return 0;
 
 }
 
 
-/* ( * ) */ 	
+/* ( * )  	

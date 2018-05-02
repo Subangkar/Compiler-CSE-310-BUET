@@ -32,37 +32,60 @@ public:
 		string parsed = str;
 		findAndReplaceAll(parsed, "\\n", "\n");
 		findAndReplaceAll(parsed, "\\t", "\t");
-//		findAndReplaceAll(parsed, "\'", "'");
+		findAndReplaceAll(parsed, "\\\'", "\'");
+		findAndReplaceAll(parsed, "\\\"", "\"");
 		return parsed;
 	}
 
 	static string parse(const char *str) {
 		return parse(string(str));
 	}
-};
 
+	static char parseChar(const string str)
+	{
+		return static_cast<char>(str.length() > 2 ? '\0' : parse(str)[0]);
+	}
+};
 
 
 #endif //STRINGPARSER_STRINGPARSER_H
 
 
-class StringUtils
-{
+class StringUtils {
 public:
-	static int occCount(string str,char ch)
-	{
+	static int occCount(string str, char ch) {
 		return static_cast<int>(std::count(str.begin(), str.end(), ch));
 	}
 
-	static int occCount(string dest,string src)
-	{
+	static int occCount(string dest, string src) {
 		int occurrences = 0;
 		string::size_type pos = 0;
-		while ((pos = dest.find(src, pos )) != std::string::npos) {
+		while ((pos = dest.find(src, pos)) != std::string::npos) {
 			++occurrences;
 			pos += src.length();
 		}
 		return occurrences;
+	}
+
+	static void replaceAll(string &source, string const &find, string const &replace) {
+		for (string::size_type i = 0; (i = source.find(find, i)) != string::npos;) {
+			source.replace(i, find.length(), replace);
+			i += replace.length();
+		}
+	}
+
+	// not checked
+	static void replaceFirst(string &source, string const &find, string const &replace) {
+		int i = static_cast<int>(source.find(find, 0));
+		if (i != string::npos)
+			source.replace(static_cast<unsigned long>(i), find.length(), replace);
+	}
+
+	// not checked
+	static void replaceLast(string &source, string const &find, string const &replace) {
+		int i = static_cast<int>(source.rfind(find));
+		if (i != string::npos)
+			source.replace(static_cast<unsigned long>(i), find.length(), replace);
 	}
 };
 

@@ -1,19 +1,17 @@
-Line no 1: TOKEN <INT> Lexeme int found
-Line no 2: TOKEN <INT> Lexeme int found
-Line no 4: TOKEN <CHAR> Lexeme char found
-Line no 6: TOKEN <CHAR> Lexeme char found
-Line no 7: TOKEN <INT> Lexeme int found
-Line no 11: TOKEN <COMMENT> Lexeme <// multi\line /**/ \
-cont\
-con2\
-/**/> found
-Line no 16: TOKEN <COMMENT> Lexeme <// x> found
-Line no 17: TOKEN <DOUBLE> Lexeme double found
-Line no 19: TOKEN <INT> Lexeme int found
-Line no 19: TOKEN <COMMENT> Lexeme </**/> found
-Line no 19: TOKEN <FLOAT> Lexeme float found
-Line no 21: TOKEN <COMMENT> Lexeme <// a comment> found
-Line no 22: TOKEN <COMMENT> Lexeme </** /* another *
-*** // comment \  ***/> found
-Line no 24: TOKEN <RETURN> Lexeme return found
-Line no 29: TOKEN <COMMENT> Lexeme </* ( * ) */> found
+<< Line no 1: Too many decimal point >>
+<< Line no 2: Ill formed number >>
+<< Line no 3: Invalid numeric constant or identifier >>
+<< Line no 4: Multi character constant  >>
+<< Line no 5: Unfinished character >>
+<< Line no 6: Invalid character >>
+<< Line no 7: Multi character constant  >>
+<< Line no 8: Unfinished character >>
+<< Line no 9: Invalid character >>
+<< Line no 10: Unfinished string >>
+<< Line no 11: Unfinished string >>
+Line no 13: TOKEN <ID> Lexeme ijk found
+<< Line no 13: Unfinished string >>
+<< Line no 14: Unfinished comment >>
+
+Total Line Number: 15
+Total Errors: 13
