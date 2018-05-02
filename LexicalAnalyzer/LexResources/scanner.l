@@ -45,6 +45,8 @@ WHITESPACE [ \t\f\r\v]+
 LETTER [a-zA-Z]
 DIGIT [0-9]
 NEWLINE \n
+ALPHABET [{LETTER}_]
+ALPHANUMERIC [{DIGIT}{ALPHABET}]
 
 %%
 
@@ -59,6 +61,18 @@ NEWLINE \n
 			fprintf(tokenout,"<ELSE>");
 			fprintf(logout,"Line no %d: TOKEN <ELSE> Lexeme %s found\n",line_count,yytext);
 		}
+
+
+"int"	{
+			fprintf(tokenout,"<INT>");
+			fprintf(logout,"Line no %d: TOKEN <ELSE> Lexeme %s found\n",line_count,yytext);
+		}
+
+[{ALPHABET}][ALPHANUMERIC]+
+{
+			fprintf(tokenout,"<ID,%s>",yytext);
+			fprintf(logout,"Line no %d: TOKEN <ID> Lexeme %s found\n",line_count,yytext);
+}
 
 "+"		|
 

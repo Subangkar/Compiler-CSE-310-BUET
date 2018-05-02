@@ -3,4 +3,4 @@ project(LexicalAnalyzer)
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_executable(LexicalAnalyzer lex.yy.c DataStructure.h)
+add_executable(LexicalAnalyzer DataStructure.h)

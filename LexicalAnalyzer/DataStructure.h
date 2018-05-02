@@ -17,6 +17,7 @@
 #include <string>
 #include <vector>
 #include <cstdio>
+#include <iomanip>
 
 
 
@@ -719,7 +720,10 @@ void HashTable<T>::printTable() {
 
 //		if (arr[i].length())
 		{
-			cout << " " << i << " --> ";
+//			cout << " " << i << " --> ";
+			cout << " " << std::setw(3) << std::setfill('0') << i << " --> ";
+
+
 
 			vector<T> vc = arr[i].get();
 
