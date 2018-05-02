@@ -119,3 +119,4 @@ SymbolTable/cmake-build-debug/CMakeFiles/
 
 
 *.o
+*.out
