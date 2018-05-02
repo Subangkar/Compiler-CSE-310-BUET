@@ -1128,13 +1128,17 @@ void SymbolTable::enterScope() {
 	ScopeTable *scopeTable = new ScopeTable(currentScope, max_id + 1, tableSize);
 	currentScope = scopeTable;
 	max_id++;
+#ifdef DEBUG
 	cout << " New ScopeTable with id " << currentScope->getId() << " created" << endl;
+#endif // DEBUG
 }
 
 void SymbolTable::exitScope() {
 	if (currentScope) {
 		ScopeTable *p = currentScope->getParentScope();
+#ifdef DEBUG
 		cout << " ScopeTable with id " << currentScope->getId() << " removed" << endl;
+#endif // DEBUG
 		delete currentScope;
 		currentScope = p;
 	}
@@ -1150,11 +1154,15 @@ bool SymbolTable::insert(const SymbolInfo &symbol) {
 	if (currentScope == nullptr) return false;
 
 	if (currentScope->Insert(symbol)) {
+#ifdef DEBUG
 		cout << " Inserted in ScopeTable# " << currentScope->getId() << " at position " << currentScope->GetPos(symbol)
 		     << endl;
+#endif // DEBUG
 		return true;
 	}
+#ifdef DEBUG
 	cout << " " << symbol << " already exists in current ScopeTable" << endl;
+#endif // DEBUG
 	return false;
 }
 
@@ -1176,13 +1184,16 @@ bool SymbolTable::remove(const SymbolInfo &symbol) {
 
 
 	if (scope && scope->Delete(symbol.getName())) {
+#ifdef DEBUG
 //		cout << " Deleted From ScopeTable# " << scope->getId() << " at position " << scope->GetPos(symbol) << endl;
 		cout << " Deleted From current ScopeTable " << endl;
+#endif // DEBUG
 		return true;
 	}
 
-
+#ifdef DEBUG
 	cout << symbol.getName() << " not found" << endl;
+#endif // DEBUG
 	return false;
 }
 
@@ -1195,11 +1206,15 @@ SymbolInfo *SymbolTable::lookUp(const string &symbol) {
 	while (scope) {
 		HASH_POS hashPos = scope->GetPos(symbol);
 		if (hashPos.isValid()) {
+#ifdef DEBUG
 			cout << " Found in ScopeTable# " << scope->getId() << " at position " << hashPos << endl;
+#endif // DEBUG
 			return scope->LookUp(symbol);
 		} else scope = scope->getParentScope();
 	}
+#ifdef DEBUG
 	cout << " Not found" << endl;
+#endif // DEBUG
 	return nullptr;
 }
 

@@ -1,3 +1,3 @@
 flex LexAnalyzer.l
 g++ lex.yy.c -o LexAnalyzer.exe
-LexAnalyzer.exe in.txt
+LexAnalyzer.exe in.c

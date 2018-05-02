@@ -7,9 +7,23 @@ int main(){
 	printf("abc\
 def\
 ghi");
+
+// multi\line /**/ \
+cont\
+con2\
+/**/
+
+// x
+double x;
+
+int cont;/**/ float inue;
+
 // a comment
-/** another
-*** comment ***/
+/** /* another *
+*** // comment \  ***/
 	return 0;
+
 }
-	
+
+
+/* ( * ) */ 	

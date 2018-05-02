@@ -2,12 +2,7 @@
 
 %{
 
-#include "DataStructure.h"
-SymbolTable st(10);
-FILE *logout,*tokenout;
-int line_count = 1;
-int keyword_count=0;
-
+#include "LexBase.h"
 
 
 #define IF_TOKEN "IF"
@@ -37,85 +32,82 @@ int keyword_count=0;
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-void addToken_keyword(string token_name)
-{
-	string token = string("<")+token_name+string(">");
-	fprintf(tokenout,(token.data()) );
-	fprintf(logout,"Line no %d: TOKEN %s Lexeme %s found\n",line_count,token.c_str(),yytext);
-	keyword_count++;
-}
-
-
-
-
 %}
 
-WHITESPACE [ \t\f\r\v]+ 
+WHITESPACE [ \t\f\r\v]+
 LETTER [a-zA-Z]
 DIGIT [0-9]
 NEWLINE \n
 ALPHABET [{LETTER}_]
 ALPHANUMERIC [a-zA-Z0-9_]
 
+
+
+
+SLASH_COMMENT "//"(.*([\\]("\r\n"|[\n]))?.*)*
+
+STAR_COMMENT_START "/*"
+STAR_COMMENT_END "*/"
+ANYTHING_EXCEPT_STAR [^*]
+STAR_NOT_FOLLOWED_BY_SLASH "*"[^/]
+
+STAR_COMMENT "/*"([^\*]|([\*][^/])|"\r\n"|"\n")*"*/"
+
+
 %%
 
 {NEWLINE} {line_count++;}
+{WHITESPACE}+ {}
 
-"if" {addToken_keyword(IF_TOKEN);}
-"for" {addToken_keyword(FOR_TOKEN);}
-"do" {addToken_keyword(DO_TOKEN);}
-"int" {addToken_keyword(INT_TOKEN);}
-"float" {addToken_keyword(FLOAT_TOKEN);}
-"void" {addToken_keyword(VOID_TOKEN);}
-"switch" {addToken_keyword(SWITCH_TOKEN);}
-"default" {addToken_keyword(DEFAULT_TOKEN);}
-
-"else" {addToken_keyword(ELSE_TOKEN);}
-"while" {addToken_keyword(WHILE_TOKEN);}
-"break" {addToken_keyword(BREAK_TOKEN);}
-"char" {addToken_keyword(CHAR_TOKEN);}
-"double" {addToken_keyword(DOUBLE_TOKEN);}
-"return" {addToken_keyword(RETURN_TOKEN);}
-"case" {addToken_keyword(CASE_TOKEN);}
-"continue" {addToken_keyword(CONTINUE_TOKEN);}
+{SLASH_COMMENT}	|
+{STAR_COMMENT}	{comment();}
 
 
 
+"if" 		{addToken_keyword(IF_TOKEN);}
+"for" 		{addToken_keyword(FOR_TOKEN);}
+"do" 		{addToken_keyword(DO_TOKEN);}
+"int" 		{addToken_keyword(INT_TOKEN);}
+"float" 	{addToken_keyword(FLOAT_TOKEN);}
+"void" 		{addToken_keyword(VOID_TOKEN);}
+"switch" 	{addToken_keyword(SWITCH_TOKEN);}
+"default" 	{addToken_keyword(DEFAULT_TOKEN);}
+
+"else" 		{addToken_keyword(ELSE_TOKEN);}
+"while" 	{addToken_keyword(WHILE_TOKEN);}
+"break" 	{addToken_keyword(BREAK_TOKEN);}
+"char" 		{addToken_keyword(CHAR_TOKEN);}
+"double" 	{addToken_keyword(DOUBLE_TOKEN);}
+"return"	{addToken_keyword(RETURN_TOKEN);}
+"case" 		{addToken_keyword(CASE_TOKEN);}
+"continue" 	{addToken_keyword(CONTINUE_TOKEN);}
 
 
-<<EOF>> {printf("Total Line Number: %d and KeyWords: %d\n",line_count,keyword_count); return 0;}
+
+
+<<EOF>> {printf("\nTotal Line Number: %d and KeyWords: %d\n",line_count,keyword_count); return 0;}
 
 
 %%
 
-
+// int yywrap()
+// {
+// 	return 0;
+// }
 
 int main(int argc,char *argv[]){
-	
+
 	if(argc!=2){
 		printf("Please provide input file name and try again\n");
 		return 0;
 	}
-	
+
 	FILE *fin=fopen(argv[1],"r");
 	if(fin==NULL){
 		printf("Cannot open specified file\n");
 		return 0;
 	}
-	
+
 	logout = fopen("log.txt","w");
 	tokenout = fopen("token.txt","w");
 
@@ -126,5 +118,5 @@ int main(int argc,char *argv[]){
 	fclose(tokenout);
 	fclose(logout);
 	return 0;
-	
+
 }
