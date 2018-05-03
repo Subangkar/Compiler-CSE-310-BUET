@@ -1,14 +1,16 @@
 int main(){
+	short x;
 	x+++;
 	int a,b;
 	a=a+.1;
-	char ch='xy';
+	char ch='\15';
 	ch='\t';
-	char c[]="ab\td;
-	printf("abc\
+	char e ='\p';
+	char c[]="ab\td";
+	printf("abc /**/ \\
 		def\
 ghi");
-.45
+3.14159E-10;
 // multi\line /**/ \
 cont\
 con2\

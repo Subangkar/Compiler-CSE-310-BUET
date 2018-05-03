@@ -65,18 +65,19 @@ NOT_IDENTIFIER {DIGIT}({ALPHANUMERIC})*
 
 DIGITS {DIGIT}+
 DECPOINT (\.)*
+FRACTION (\.{DIGITS})
 
 INTEGER {DIGITS}
-FLOATING_POINT ({INTEGER})(\.{DIGITS})(E[+-]?{INTEGER})?
+FLOATING_POINT ({INTEGER})?(\.?{DIGITS})(E[+-]?{INTEGER})?
 TOO_DECPOINT {DIGIT}*((\.)+{DIGITS})+(E{DECPOINT}[+-]?{DECPOINT}{DIGITS})?{DECPOINT}{DIGITS}*
 ILL_NUM ({DIGITS}|{FLOATING_POINT})[E]*{FLOATING_POINT}*
 
 
 
-CHARACTER ('(\\.|[^\\'])')
+CHARACTER ('(\\.|[^\\'\n])')
 ILL_CHARACTER ('(')?')
 MULTI_CHARACTER '.(.)+'
-UNFINISHED_CHARACTER '[.]*|'[\\]'
+UNFINISHED_CHARACTER '[^'\n]*|'[\\]'
 
 
 
@@ -122,9 +123,7 @@ ADDOP ("+"|"-")
 {ILL_NUM}				{printError("Ill formed number");}
 {ILL_CHARACTER}			{printError("Invalid character");}
 {MULTI_CHARACTER}		{printError("Multi character constant ");}
-{UNFINISHED_CHARACTER}	{
-	//printError("Unfinished character");
-	}
+{UNFINISHED_CHARACTER}	{printError("Unfinished character");}
 {UNFINISHED_STRING}		{printError("Unfinished string");}
 
 
