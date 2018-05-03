@@ -8,7 +8,7 @@
 #include "DataStructure.h"
 #include "Utils.h"
 
-SymbolTable hashTable(10);
+SymbolTable hashTable(7);
 FILE *logout, *tokenout;
 int line_count = 1;
 int keyword_count = 0;
@@ -17,12 +17,15 @@ int err_count = 0;
 
 
 #define TOKEN_PRINT_KEY "<%s> "
-#define TOKEN_PRINT_SYMBOL "<%s,%s> "
+#define TOKEN_PRINT_SYMBOL "<%s, %s> "
+#define LOG_TOKEN_PRINT "\nLine no %d: TOKEN <%s> Lexeme %s found\n"
+#define LOG_ERROR_PRINT "\n<< Error @ Line no %d: %s: %s >>\n"
+#define LOG_COMMENT_PRINT "\nLine no %d: TOKEN <COMMENT> Lexeme <%s> found\n"
 
 
 
 void printLog(int lineNo, string tokenName, string lexemeName) {
-	fprintf(logout, "Line no %d: TOKEN <%s> Lexeme %s found\n", line_count, tokenName.data(), lexemeName.data());
+	fprintf(logout, LOG_TOKEN_PRINT, line_count, tokenName.data(), lexemeName.data());
 }
 
 
@@ -98,7 +101,7 @@ void addToken_operatorNotStore(string token_name) {
 
 
 void printError(string msg) {
-	fprintf(logout, "<< Line no %d: %s >>\n", line_count, msg.data());
+	fprintf(logout, LOG_ERROR_PRINT, line_count, msg.data(),yytext);
 
 	err_count++;
 
@@ -117,7 +120,7 @@ void comment() {
 		StringUtils::replaceFirst(cmnt,"*/","");
 	}
 
-	fprintf(logout, "Line no %d: TOKEN <COMMENT> Lexeme <%s> found\n", line_count, cmnt.data());
+	fprintf(logout, LOG_COMMENT_PRINT, line_count, cmnt.data());
 
 //	string s(yytext);
 	line_count += StringUtils::occCount(yytext, '\n');

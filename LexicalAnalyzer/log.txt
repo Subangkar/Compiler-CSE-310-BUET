@@ -1,15 +1,140 @@
-<< Line no 1: Too many decimal point >>
-<< Line no 2: Ill formed number >>
-<< Line no 3: Invalid numeric constant or identifier >>
-<< Line no 4: Multi character constant  >>
-Line no 5: TOKEN <ID> Lexeme a found
-<< Line no 6: Multi character constant  >>
-<< Line no 8: Invalid character >>
-<< Line no 9: Unfinished string >>
-<< Line no 10: Unfinished string >>
-Line no 12: TOKEN <ID> Lexeme ijk found
-<< Line no 12: Unfinished string >>
-<< Line no 13: Unfinished comment >>
 
-Total Line Number: 15
-Total Errors: 10
+Line no 1: TOKEN <INT> Lexeme int found
+
+Line no 1: TOKEN <ID> Lexeme main found
+
+Line no 1: TOKEN <LPAREN> Lexeme ( found
+
+Line no 1: TOKEN <RPAREN> Lexeme ) found
+
+Line no 1: TOKEN <LCURL> Lexeme { found
+
+Line no 2: TOKEN <ID> Lexeme short found
+
+Line no 2: TOKEN <ID> Lexeme x found
+
+Line no 2: TOKEN <SEMICOLON> Lexeme ; found
+
+Line no 3: TOKEN <ID> Lexeme x found
+
+Line no 3: TOKEN <INCOP> Lexeme ++ found
+
+Line no 3: TOKEN <ADDOP> Lexeme + found
+
+Line no 3: TOKEN <SEMICOLON> Lexeme ; found
+
+Line no 4: TOKEN <INT> Lexeme int found
+
+Line no 4: TOKEN <ID> Lexeme a found
+
+Line no 4: TOKEN <COMMA> Lexeme , found
+
+Line no 4: TOKEN <ID> Lexeme b found
+
+Line no 4: TOKEN <SEMICOLON> Lexeme ; found
+
+Line no 5: TOKEN <ID> Lexeme a found
+
+Line no 5: TOKEN <ASSIGNOP> Lexeme = found
+
+Line no 5: TOKEN <ID> Lexeme a found
+
+Line no 5: TOKEN <ADDOP> Lexeme + found
+
+Line no 5: TOKEN <CONST_FLOAT> Lexeme .1 found
+
+Line no 5: TOKEN <SEMICOLON> Lexeme ; found
+
+Line no 6: TOKEN <CHAR> Lexeme char found
+
+Line no 6: TOKEN <ID> Lexeme ch found
+
+Line no 6: TOKEN <ASSIGNOP> Lexeme = found
+
+<< Error @ Line no 6: Multi character constant : '\15' >>
+
+Line no 6: TOKEN <SEMICOLON> Lexeme ; found
+
+Line no 7: TOKEN <ID> Lexeme ch found
+
+Line no 7: TOKEN <ASSIGNOP> Lexeme = found
+
+Line no 7: TOKEN <CONST_CHAR> Lexeme '\t' found
+
+Line no 7: TOKEN <SEMICOLON> Lexeme ; found
+
+Line no 8: TOKEN <CHAR> Lexeme char found
+
+Line no 8: TOKEN <ID> Lexeme e found
+
+Line no 8: TOKEN <ASSIGNOP> Lexeme = found
+
+Line no 8: TOKEN <CONST_CHAR> Lexeme '\p' found
+
+Line no 8: TOKEN <SEMICOLON> Lexeme ; found
+
+Line no 9: TOKEN <CHAR> Lexeme char found
+
+Line no 9: TOKEN <ID> Lexeme c found
+
+Line no 9: TOKEN <LTHIRD> Lexeme [ found
+
+Line no 9: TOKEN <RTHIRD> Lexeme ] found
+
+Line no 9: TOKEN <ASSIGNOP> Lexeme = found
+
+Line no 9: TOKEN <STRING> Lexeme "ab\td" found
+
+Line no 9: TOKEN <SEMICOLON> Lexeme ; found
+
+Line no 10: TOKEN <ID> Lexeme printf found
+
+Line no 10: TOKEN <LPAREN> Lexeme ( found
+
+Line no 10: TOKEN <STRING> Lexeme "abc /**/ \\
+		def\
+ghi" found
+
+Line no 12: TOKEN <RPAREN> Lexeme ) found
+
+Line no 12: TOKEN <SEMICOLON> Lexeme ; found
+
+Line no 13: TOKEN <CONST_FLOAT> Lexeme 3.14159E-10 found
+
+Line no 13: TOKEN <SEMICOLON> Lexeme ; found
+
+Line no 14: TOKEN <COMMENT> Lexeme < multi\line /**/ contcon2/**/> found
+
+Line no 19: TOKEN <COMMENT> Lexeme < x> found
+
+Line no 20: TOKEN <DOUBLE> Lexeme double found
+
+Line no 20: TOKEN <ID> Lexeme x found
+
+Line no 20: TOKEN <ASSIGNOP> Lexeme = found
+
+<< Error @ Line no 20: Too many decimal point: 5.34.2 >>
+
+Line no 20: TOKEN <SEMICOLON> Lexeme ; found
+
+Line no 20: TOKEN <COMMENT> Lexeme <> found
+
+Line no 22: TOKEN <INT> Lexeme int found
+
+Line no 22: TOKEN <ID> Lexeme cont found
+
+Line no 22: TOKEN <SEMICOLON> Lexeme ; found
+
+<< Error @ Line no 22: Unfinished comment: /* float inue;
+// a comment
+/** /* another *
+*** // "comment" \  **
+	return 0;
+
+}
+
+
+/* ( * )  	 >>
+
+Total Line Number: 31
+Total Errors: 3
