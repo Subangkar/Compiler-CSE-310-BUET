@@ -7,6 +7,7 @@ int main(){
 	printf("abc\
 def\
 ghi");
+	
 // a comment
 /** another
 *** comment ***/
