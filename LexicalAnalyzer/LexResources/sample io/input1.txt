@@ -1,0 +1,16 @@
+int main(){
+char ch='a';
+ch = 'b'
+string s = "This is \\\\an string ";
+"this is \t an\
+string \\n too";
+//this is a single line comment
+//this is a single \ line comment too
+//but this\
+is a multi line commnet
+/* multi line \\n\
+comment */
+ch='\n'
+ch='\t'
+a=b+c;
+}

@@ -91,12 +91,7 @@ void addToken_operator(string token_name) {
 	fprintf(tokenout, TOKEN_PRINT_SYMBOL, token_name.data(), yytext);
 	printLog(line_count, token_name, yytext);
 
-	hashTable.insert(yytext, token_name);
-}
-
-void addToken_operatorNotStore(string token_name) {
-	fprintf(tokenout, TOKEN_PRINT_SYMBOL, token_name.data(), yytext);
-	printLog(line_count, token_name, yytext);
+	// hashTable.insert(yytext, token_name);
 }
 
 

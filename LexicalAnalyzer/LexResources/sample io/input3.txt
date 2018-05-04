@@ -1,0 +1,12 @@
+ch = '\'
+'abc'
+'a
+abc'
+ab'c
+'a\n'
+'\k'
+'\n'
+'\t'
+'a\nb'
+/* this one is \
+unfinished comment

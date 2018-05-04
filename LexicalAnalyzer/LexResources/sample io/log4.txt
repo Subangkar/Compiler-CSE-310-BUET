@@ -1,0 +1,20 @@
+
+Line No. 1: Token <STRING> Lexeme "abc" found
+
+Line No. 2: Token <STRING> Lexeme "abc \\\\ \t \\t def\" " found
+
+Error at line 3. Missing terminating character "abc \\\\ \t \\t def\" \"
+
+Error at line 4. Missing terminating character "abc
+
+Line No. 5: Token <STRING> Lexeme "" found
+
+Line No. 6: Token <STRING> Lexeme "aditya \
+chakma" found
+
+Error at line 8. Missing terminating character "aditya \\
+chakma
+
+Error at line 9. Missing terminating character "
+Total lines: 9
+Total errors: 4

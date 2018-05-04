@@ -152,16 +152,16 @@ ADDOP ("+"|"-")
 ("<="|">="|"=="|"!="|"<"|">") 	{addToken_operator(RELOP_TOKEN);}
 ("&&"|"||")						{addToken_operator(LOGICOP_TOKEN);}
 ("&"|"|"|"^"|"<<"|">>")			{addToken_operator(BITOP_TOKEN);}
-("=")							{addToken_operatorNotStore(ASSIGNOP_TOKEN);}
-"!"								{addToken_operatorNotStore(NOT_TOKEN);}
-"("								{addToken_operatorNotStore(LPAREN_TOKEN);}
-")"								{addToken_operatorNotStore(RPAREN_TOKEN);}
-"{"								{addToken_operatorNotStore(LCURL_TOKEN);}
-"}"								{addToken_operatorNotStore(RCURL_TOKEN);}
-"["								{addToken_operatorNotStore(LTHIRD_TOKEN);}
-"]"								{addToken_operatorNotStore(RTHIRD_TOKEN);}
-","								{addToken_operatorNotStore(COMMA_TOKEN);}
-";"								{addToken_operatorNotStore(SEMICOLON_TOKEN);}
+("=")							{addToken_operator(ASSIGNOP_TOKEN);}
+"!"								{addToken_operator(NOT_TOKEN);}
+"("								{addToken_operator(LPAREN_TOKEN);}
+")"								{addToken_operator(RPAREN_TOKEN);}
+"{"								{addToken_operator(LCURL_TOKEN);}
+"}"								{addToken_operator(RCURL_TOKEN);}
+"["								{addToken_operator(LTHIRD_TOKEN);}
+"]"								{addToken_operator(RTHIRD_TOKEN);}
+","								{addToken_operator(COMMA_TOKEN);}
+";"								{addToken_operator(SEMICOLON_TOKEN);}
 
 
 

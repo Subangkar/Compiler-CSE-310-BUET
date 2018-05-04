@@ -1,0 +1,163 @@
+
+Line No. 1: Token <INT> Lexeme int found
+
+Line No. 1: Token <ID> Lexeme main found
+
+ Scope Table # 1
+ [48]--><ID, main>
+
+Line No. 1: Token <LPAREN> Lexeme ( found
+
+Line No. 1: Token <RPAREN> Lexeme ) found
+
+Line No. 1: Token <LCUR> Lexeme { found
+
+Line No. 2: Token <CHAR> Lexeme char found
+
+Line No. 2: Token <ID> Lexeme ch found
+
+ Scope Table # 1
+ [0]--><ID, ch>
+ [48]--><ID, main>
+
+Line No. 2: Token <ASSIGNOP> Lexeme = found
+
+ Line No. 2: Token <CONST_CHAR> Lexeme 'a' found
+
+ Scope Table # 1
+ [0]--><ID, ch>
+ [12]--><CONST_CHAR, 'a'>
+ [48]--><ID, main>
+
+Line No. 2: Token <SEMICOLON> Lexeme ; found
+
+Line No. 3: Token <ID> Lexeme ch found
+
+Line No. 3: Token <ASSIGNOP> Lexeme = found
+
+ Line No. 3: Token <CONST_CHAR> Lexeme 'b' found
+
+ Scope Table # 1
+ [0]--><ID, ch>
+ [12]--><CONST_CHAR, 'a'>
+ [43]--><CONST_CHAR, 'b'>
+ [48]--><ID, main>
+
+Line No. 4: Token <ID> Lexeme string found
+
+ Scope Table # 1
+ [0]--><ID, ch>
+ [12]--><CONST_CHAR, 'a'>
+ [18]--><ID, string>
+ [43]--><CONST_CHAR, 'b'>
+ [48]--><ID, main>
+
+Line No. 4: Token <ID> Lexeme s found
+
+ Scope Table # 1
+ [0]--><ID, ch>
+ [12]--><CONST_CHAR, 'a'>
+ [18]--><ID, string>
+ [32]--><ID, s>
+ [43]--><CONST_CHAR, 'b'>
+ [48]--><ID, main>
+
+Line No. 4: Token <ASSIGNOP> Lexeme = found
+
+Line No. 4: Token <STRING> Lexeme "This is \\\\an string " found
+
+Line No. 4: Token <SEMICOLON> Lexeme ; found
+
+Line No. 5: Token <STRING> Lexeme "this is \t an\
+string \\n too" found
+
+Line No. 6: Token <SEMICOLON> Lexeme ; found
+
+Line No. 7: Token <COMMENT> Lexeme //this is a single line comment found
+
+Line No. 8: Token <COMMENT> Lexeme //this is a single \ line comment too found
+
+Line No. 9: Token <COMMENT> Lexeme //but this\
+is a multi line commnet found
+
+Token <COMMENT> Lexeme /* multi line \\n\
+comment */ found
+
+Line No. 13: Token <ID> Lexeme ch found
+
+Line No. 13: Token <ASSIGNOP> Lexeme = found
+
+ Line No. 13: Token <CONST_CHAR> Lexeme '\n' found
+
+ Scope Table # 1
+ [0]--><ID, ch>
+ [7]--><CONST_CHAR, '\n'>
+ [12]--><CONST_CHAR, 'a'>
+ [18]--><ID, string>
+ [32]--><ID, s>
+ [43]--><CONST_CHAR, 'b'>
+ [48]--><ID, main>
+
+Line No. 14: Token <ID> Lexeme ch found
+
+Line No. 14: Token <ASSIGNOP> Lexeme = found
+
+ Line No. 14: Token <CONST_CHAR> Lexeme '\t' found
+
+ Scope Table # 1
+ [0]--><ID, ch>
+ [7]--><CONST_CHAR, '\n'>
+ [12]--><CONST_CHAR, 'a'>
+ [18]--><ID, string>
+ [32]--><ID, s>
+ [43]--><CONST_CHAR, 'b'><CONST_CHAR, '\t'>
+ [48]--><ID, main>
+
+Line No. 15: Token <ID> Lexeme a found
+
+ Scope Table # 1
+ [0]--><ID, ch>
+ [7]--><CONST_CHAR, '\n'>
+ [12]--><CONST_CHAR, 'a'>
+ [14]--><ID, a>
+ [18]--><ID, string>
+ [32]--><ID, s>
+ [43]--><CONST_CHAR, 'b'><CONST_CHAR, '\t'>
+ [48]--><ID, main>
+
+Line No. 15: Token <ASSIGNOP> Lexeme = found
+
+Line No. 15: Token <ID> Lexeme b found
+
+ Scope Table # 1
+ [0]--><ID, ch>
+ [7]--><CONST_CHAR, '\n'>
+ [12]--><CONST_CHAR, 'a'>
+ [14]--><ID, a>
+ [15]--><ID, b>
+ [18]--><ID, string>
+ [32]--><ID, s>
+ [43]--><CONST_CHAR, 'b'><CONST_CHAR, '\t'>
+ [48]--><ID, main>
+
+Line No. 15: Token <ADDOP> Lexeme + found
+
+Line No. 15: Token <ID> Lexeme c found
+
+ Scope Table # 1
+ [0]--><ID, ch>
+ [7]--><CONST_CHAR, '\n'>
+ [12]--><CONST_CHAR, 'a'>
+ [14]--><ID, a>
+ [15]--><ID, b>
+ [16]--><ID, c>
+ [18]--><ID, string>
+ [32]--><ID, s>
+ [43]--><CONST_CHAR, 'b'><CONST_CHAR, '\t'>
+ [48]--><ID, main>
+
+Line No. 15: Token <SEMICOLON> Lexeme ; found
+
+Line No. 16: Token <RCUR> Lexeme } found
+Total lines: 16
+Total errors: 0

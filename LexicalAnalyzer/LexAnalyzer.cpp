@@ -1156,52 +1156,52 @@ YY_RULE_SETUP
 case 38:
 YY_RULE_SETUP
 #line 155 "LexAnalyzer.l"
-{addToken_operatorNotStore(ASSIGNOP_TOKEN);}
+{addToken_operator(ASSIGNOP_TOKEN);}
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
 #line 156 "LexAnalyzer.l"
-{addToken_operatorNotStore(NOT_TOKEN);}
+{addToken_operator(NOT_TOKEN);}
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
 #line 157 "LexAnalyzer.l"
-{addToken_operatorNotStore(LPAREN_TOKEN);}
+{addToken_operator(LPAREN_TOKEN);}
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
 #line 158 "LexAnalyzer.l"
-{addToken_operatorNotStore(RPAREN_TOKEN);}
+{addToken_operator(RPAREN_TOKEN);}
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
 #line 159 "LexAnalyzer.l"
-{addToken_operatorNotStore(LCURL_TOKEN);}
+{addToken_operator(LCURL_TOKEN);}
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
 #line 160 "LexAnalyzer.l"
-{addToken_operatorNotStore(RCURL_TOKEN);}
+{addToken_operator(RCURL_TOKEN);}
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
 #line 161 "LexAnalyzer.l"
-{addToken_operatorNotStore(LTHIRD_TOKEN);}
+{addToken_operator(LTHIRD_TOKEN);}
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
 #line 162 "LexAnalyzer.l"
-{addToken_operatorNotStore(RTHIRD_TOKEN);}
+{addToken_operator(RTHIRD_TOKEN);}
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
 #line 163 "LexAnalyzer.l"
-{addToken_operatorNotStore(COMMA_TOKEN);}
+{addToken_operator(COMMA_TOKEN);}
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
 #line 164 "LexAnalyzer.l"
-{addToken_operatorNotStore(SEMICOLON_TOKEN);}
+{addToken_operator(SEMICOLON_TOKEN);}
 	YY_BREAK
 case 48:
 YY_RULE_SETUP

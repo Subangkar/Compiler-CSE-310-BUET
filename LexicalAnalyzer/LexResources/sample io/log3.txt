@@ -1,0 +1,70 @@
+
+Line No. 1: Token <ID> Lexeme ch found
+
+ Scope Table # 1
+ [0]--><ID, ch>
+
+Line No. 1: Token <ASSIGNOP> Lexeme = found
+
+Error at line 1.Unterminated character literal '\'
+
+Error at line 2. Multicharacter constant error for character sequence 'abc'
+
+Error at line 3.Unterminated character literal 'a
+
+
+Line No. 4: Token <ID> Lexeme abc found
+
+ Scope Table # 1
+ [0]--><ID, ch>
+ [41]--><ID, abc>
+
+Error at line 4.Unterminated character literal '
+
+
+Line No. 5: Token <ID> Lexeme ab found
+
+ Scope Table # 1
+ [0]--><ID, ch>
+ [32]--><ID, ab>
+ [41]--><ID, abc>
+
+Error at line 5.Unterminated character literal 'c
+
+
+Error at line 6. Multicharacter constant error for character sequence 'a\n'
+
+ Line No. 7: Token <CONST_CHAR> Lexeme '\k' found
+
+ Scope Table # 1
+ [0]--><ID, ch>
+ [14]--><CONST_CHAR, '\k'>
+ [32]--><ID, ab>
+ [41]--><ID, abc>
+
+ Line No. 8: Token <CONST_CHAR> Lexeme '\n' found
+
+ Scope Table # 1
+ [0]--><ID, ch>
+ [7]--><CONST_CHAR, '\n'>
+ [14]--><CONST_CHAR, '\k'>
+ [32]--><ID, ab>
+ [41]--><ID, abc>
+
+ Line No. 9: Token <CONST_CHAR> Lexeme '\t' found
+
+ Scope Table # 1
+ [0]--><ID, ch>
+ [7]--><CONST_CHAR, '\n'>
+ [14]--><CONST_CHAR, '\k'>
+ [32]--><ID, ab>
+ [41]--><ID, abc>
+ [43]--><CONST_CHAR, '\t'>
+
+Error at line 10. Multicharacter constant error for character sequence 'a\nb'
+
+Error at line 11. Unfinished comment /* this one is \
+unfinished comment
+
+Total lines: 12
+Total errors: 8

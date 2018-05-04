@@ -1,0 +1,29 @@
+
+Error at line 1. Missing terminating character "this is an \
+unfinished string.
+
+Line No. 4: Token <ID> Lexeme aditya found
+
+ Scope Table # 1
+ [1]--><ID, aditya>
+
+Line No. 4: Token <ID> Lexeme chakma found
+
+ Scope Table # 1
+ [1]--><ID, aditya>
+ [38]--><ID, chakma>
+
+Error at line 6. Unfinished comment /* this is an unfinished comment
+a
+b
+c
+d
+e
+f
+g
+h
+i
+j
+
+Total lines: 16
+Total errors: 2

@@ -1,0 +1,2 @@
+<INT><ID,main><LPAREN,(><RPAREN,)><LCUR,{><CHAR><ID,ch><ASSIGNOP,=><CONST_CHAR,a><SEMICOLON,;><ID,ch><ASSIGNOP,=><CONST_CHAR,b><ID,string><ID,s><ASSIGNOP,=><STRING, "This is \\an string "><SEMICOLON,;><STRING, "this is 	 an string \n too"><SEMICOLON,;><ID,ch><ASSIGNOP,=><CONST_CHAR,
+><ID,ch><ASSIGNOP,=><CONST_CHAR,	><ID,a><ASSIGNOP,=><ID,b><ADDOP,+><ID,c><SEMICOLON,;><RCUR,}>

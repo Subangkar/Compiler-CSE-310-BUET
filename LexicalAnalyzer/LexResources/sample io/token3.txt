@@ -1,0 +1,2 @@
+<ID,ch><ASSIGNOP,=><ID,abc><ID,ab><CONST_CHAR,k><CONST_CHAR,
+><CONST_CHAR,	>
