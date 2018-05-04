@@ -1,152 +1,175 @@
 
-<< Error @ Line no 1: Unfinished string: "\\\\ >>
+Line no 1: TOKEN <INT> Lexeme int found
 
-<< Error @ Line no 2: Unfinished string: " >>
+Line no 1: TOKEN <ID> Lexeme main found
+ ScopeTable # 0
+ 008 --> < main : ID > 
 
-Line no 3: TOKEN <STRING> Lexeme "\
-" found
 
-<< Error @ Line no 5: Unfinished string: "\\ x\\\\ >>
+Line no 1: TOKEN <LPAREN> Lexeme ( found
 
-<< Error @ Line no 6: Unfinished string: " >>
+Line no 1: TOKEN <RPAREN> Lexeme ) found
 
-Line no 7: TOKEN <STRING> Lexeme "\t y\\\
-" found
+Line no 1: TOKEN <LCURL> Lexeme { found
 
-Line no 9: TOKEN <INT> Lexeme int found
+Line no 2: TOKEN <CHAR> Lexeme char found
 
-Line no 9: TOKEN <ID> Lexeme main found
+Line no 2: TOKEN <ID> Lexeme ch found
+ ScopeTable # 0
+ 008 --> < main : ID > 
+ 026 --> < ch : ID > 
 
-Line no 9: TOKEN <LPAREN> Lexeme ( found
 
-Line no 9: TOKEN <RPAREN> Lexeme ) found
+Line no 2: TOKEN <ASSIGNOP> Lexeme = found
 
-Line no 9: TOKEN <LCURL> Lexeme { found
+Line no 2: TOKEN <CONST_CHAR> Lexeme 'a' found
+ ScopeTable # 0
+ 008 --> < main : ID > 
+ 024 --> < 'a' : CONST_CHAR > 
+ 026 --> < ch : ID > 
 
-Line no 10: TOKEN <ID> Lexeme short found
 
-Line no 10: TOKEN <ID> Lexeme x found
+Line no 2: TOKEN <SEMICOLON> Lexeme ; found
 
-Line no 10: TOKEN <SEMICOLON> Lexeme ; found
+Line no 3: TOKEN <ID> Lexeme ch found
+ ScopeTable # 0
+ 008 --> < main : ID > 
+ 024 --> < 'a' : CONST_CHAR > 
+ 026 --> < ch : ID > 
 
-Line no 11: TOKEN <COMMENT> Lexeme < x+++;> found
 
-Line no 12: TOKEN <INT> Lexeme int found
+Line no 3: TOKEN <ASSIGNOP> Lexeme = found
 
-Line no 12: TOKEN <ID> Lexeme a found
+Line no 3: TOKEN <CONST_CHAR> Lexeme 'b' found
+ ScopeTable # 0
+ 008 --> < main : ID > 
+ 018 --> < 'b' : CONST_CHAR > 
+ 024 --> < 'a' : CONST_CHAR > 
+ 026 --> < ch : ID > 
 
-Line no 12: TOKEN <COMMA> Lexeme , found
 
-Line no 12: TOKEN <ID> Lexeme b found
+Line no 4: TOKEN <ID> Lexeme string found
+ ScopeTable # 0
+ 008 --> < main : ID > 
+ 018 --> < 'b' : CONST_CHAR > 
+ 020 --> < string : ID > 
+ 024 --> < 'a' : CONST_CHAR > 
+ 026 --> < ch : ID > 
 
-Line no 12: TOKEN <SEMICOLON> Lexeme ; found
 
-Line no 13: TOKEN <ID> Lexeme a found
+Line no 4: TOKEN <ID> Lexeme s found
+ ScopeTable # 0
+ 008 --> < main : ID > 
+ 018 --> < 'b' : CONST_CHAR > < s : ID > 
+ 020 --> < string : ID > 
+ 024 --> < 'a' : CONST_CHAR > 
+ 026 --> < ch : ID > 
+
+
+Line no 4: TOKEN <ASSIGNOP> Lexeme = found
+
+Line no 4: TOKEN <STRING> Lexeme "This is \\\\an string " found
+
+Line no 4: TOKEN <SEMICOLON> Lexeme ; found
+
+Line no 5: TOKEN <STRING> Lexeme "this is \t an\
+string \\n too" found
+
+Line no 6: TOKEN <SEMICOLON> Lexeme ; found
+
+Line no 7: TOKEN <COMMENT> Lexeme <this is a single line comment> found
+
+Line no 8: TOKEN <COMMENT> Lexeme <this is a single \ line comment too> found
+
+Line no 9: TOKEN <COMMENT> Lexeme <but thisis a multi line commnet> found
+
+Line no 11: TOKEN <COMMENT> Lexeme < multi line \\n\
+comment > found
+
+Line no 13: TOKEN <ID> Lexeme ch found
+ ScopeTable # 0
+ 008 --> < main : ID > 
+ 018 --> < 'b' : CONST_CHAR > < s : ID > 
+ 020 --> < string : ID > 
+ 024 --> < 'a' : CONST_CHAR > 
+ 026 --> < ch : ID > 
+
 
 Line no 13: TOKEN <ASSIGNOP> Lexeme = found
 
-Line no 13: TOKEN <ID> Lexeme a found
+Line no 13: TOKEN <CONST_CHAR> Lexeme '\n' found
+ ScopeTable # 0
+ 008 --> < main : ID > 
+ 018 --> < 'b' : CONST_CHAR > < s : ID > < '\n' : CONST_CHAR > 
+ 020 --> < string : ID > 
+ 024 --> < 'a' : CONST_CHAR > 
+ 026 --> < ch : ID > 
 
-Line no 13: TOKEN <ADDOP> Lexeme + found
-
-Line no 13: TOKEN <CONST_FLOAT> Lexeme .1 found
-
-Line no 13: TOKEN <SEMICOLON> Lexeme ; found
-
-Line no 14: TOKEN <CHAR> Lexeme char found
 
 Line no 14: TOKEN <ID> Lexeme ch found
+ ScopeTable # 0
+ 008 --> < main : ID > 
+ 018 --> < 'b' : CONST_CHAR > < s : ID > < '\n' : CONST_CHAR > 
+ 020 --> < string : ID > 
+ 024 --> < 'a' : CONST_CHAR > 
+ 026 --> < ch : ID > 
+
 
 Line no 14: TOKEN <ASSIGNOP> Lexeme = found
 
-Line no 14: TOKEN <CONST_CHAR> Lexeme '\\' found
+Line no 14: TOKEN <CONST_CHAR> Lexeme '\t' found
+ ScopeTable # 0
+ 008 --> < main : ID > 
+ 017 --> < '\t' : CONST_CHAR > 
+ 018 --> < 'b' : CONST_CHAR > < s : ID > < '\n' : CONST_CHAR > 
+ 020 --> < string : ID > 
+ 024 --> < 'a' : CONST_CHAR > 
+ 026 --> < ch : ID > 
 
-Line no 14: TOKEN <SEMICOLON> Lexeme ; found
 
-Line no 15: TOKEN <ID> Lexeme ch found
+Line no 15: TOKEN <ID> Lexeme a found
+ ScopeTable # 0
+ 008 --> < main : ID > 
+ 017 --> < '\t' : CONST_CHAR > 
+ 018 --> < 'b' : CONST_CHAR > < s : ID > < '\n' : CONST_CHAR > 
+ 020 --> < string : ID > 
+ 021 --> < a : ID > 
+ 024 --> < 'a' : CONST_CHAR > 
+ 026 --> < ch : ID > 
+
 
 Line no 15: TOKEN <ASSIGNOP> Lexeme = found
 
-Line no 15: TOKEN <CONST_CHAR> Lexeme '\t' found
+Line no 15: TOKEN <ID> Lexeme b found
+ ScopeTable # 0
+ 002 --> < b : ID > 
+ 008 --> < main : ID > 
+ 017 --> < '\t' : CONST_CHAR > 
+ 018 --> < 'b' : CONST_CHAR > < s : ID > < '\n' : CONST_CHAR > 
+ 020 --> < string : ID > 
+ 021 --> < a : ID > 
+ 024 --> < 'a' : CONST_CHAR > 
+ 026 --> < ch : ID > 
+
+
+Line no 15: TOKEN <ADDOP> Lexeme + found
+
+Line no 15: TOKEN <ID> Lexeme c found
+ ScopeTable # 0
+ 002 --> < b : ID > 
+ 008 --> < main : ID > 
+ 012 --> < c : ID > 
+ 017 --> < '\t' : CONST_CHAR > 
+ 018 --> < 'b' : CONST_CHAR > < s : ID > < '\n' : CONST_CHAR > 
+ 020 --> < string : ID > 
+ 021 --> < a : ID > 
+ 024 --> < 'a' : CONST_CHAR > 
+ 026 --> < ch : ID > 
+
 
 Line no 15: TOKEN <SEMICOLON> Lexeme ; found
 
-Line no 16: TOKEN <CHAR> Lexeme char found
+Line no 16: TOKEN <RCURL> Lexeme } found
 
-Line no 16: TOKEN <ID> Lexeme e found
-
-Line no 16: TOKEN <ASSIGNOP> Lexeme = found
-
-Line no 16: TOKEN <CONST_CHAR> Lexeme '\p' found
-
-Line no 16: TOKEN <SEMICOLON> Lexeme ; found
-
-Line no 17: TOKEN <CHAR> Lexeme char found
-
-Line no 17: TOKEN <ID> Lexeme c found
-
-Line no 17: TOKEN <LTHIRD> Lexeme [ found
-
-Line no 17: TOKEN <RTHIRD> Lexeme ] found
-
-Line no 17: TOKEN <ASSIGNOP> Lexeme = found
-
-Line no 17: TOKEN <STRING> Lexeme "ab\td" found
-
-Line no 17: TOKEN <SEMICOLON> Lexeme ; found
-
-Line no 18: TOKEN <ID> Lexeme printf found
-
-Line no 18: TOKEN <LPAREN> Lexeme ( found
-
-<< Error @ Line no 18: Unfinished string: "abc /**/ \\\\\
-	def\
-	s\\ >>
-
-Line no 21: TOKEN <ID> Lexeme ghi found
-
-<< Error @ Line no 21: Unfinished string: "); >>
-
-<< Error @ Line no 22: Unfinished string: "\\\\ >>
-
-<< Error @ Line no 23: Unfinished string: " >>
-
-Line no 24: TOKEN <CONST_FLOAT> Lexeme 3.14159E-10 found
-
-Line no 24: TOKEN <SEMICOLON> Lexeme ; found
-
-Line no 25: TOKEN <COMMENT> Lexeme < multi\line /**/ contcon2/**/> found
-
-Line no 30: TOKEN <COMMENT> Lexeme < x> found
-
-Line no 31: TOKEN <DOUBLE> Lexeme double found
-
-Line no 31: TOKEN <ID> Lexeme y found
-
-Line no 31: TOKEN <ASSIGNOP> Lexeme = found
-
-Line no 31: TOKEN <CONST_FLOAT> Lexeme 5.342 found
-
-Line no 31: TOKEN <SEMICOLON> Lexeme ; found
-
-Line no 31: TOKEN <COMMENT> Lexeme <> found
-
-Line no 33: TOKEN <INT> Lexeme int found
-
-Line no 33: TOKEN <ID> Lexeme cont found
-
-Line no 33: TOKEN <SEMICOLON> Lexeme ; found
-
-Line no 33: TOKEN <COMMENT> Lexeme < float inue;
-// a comment
-/** /* another *
-*** // "comment" \  **
-	return 0;
-\> found
-
-Line no 39: TOKEN <RCURL> Lexeme } found
-
-Line no 42: TOKEN <COMMENT> Lexeme < ( * )  	\\\\\\******> found
-
-Total Line Number: 42
-Total Errors: 8
+Total Line Number: 17
+Total Errors: 0

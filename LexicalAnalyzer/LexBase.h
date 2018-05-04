@@ -2,6 +2,10 @@
 // Created by subangkar on 5/2/18.
 //
 
+
+#define SYMBOL_TABLE_SIZE 29
+
+
 #ifndef LEXICALANALYZER_LEXBASE_H
 #define LEXICALANALYZER_LEXBASE_H
 
@@ -9,7 +13,7 @@
 #include "Utils.h"
 #include <locale>
 
-SymbolTable hashTable(7);
+SymbolTable hashTable(SYMBOL_TABLE_SIZE);
 FILE *logout, *tokenout;
 int line_count = 1;
 int keyword_count = 0;
@@ -27,6 +31,12 @@ int err_count = 0;
 
 void printLog(int lineNo, string tokenName, string lexemeName) {
 	fprintf(logout, LOG_TOKEN_PRINT, line_count, tokenName.data(), lexemeName.data());
+}
+
+void insertToHashTable(string token_symbol,string token_name) {
+	hashTable.insert(token_symbol, token_name);
+	hashTable.printAllScope(logout);
+
 }
 
 
@@ -47,7 +57,7 @@ void addToken_identifier() {
 	string token_name = "ID";
 	fprintf(tokenout, TOKEN_PRINT_SYMBOL, token_name.data(), yytext);
 	printLog(line_count, token_name, yytext);
-	hashTable.insert(yytext, token_name);
+	insertToHashTable(yytext, token_name);
 }
 
 void addToken_string() {
@@ -63,7 +73,7 @@ void addToken_string() {
 
 	line_count += StringUtils::occCount(yytext, '\n');
 
-//	hashTable.insert(string_literal,token_name);
+//	insertToHashTable(string_literal,token_name);
 }
 
 
@@ -72,7 +82,7 @@ void addToken_const_int() {
 	fprintf(tokenout, TOKEN_PRINT_SYMBOL, token_name.data(), yytext);
 	printLog(line_count, token_name, yytext);
 
-	hashTable.insert(yytext, token_name);
+	insertToHashTable(yytext, token_name);
 }
 
 void addToken_const_float() {
@@ -80,7 +90,7 @@ void addToken_const_float() {
 	fprintf(tokenout, TOKEN_PRINT_SYMBOL, token_name.data(), yytext);
 	printLog(line_count, token_name, yytext);
 
-	hashTable.insert(yytext, token_name);
+	insertToHashTable(yytext, token_name);
 }
 
 void addToken_const_char() {
@@ -92,14 +102,14 @@ void addToken_const_char() {
 	fprintf(tokenout, TOKEN_PRINT_SYMBOL, token_name.data(), char_literal.data());
 	printLog(line_count, token_name, yytext);
 
-	hashTable.insert(yytext, token_name);
+	insertToHashTable(yytext, token_name);
 }
 
 void addToken_operator(string token_name) {
 	fprintf(tokenout, TOKEN_PRINT_SYMBOL, token_name.data(), yytext);
 	printLog(line_count, token_name, yytext);
 
-	// hashTable.insert(yytext, token_name);
+	// insertToHashTable(yytext, token_name);
 }
 
 
