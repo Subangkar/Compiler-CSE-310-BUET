@@ -43,12 +43,6 @@
 
 
 #define _TOKEN ""
-#define _TOKEN ""
-#define _TOKEN ""
-#define _TOKEN ""
-
-
-
 
 %}
 
@@ -82,9 +76,6 @@ UNFINISHED_CHARACTER '[^'\n]*|'[\\]'
 
 ANYTHING_EXCEPT_SLASH [^\\]
 SLASH [\\]
-EVEN_NO_OF_SLASH ({SLASH}{2})*
-ODD_NO_OF_SLASH {ANYTHING_EXCEPT_SLASH}({EVEN_NO_OF_SLASH}{SLASH})
-ODD_NO_OF_SLASH_AT_END_OF_LINE ({ODD_NO_OF_SLASH}{NEWLINE})
 NOT_QUOTE_SLASH_OR_NEWLINE [^"\\\n]
 ANYTHING (.|{NEWLINE})
 
@@ -100,9 +91,9 @@ STAR_COMMENT_END "*/"
 ANYTHING_EXCEPT_STAR [^\*]
 STAR_NOT_FOLLOWED_BY_SLASH [\*][^/]
 
-SLASH_COMMENT "//"(.*([\\]("\r\n"|[\n]))?.*)*
+SLASH_COMMENT "//"(.*({SLASH}({NEWLINE}))?.*)*
 
-UNFINISHED_STAR_COMMENT {STAR_COMMENT_START}({ANYTHING_EXCEPT_STAR}|{STAR_NOT_FOLLOWED_BY_SLASH}|NEWLINE)*
+UNFINISHED_STAR_COMMENT {STAR_COMMENT_START}({ANYTHING_EXCEPT_STAR}|{STAR_NOT_FOLLOWED_BY_SLASH}|{NEWLINE})*
 STAR_COMMENT {UNFINISHED_STAR_COMMENT}{STAR_COMMENT_END}
 
 
@@ -124,14 +115,14 @@ ADDOP ("+"|"-")
 {INTEGER}				{addToken_const_int();}
 {FLOATING_POINT}		{addToken_const_float();}
 {CHARACTER} 			{addToken_const_char();}
-{STRING}				{addToken_string(); ECHO;}
+{STRING}				{addToken_string();}
 
 {TOO_DECPOINT}			{printError("Too many decimal point");}
 {ILL_NUM}				{printError("Ill formed number");}
 {ILL_CHARACTER}			{printError("Invalid character");}
 {MULTI_CHARACTER}		{printError("Multi character constant ");}
 {UNFINISHED_CHARACTER}	{printError("Unfinished character");}
-{UNFINISHED_STRING}		{printError("Unfinished string");ECHO;}
+{UNFINISHED_STRING}		{printError("Unfinished string");}
 
 
 "if" 		|
@@ -177,7 +168,7 @@ ADDOP ("+"|"-")
 
 {NOT_IDENTIFIER}	{printError("Invalid numeric constant or identifier");}
 
-. {printError("Unrecognized character");}
+{ANYTHING} {printError("Unrecognized character");}
 
 <<EOF>> {fprintf(logout,"\nTotal Line Number: %d\nTotal Errors: %d\n",line_count,err_count); return 0;}
 
@@ -190,7 +181,6 @@ int main(int argc,char *argv[]){
 		printf("Please provide input file name and try again\n");
 		return 0;
 	}
-
 	FILE *fin=fopen(argv[1],"r");
 	if(fin==NULL){
 		printf("Cannot open specified file\n");
@@ -202,10 +192,10 @@ int main(int argc,char *argv[]){
 
 	yyin= fin;
 	yylex();
-	hashTable.printAllScope();
+	// hashTable.setPrintEmptyListOn(true);
+	hashTable.printAllScope(stdout);
 	fclose(yyin);
 	fclose(tokenout);
 	fclose(logout);
 	return 0;
-
 }

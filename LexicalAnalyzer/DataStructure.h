@@ -10,23 +10,16 @@
 #define DATA_STRUCTURE
 
 
-
-
 #include <iostream>
 #include <cmath>
 #include <string>
-#include <vector>
+#include <utility>
 #include <cstdio>
 #include <iomanip>
+#include <fstream>
+#include <vector>
 
-
-
-
-
-
-
-
-
+using std::ostream;
 
 
 #ifndef SYMBOLTABLE_CONSTANTS_H
@@ -37,16 +30,6 @@
 
 
 #endif //SYMBOLTABLE_CONSTANTS_H
-
-
-
-
-
-
-
-
-
-
 
 
 #ifndef SYMBOLTABLE_TYPEDEFN_H
@@ -83,18 +66,8 @@ struct HASH_POS {
 #endif //SYMBOLTABLE_TYPEDEFN_H
 
 
-
-
-
-
-
-
-
-
-
 #ifndef SYMBOLTABLE_LINKEDLIST_H
 #define SYMBOLTABLE_LINKEDLIST_H
-
 
 
 template<class T>
@@ -109,7 +82,7 @@ public:
 	const T &GetValue() const { return data; }
 
 	// returns actual data pointer
-	T* getData() { return &data;}
+	T *getData() { return &data; }
 
 	void SetNext(Node<T> *next) { this->next = next; }
 
@@ -125,46 +98,53 @@ private:
 };
 
 
-template <class T>
+template<class T>
 class LinkedList {
 
 
-	bool PushFront(const T& value);
-	bool PushBack (const T& value);
-	bool PopFront(T* value);
-	bool PopBack (T* value);
+	bool PushFront(const T &value);
 
-	bool Insert(const T& value, const int& position);
-	bool Insert(const T& value);
+	bool PushBack(const T &value);
 
-	bool Delete(const int& position);
+	bool PopFront(T *value);
+
+	bool PopBack(T *value);
+
+	bool Insert(const T &value, const int &position);
+
+	bool Insert(const T &value);
+
+	bool Delete(const int &position);
 
 public:
-	LinkedList(): head(NULL), tail(NULL) {}
+	LinkedList() : head(NULL), tail(NULL) {}
+
 	~LinkedList();
 
-	int  length() const;
+	int length() const;
+
 	void Print() const;
 
-	bool insert(const T& value);
+	bool insert(const T &value);
 
-	bool remove(const T& value);
+	bool remove(const T &value);
 
 //    int  findPos(const int& value) const;
 	int findPos(const T &value) const;
-	bool search(const T& value) const;
+
+	bool search(const T &value) const;
 
 	// returns the original data pointer if exists otherwise NULL
-	T* getData(const T &value);
-	bool Get (const int& position, T* value);
+	T *getData(const T &value);
+
+	bool Get(const int &position, T *value);
 
 	std::vector<T> get() const;
 
 private:
-	Node<T>* head;
-	Node<T>* tail;
+	Node<T> *head;
+	Node<T> *tail;
 };
-
 
 
 #endif //SYMBOLTABLE_LINKEDLIST_H
@@ -172,7 +152,6 @@ private:
 
 #ifndef SYMBOLTABLE_LINKEDLIST_CPP
 #define SYMBOLTABLE_LINKEDLIST_CPP
-
 
 
 template<class T>
@@ -476,74 +455,64 @@ T *LinkedList<T>::getData(const T &value) {
 #endif //SYMBOLTABLE_LINKEDLIST_CPP
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #ifndef SYMBOLTABLE_HASHTABLE_H
 #define SYMBOLTABLE_HASHTABLE_H
-
-
-
 
 
 #pragma once
 
 
-
-
-
 using std::vector;
 
 
-
-template <typename T>
-class HashTable
-{
+template<typename T>
+class HashTable {
 public:
 	HashTable(); //default constructor
 	explicit HashTable(int); //one parameter constructor
-	HashTable(const HashTable&); //copy constructor
+	HashTable(const HashTable &); //copy constructor
 	virtual ~HashTable(); //destructor
-	HashTable& operator=(const HashTable&); //assignment operator
+	HashTable &operator=(const HashTable &); //assignment operator
 	bool insert(const T &);
+
 //	bool remove(const string&);
-	bool remove(const T&);
+	bool remove(const T &);
+
 //	bool search(const string&) const;
-	bool search(const T&) const;
+	bool search(const T &) const;
+
 	int size() const; //return numOfItems
 	int maxSize() const; //return arrSize
 	double loadFactor() const;
+
 	vector<T> get() const; //returns a vector of all the strings in the HashTable
 
-	void printTable();
+	void printTable(FILE *printStream = stdout);
 
 	// returns the original data pointer if exists otherwise NULL
-	T* get(const T&key);
+	T *get(const T &key);
 
 	int64_t getLOC(const T &key); // index of table
 
 	int64_t getPOS(const T &key); // position in chain
 
-	HASH_POS getHASHPOS(const T& key);
+	HASH_POS getHASHPOS(const T &key);
+
+	bool isPrintEmptyListOn() const;
+
+	void setPrintEmptyListOn(bool printEmptyListOn);
+
+
 private:
-	LinkedList<T>* arr;
+	LinkedList<T> *arr;
 	int arrSize;
 	int numOfItems;
-	int64_p hashFunc(const T&) const;
 
-	void deepCopy(const HashTable& h);
+	int64_p hashFunc(const T &) const;
+
+	void deepCopy(const HashTable &h);
+
+	bool printEmptyListOn = false;
 };
 
 #endif //SYMBOLTABLE_HASHTABLE_H
@@ -551,11 +520,6 @@ private:
 
 #ifndef SYMBOLTABLE_HASHTABLE_CPP
 #define SYMBOLTABLE_HASHTABLE_CPP
-
-
-
-
-
 
 
 using std::cout;
@@ -567,7 +531,8 @@ using std::endl;
  *====================================================================*/
 
 template<typename T>
-int64_p HashTable<T>::hashFunc(const T &s) const //hash function (utilizes horner's method to prevent overflow on large strings)
+int64_p
+HashTable<T>::hashFunc(const T &s) const //hash function (utilizes horner's method to prevent overflow on large strings)
 {
 	return s.hashValue() % arrSize;
 }
@@ -630,7 +595,7 @@ HashTable<T>::~HashTable() //destructor
 }
 
 template<typename T>
-HashTable<T> &HashTable<T>::operator=(const HashTable<T> &h) //assignment operator
+HashTable<T> &HashTable<T>::operator=(const HashTable <T> &h) //assignment operator
 {
 	if (this != &h) {
 		if (h.arr != NULL)
@@ -715,23 +680,27 @@ bool HashTable<T>::search(const T &s) const {
 }
 
 template<typename T>
-void HashTable<T>::printTable() {
+void HashTable<T>::printTable(FILE *printStream) {
 	for (int i = 0; i < arrSize; ++i) {
 
-//		if (arr[i].length())
+		if (printEmptyListOn || arr[i].length())
 		{
 //			cout << " " << i << " --> ";
-			cout << " " << std::setw(3) << std::setfill('0') << i << " --> ";
-
+//			cout << " " << std::setw(3) << std::setfill('0') << i << " --> ";
+			fprintf(printStream, " %03d --> ", i);
 
 
 			vector<T> vc = arr[i].get();
 
 			for (int j = 0; j < vc.size(); j++) {
-				cout << vc[j];
+//				cout << vc[j];
+//				fprintf(printStream,"%s",vc[j].printString().data());
+				fprintf(printStream, "%s", (char *) vc[j]);
+//				cout << vc[j].printString();
 			}
 
-			cout << endl;
+//			cout << endl;
+			fprintf(printStream, "\n");
 
 		}
 
@@ -757,34 +726,28 @@ int64_t HashTable<T>::getPOS(const T &key) {
 
 template<typename T>
 HASH_POS HashTable<T>::getHASHPOS(const T &key) {
-	return HASH_POS(getLOC(key),getPOS(key));
+	return HASH_POS(getLOC(key), getPOS(key));
+}
+
+template<typename T>
+bool HashTable<T>::isPrintEmptyListOn() const {
+	return printEmptyListOn;
+}
+
+template<typename T>
+void HashTable<T>::setPrintEmptyListOn(bool setprintEmptyListOn) {
+	printEmptyListOn = setprintEmptyListOn;
 }
 
 
 #endif //SYMBOLTABLE_HASHTABLE_CPP
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 #ifndef SYMBOLTABLE_SYMBOLINFO_H
 #define SYMBOLTABLE_SYMBOLINFO_H
 
 
-
-
-
 using std::string;
-
 
 
 class SymbolInfo {
@@ -793,9 +756,25 @@ class SymbolInfo {
 
 
 public:
+
+	explicit operator string() const {
+		return string("< " + name + " : " + type + " > ");
+	}
+
+	explicit operator char *() const {
+		char *str = new char[("< " + name + " : " + type + " > ").length()];
+		strcpy(str, ("< " + name + " : " + type + " > ").data());
+		return str;
+	}
+
+
+	string printString() {
+		return string("< " + name + " : " + type + " > ");
+	}
+
 	const string &getName() const;
 
-	explicit SymbolInfo(const string &name, const string &type = "");
+	explicit SymbolInfo(string name, string type = "");
 
 	void setName(const string &name);
 
@@ -826,8 +805,6 @@ private:
 #endif //SYMBOLTABLE_SYMBOLINFO_H
 
 
-
-
 using std::abs;
 
 const string &SymbolInfo::getName() const {
@@ -846,7 +823,7 @@ void SymbolInfo::setType(const string &type) {
 	SymbolInfo::type = type;
 }
 
-SymbolInfo::SymbolInfo(const string &name, const string &type) : name(name), type(type) {}
+SymbolInfo::SymbolInfo(string name, string type) : name(std::move(name)), type(std::move(type)) {}
 
 SymbolInfo::SymbolInfo(const SymbolInfo &symbolInfo) {
 	this->name = symbolInfo.name;
@@ -877,9 +854,9 @@ int64_p SymbolInfo::hashValue() const {
 
 	for (int i = 0; i < key.length(); i++) {
 		if (i % 2 == 0) {
-			value += abs( reverseDigits( key[i] ) ) * (int64_p) pow( 19 , i );
+			value += abs(reverseDigits(key[i])) * (int64_p) pow(19, i);
 		} else {
-			value += abs( (key[i]) * (int) pow( 23 , i ) );
+			value += abs((key[i]) * (int) pow(23, i));
 		}
 	}
 
@@ -901,27 +878,8 @@ int64_p SymbolInfo::reverseDigits(int64_p n) const {
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #ifndef SYMBOLTABLE_SCOPETABLE_H
 #define SYMBOLTABLE_SCOPETABLE_H
-
 
 
 class ScopeTable : private HashTable<SymbolInfo> {
@@ -962,7 +920,7 @@ public:
 
 	bool Delete(const string &symbol);
 
-	void Print();
+	void Print(FILE *printStream = stdout);
 
 
 	HASH_POS GetPos(const string &key);
@@ -972,7 +930,6 @@ public:
 
 
 #endif //SYMBOLTABLE_SCOPETABLE_H
-
 
 
 ScopeTable::ScopeTable(ScopeTable *parentScope) {
@@ -1022,9 +979,10 @@ bool ScopeTable::Delete(const string &symbol) {
 	return remove(SymbolInfo(symbol));
 }
 
-void ScopeTable::Print() {
-	cout << " ScopeTable # " << id << endl;
-	printTable();
+void ScopeTable::Print(FILE *printStream) {
+//	cout << " ScopeTable # " << id << endl;
+	fprintf(printStream, " ScopeTable # %d\n", id);
+	printTable(printStream);
 }
 
 bool ScopeTable::Insert(const string &name, const string &type) {
@@ -1041,22 +999,6 @@ HASH_POS ScopeTable::GetPos(const string &key) {
 HASH_POS ScopeTable::GetPos(const SymbolInfo &key) {
 	return HASH_POS(getLOC(key), getPOS(key));
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 #ifndef SYMBOLTABLE_SYMBOLTABLE_H
@@ -1093,7 +1035,7 @@ public:
 
 	void printCurrentScope();
 
-	void printAllScope();
+	void printAllScope(FILE *printStream = stdout);
 
 };
 
@@ -1103,7 +1045,6 @@ public:
 
 #ifndef SYMBOLTABLE_SYMBOLTABLE_CPP
 #define SYMBOLTABLE_SYMBOLTABLE_CPP
-
 
 
 SymbolTable::SymbolTable(int64_p size) {
@@ -1156,7 +1097,7 @@ bool SymbolTable::insert(const SymbolInfo &symbol) {
 	if (currentScope->Insert(symbol)) {
 #ifdef DEBUG
 		cout << " Inserted in ScopeTable# " << currentScope->getId() << " at position " << currentScope->GetPos(symbol)
-		     << endl;
+			 << endl;
 #endif // DEBUG
 		return true;
 	}
@@ -1185,8 +1126,8 @@ bool SymbolTable::remove(const SymbolInfo &symbol) {
 
 	if (scope && scope->Delete(symbol.getName())) {
 #ifdef DEBUG
-//		cout << " Deleted From ScopeTable# " << scope->getId() << " at position " << scope->GetPos(symbol) << endl;
-		cout << " Deleted From current ScopeTable " << endl;
+		//		cout << " Deleted From ScopeTable# " << scope->getId() << " at position " << scope->GetPos(symbol) << endl;
+				cout << " Deleted From current ScopeTable " << endl;
 #endif // DEBUG
 		return true;
 	}
@@ -1222,11 +1163,12 @@ void SymbolTable::printCurrentScope() {
 	currentScope->Print();
 }
 
-void SymbolTable::printAllScope() {
+void SymbolTable::printAllScope(FILE *printStream) {
 	for (ScopeTable *scope = currentScope; scope; scope = scope->getParentScope()) {
-		scope->Print();
-		cout << endl;
+		scope->Print(printStream);
+		fprintf(printStream, "\n");
 	}
+
 }
 
 
