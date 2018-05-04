@@ -80,10 +80,17 @@ MULTI_CHARACTER '.(.)+'
 UNFINISHED_CHARACTER '[^'\n]*|'[\\]'
 
 
+ANYTHING_EXCEPT_SLASH [^\\]
+SLASH [\\]
+EVEN_NO_OF_SLASH ({SLASH}{2})*
+ODD_NO_OF_SLASH {ANYTHING_EXCEPT_SLASH}({EVEN_NO_OF_SLASH}{SLASH})
+ODD_NO_OF_SLASH_AT_END_OF_LINE ({ODD_NO_OF_SLASH}{NEWLINE})
+NOT_QUOTE_SLASH_OR_NEWLINE [^"\\\n]
+ANYTHING (.|{NEWLINE})
 
 
-STRING \"([^\"\n]|\\{NEWLINE})*\"
-UNFINISHED_STRING \"([^\"\n]|(\\{NEWLINE}))*
+UNFINISHED_STRING \"({NOT_QUOTE_SLASH_OR_NEWLINE}|{SLASH}{ANYTHING})*
+STRING {UNFINISHED_STRING}\"
 
 
 
@@ -93,10 +100,10 @@ STAR_COMMENT_END "*/"
 ANYTHING_EXCEPT_STAR [^\*]
 STAR_NOT_FOLLOWED_BY_SLASH [\*][^/]
 
-STAR_COMMENT {STAR_COMMENT_START}({ANYTHING_EXCEPT_STAR}|{STAR_NOT_FOLLOWED_BY_SLASH}|NEWLINE)*"*/"
-
 SLASH_COMMENT "//"(.*([\\]("\r\n"|[\n]))?.*)*
-UNFINISHED_COMMENT {STAR_COMMENT_START}({ANYTHING_EXCEPT_STAR}|{STAR_NOT_FOLLOWED_BY_SLASH}|NEWLINE)*
+
+UNFINISHED_STAR_COMMENT {STAR_COMMENT_START}({ANYTHING_EXCEPT_STAR}|{STAR_NOT_FOLLOWED_BY_SLASH}|NEWLINE)*
+STAR_COMMENT {UNFINISHED_STAR_COMMENT}{STAR_COMMENT_END}
 
 
 ADDOP ("+"|"-")
@@ -110,21 +117,21 @@ ADDOP ("+"|"-")
 {SLASH_COMMENT}	| 
 {STAR_COMMENT}			{comment();}
 
-{UNFINISHED_COMMENT}	{printError("Unfinished comment");}
+{UNFINISHED_STAR_COMMENT}	{printError("Unfinished comment");}
 
 
 
 {INTEGER}				{addToken_const_int();}
 {FLOATING_POINT}		{addToken_const_float();}
 {CHARACTER} 			{addToken_const_char();}
-{STRING}				{addToken_string();}
+{STRING}				{addToken_string(); ECHO;}
 
 {TOO_DECPOINT}			{printError("Too many decimal point");}
 {ILL_NUM}				{printError("Ill formed number");}
 {ILL_CHARACTER}			{printError("Invalid character");}
 {MULTI_CHARACTER}		{printError("Multi character constant ");}
 {UNFINISHED_CHARACTER}	{printError("Unfinished character");}
-{UNFINISHED_STRING}		{printError("Unfinished string");}
+{UNFINISHED_STRING}		{printError("Unfinished string");ECHO;}
 
 
 "if" 		|
