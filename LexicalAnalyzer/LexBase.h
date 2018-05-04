@@ -3,7 +3,7 @@
 //
 
 
-#define SYMBOL_TABLE_SIZE 29
+#define SYMBOL_TABLE_SIZE 73
 
 
 #ifndef LEXICALANALYZER_LEXBASE_H

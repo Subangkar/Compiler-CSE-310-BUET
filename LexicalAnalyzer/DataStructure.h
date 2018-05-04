@@ -26,7 +26,7 @@ using std::ostream;
 #define SYMBOLTABLE_CONSTANTS_H
 
 
-#define HASH_TABLE_MAXSIZE 17
+#define HASH_TABLE_MAXSIZE 59
 
 
 #endif //SYMBOLTABLE_CONSTANTS_H
@@ -762,7 +762,7 @@ public:
 	}
 
 	explicit operator char *() const {
-		char *str = new char[("< " + name + " : " + type + " > ").length()];
+		char *str = new char[("< " + name + " : " + type + " > ").length() + 1];
 		strcpy(str, ("< " + name + " : " + type + " > ").data());
 		return str;
 	}

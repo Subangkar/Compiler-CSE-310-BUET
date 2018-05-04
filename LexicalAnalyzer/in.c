@@ -1,3 +1,5 @@
+" \"
+" 
 "\\\\
 "
 " \\\
@@ -11,7 +13,7 @@ int main(){
 	short x;
 	// x+++;
 	int a,b;
-	a=a+.1;
+	a = a + .1;
 	char ch='\\';
 	ch='\t';
 	char e ='\p';
