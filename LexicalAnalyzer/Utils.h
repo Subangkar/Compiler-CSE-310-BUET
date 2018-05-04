@@ -14,6 +14,7 @@
 
 #include <string>
 #include <algorithm>
+#include <locale>
 
 using std::string;
 
@@ -45,6 +46,14 @@ public:
 	{
 		return static_cast<char>(str.length() > 2 ? '\0' : parse(str)[0]);
 	}
+
+	static string toUpperCase(string str)
+	{
+		std::locale loc;
+		for (char &i : str)
+			i = toupper(i,loc);
+		return str;
+	}
 };
 
 
@@ -57,10 +66,10 @@ public:
 		return static_cast<int>(std::count(str.begin(), str.end(), ch));
 	}
 
-	static int occCount(string dest, string src) {
+	static int occCount(const string &dest, string src) {
 		int occurrences = 0;
 		string::size_type pos = 0;
-		while ((pos = dest.find(src, pos)) != std::string::npos) {
+		while ((pos = dest.find(src, pos)) != string::npos) {
 			++occurrences;
 			pos += src.length();
 		}

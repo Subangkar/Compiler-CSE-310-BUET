@@ -7,6 +7,7 @@
 
 #include "DataStructure.h"
 #include "Utils.h"
+#include <locale>
 
 SymbolTable hashTable(7);
 FILE *logout, *tokenout;
@@ -30,6 +31,13 @@ void printLog(int lineNo, string tokenName, string lexemeName) {
 
 
 void addToken_keyword(string token_name) {
+	fprintf(tokenout, TOKEN_PRINT_KEY, token_name.data());
+	printLog(line_count, token_name, yytext);
+	keyword_count++;
+}
+
+void addToken_keyword() {
+	string token_name = StringParser::toUpperCase(yytext);
 	fprintf(tokenout, TOKEN_PRINT_KEY, token_name.data());
 	printLog(line_count, token_name, yytext);
 	keyword_count++;

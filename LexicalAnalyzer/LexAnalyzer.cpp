@@ -1044,84 +1044,39 @@ YY_RULE_SETUP
 {printError("Unfinished string");}
 	YY_BREAK
 case 16:
-YY_RULE_SETUP
-#line 130 "LexAnalyzer.l"
-{addToken_keyword(IF_TOKEN);}
-	YY_BREAK
-case 17:
-YY_RULE_SETUP
 #line 131 "LexAnalyzer.l"
-{addToken_keyword(FOR_TOKEN);}
-	YY_BREAK
-case 18:
-YY_RULE_SETUP
+case 17:
 #line 132 "LexAnalyzer.l"
-{addToken_keyword(DO_TOKEN);}
-	YY_BREAK
-case 19:
-YY_RULE_SETUP
+case 18:
 #line 133 "LexAnalyzer.l"
-{addToken_keyword(INT_TOKEN);}
-	YY_BREAK
-case 20:
-YY_RULE_SETUP
+case 19:
 #line 134 "LexAnalyzer.l"
-{addToken_keyword(FLOAT_TOKEN);}
-	YY_BREAK
-case 21:
-YY_RULE_SETUP
+case 20:
 #line 135 "LexAnalyzer.l"
-{addToken_keyword(VOID_TOKEN);}
-	YY_BREAK
-case 22:
-YY_RULE_SETUP
+case 21:
 #line 136 "LexAnalyzer.l"
-{addToken_keyword(SWITCH_TOKEN);}
-	YY_BREAK
-case 23:
-YY_RULE_SETUP
+case 22:
 #line 137 "LexAnalyzer.l"
-{addToken_keyword(DEFAULT_TOKEN);}
-	YY_BREAK
-case 24:
-YY_RULE_SETUP
+case 23:
 #line 138 "LexAnalyzer.l"
-{addToken_keyword(ELSE_TOKEN);}
-	YY_BREAK
-case 25:
-YY_RULE_SETUP
+case 24:
 #line 139 "LexAnalyzer.l"
-{addToken_keyword(WHILE_TOKEN);}
-	YY_BREAK
-case 26:
-YY_RULE_SETUP
+case 25:
 #line 140 "LexAnalyzer.l"
-{addToken_keyword(BREAK_TOKEN);}
-	YY_BREAK
-case 27:
-YY_RULE_SETUP
+case 26:
 #line 141 "LexAnalyzer.l"
-{addToken_keyword(CHAR_TOKEN);}
-	YY_BREAK
-case 28:
-YY_RULE_SETUP
+case 27:
 #line 142 "LexAnalyzer.l"
-{addToken_keyword(DOUBLE_TOKEN);}
-	YY_BREAK
-case 29:
-YY_RULE_SETUP
+case 28:
 #line 143 "LexAnalyzer.l"
-{addToken_keyword(RETURN_TOKEN);}
-	YY_BREAK
-case 30:
-YY_RULE_SETUP
+case 29:
 #line 144 "LexAnalyzer.l"
-{addToken_keyword(CASE_TOKEN);}
-	YY_BREAK
+case 30:
+#line 145 "LexAnalyzer.l"
 case 31:
 YY_RULE_SETUP
 #line 145 "LexAnalyzer.l"
-{addToken_keyword(CONTINUE_TOKEN);}
+{addToken_keyword();}
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
@@ -1227,7 +1182,7 @@ YY_RULE_SETUP
 #line 178 "LexAnalyzer.l"
 ECHO;
 	YY_BREAK
-#line 1231 "LexAnalyzer.cpp"
+#line 1186 "LexAnalyzer.cpp"
 
 	case YY_END_OF_BUFFER:
 		{

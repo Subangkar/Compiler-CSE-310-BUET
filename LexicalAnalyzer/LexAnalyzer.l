@@ -127,22 +127,22 @@ ADDOP ("+"|"-")
 {UNFINISHED_STRING}		{printError("Unfinished string");}
 
 
-"if" 		{addToken_keyword(IF_TOKEN);}
-"for" 		{addToken_keyword(FOR_TOKEN);}
-"do" 		{addToken_keyword(DO_TOKEN);}
-"int" 		{addToken_keyword(INT_TOKEN);}
-"float" 	{addToken_keyword(FLOAT_TOKEN);}
-"void" 		{addToken_keyword(VOID_TOKEN);}
-"switch" 	{addToken_keyword(SWITCH_TOKEN);}
-"default" 	{addToken_keyword(DEFAULT_TOKEN);}
-"else" 		{addToken_keyword(ELSE_TOKEN);}
-"while" 	{addToken_keyword(WHILE_TOKEN);}
-"break" 	{addToken_keyword(BREAK_TOKEN);}
-"char" 		{addToken_keyword(CHAR_TOKEN);}
-"double" 	{addToken_keyword(DOUBLE_TOKEN);}
-"return"	{addToken_keyword(RETURN_TOKEN);}
-"case" 		{addToken_keyword(CASE_TOKEN);}
-"continue" 	{addToken_keyword(CONTINUE_TOKEN);}
+"if" 		|
+"for" 		|
+"do" 		|
+"int" 		|
+"float" 	|
+"void" 		|
+"switch" 	|
+"default" 	|
+"else" 		|
+"while" 	|
+"break" 	|
+"char" 		|
+"double" 	|
+"return"	|
+"case" 		|
+"continue" 	{addToken_keyword();}
 
 
 
