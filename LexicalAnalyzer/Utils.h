@@ -31,6 +31,7 @@ class StringParser {
 public:
 	static string parse(const string &str) {
 		string parsed = str;
+//		findAndReplaceAll(parsed, "\\n", "\n");
 		findAndReplaceAll(parsed, "\\n", "\n");
 		findAndReplaceAll(parsed, "\\t", "\t");
 		findAndReplaceAll(parsed, "\\\'", "\'");

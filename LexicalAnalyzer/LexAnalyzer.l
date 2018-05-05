@@ -68,17 +68,17 @@ ILL_NUM ({DIGITS}|{FLOATING_POINT})[E]*{FLOATING_POINT}*
 
 
 
-CHAR_CONST (\\.|[^\\'\n])
+CHAR_CONST (("\\".)|[^[\\'\r\n])
 
 CHARACTER ('{CHAR_CONST}')
-ILL_CHARACTER ('(')?')
+ILL_CHARACTER ('')
 MULTI_CHARACTER '{CHAR_CONST}{2,}'
-UNFINISHED_CHARACTER '[^'\n]*|'[\\]'
+UNFINISHED_CHARACTER '({CHAR_CONST}*)
 
 
 ANYTHING_EXCEPT_SLASH [^\\]
 SLASH [\\]
-NOT_QUOTE_SLASH_OR_NEWLINE [^"\\\n]
+NOT_QUOTE_SLASH_OR_NEWLINE [^"\\\r\n]
 ANYTHING (.|{NEWLINE})
 
 
@@ -121,9 +121,9 @@ ADDOP ("+"|"-")
 
 {TOO_DECPOINT}			{printError("Too many decimal point");}
 {ILL_NUM}				{printError("Ill formed number");}
+{UNFINISHED_CHARACTER}	{printError("Unfinished character");}
 {ILL_CHARACTER}			{printError("Invalid character");}
 {MULTI_CHARACTER}		{printError("Multi character constant ");}
-{UNFINISHED_CHARACTER}	{printError("Unfinished character");}
 {UNFINISHED_STRING}		{printError("Unfinished string");}
 
 

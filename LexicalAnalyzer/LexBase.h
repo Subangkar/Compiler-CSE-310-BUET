@@ -66,10 +66,12 @@ void addToken_string() {
 	string string_literal = StringParser::parse(yytext);
 	StringUtils::replaceFirst(string_literal, "\"", "");
 	StringUtils::replaceLast(string_literal, "\"", "");
-	StringUtils::replaceAll(string_literal, "\\\n", "");
-//	string_literal=StringParser::parse(string_literal);
+	StringUtils::replaceAll(string_literal, "\\\r\n", ""); // CRLF
+	StringUtils::replaceAll(string_literal, "\\\n", ""); // LF
+	//	string_literal=StringParser::parse(string_literal);
 	fprintf(tokenout, TOKEN_PRINT_SYMBOL, token_name.data(), string_literal.data());
-	printLog(line_count, token_name, yytext);
+//	printLog(line_count, token_name, yytext);
+	printLog(line_count, token_name, string_literal.data());
 
 	line_count += StringUtils::occCount(yytext, '\n');
 
