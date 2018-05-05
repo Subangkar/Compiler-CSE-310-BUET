@@ -1,5 +1,3 @@
-"ha\ha
-ha"
 int main(){
 char ch='a';
 ch = 'b'
