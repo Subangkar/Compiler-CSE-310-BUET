@@ -3,15 +3,16 @@
 //
 
 
-#define SYMBOL_TABLE_SIZE 73
-
-
 #ifndef LEXICALANALYZER_LEXBASE_H
 #define LEXICALANALYZER_LEXBASE_H
+
+#define SYMBOL_TABLE_SIZE 73
+
 
 #include "DataStructure.h"
 #include "Utils.h"
 #include <locale>
+
 
 SymbolTable hashTable(SYMBOL_TABLE_SIZE);
 FILE *logout, *tokenout;
@@ -21,10 +22,14 @@ int err_count = 0;
 
 
 
+#define REPLACE_NEWLINES(string_literal) StringUtils::replaceAll(string_literal, "\\\r\n", ""); // CRLF \
+StringUtils::replaceAll(string_literal, "\\\n", ""); // LF
+
+
 #define TOKEN_PRINT_KEY "<%s> "
 #define TOKEN_PRINT_SYMBOL "<%s, %s> "
-#define LOG_TOKEN_PRINT "\nLine no %d: TOKEN <%s> Lexeme %s found\n"
-#define LOG_ERROR_PRINT "\n<< Error @ Line no %d: %s: %s >>\n"
+#define LOG_TOKEN_PRINT "\nLine no %d: TOKEN <%s> Lexeme <%s> found\n"
+#define LOG_ERROR_PRINT "\n<< Error @ Line no %d: %s: <%s> >>\n"
 #define LOG_COMMENT_PRINT "\nLine no %d: TOKEN <COMMENT> Lexeme <%s> found\n"
 
 
@@ -66,12 +71,14 @@ void addToken_string() {
 	string string_literal = StringParser::parse(yytext);
 	StringUtils::replaceFirst(string_literal, "\"", "");
 	StringUtils::replaceLast(string_literal, "\"", "");
-	StringUtils::replaceAll(string_literal, "\\\r\n", ""); // CRLF
-	StringUtils::replaceAll(string_literal, "\\\n", ""); // LF
+//	StringUtils::replaceAll(string_literal, "\\\r\n", ""); // CRLF
+//	StringUtils::replaceAll(string_literal, "\\\n", ""); // LF
+	REPLACE_NEWLINES(string_literal);
+
 	//	string_literal=StringParser::parse(string_literal);
 	fprintf(tokenout, TOKEN_PRINT_SYMBOL, token_name.data(), string_literal.data());
-//	printLog(line_count, token_name, yytext);
-	printLog(line_count, token_name, string_literal.data());
+	printLog(line_count, token_name, yytext);
+//	printLog(line_count, token_name, string_literal.data());
 
 	line_count += StringUtils::occCount(yytext, '\n');
 
@@ -129,7 +136,7 @@ void comment() {
 
 	if(cmnt[1]=='/'){
 		StringUtils::replaceFirst(cmnt,"//","");
-		StringUtils::replaceAll(cmnt,"\\\n","");
+		REPLACE_NEWLINES(cmnt);
 	} else{
 		StringUtils::replaceFirst(cmnt,"/*","");
 		StringUtils::replaceFirst(cmnt,"*/","");
