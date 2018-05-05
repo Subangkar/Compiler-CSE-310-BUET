@@ -2,7 +2,7 @@
 
 %{
 
-#include "LexBase.h"
+#include "1505015_LexBase.h"
 
 
 #define IF_TOKEN "IF"
