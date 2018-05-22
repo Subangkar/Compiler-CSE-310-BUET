@@ -128,5 +128,5 @@ SymbolTable/cmake-build-debug/CMakeFiles/
 
 
 
-**//y.tab.c
-**//lex.yy.c
+**/y.tab.c
+**/lex.yy.c
