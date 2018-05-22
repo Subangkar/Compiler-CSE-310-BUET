@@ -2,6 +2,6 @@
 
 1-> Symbol Table Implemented
 
-2-> Lexical Analyzer is being developed
+2-> Lexical Analyzer Implemented
 
-3-> 
+3-> Syntax Analyzer is being developed
