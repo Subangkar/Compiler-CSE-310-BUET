@@ -22,6 +22,22 @@
 using std::ostream;
 
 
+using std::vector;
+
+
+
+using std::cout;
+using std::endl;
+
+
+using std::string;
+
+
+
+using std::abs;
+
+
+
 #ifndef SYMBOLTABLE_CONSTANTS_H
 #define SYMBOLTABLE_CONSTANTS_H
 
@@ -462,9 +478,6 @@ T *LinkedList<T>::getData(const T &value) {
 #pragma once
 
 
-using std::vector;
-
-
 template<typename T>
 class HashTable {
 public:
@@ -520,10 +533,6 @@ private:
 
 #ifndef SYMBOLTABLE_HASHTABLE_CPP
 #define SYMBOLTABLE_HASHTABLE_CPP
-
-
-using std::cout;
-using std::endl;
 
 
 /*====================================================================
@@ -747,9 +756,6 @@ void HashTable<T>::setPrintEmptyListOn(bool setprintEmptyListOn) {
 #define SYMBOLTABLE_SYMBOLINFO_H
 
 
-using std::string;
-
-
 class SymbolInfo {
 	string name;
 	string type;
@@ -805,8 +811,6 @@ private:
 #endif //SYMBOLTABLE_SYMBOLINFO_H
 
 
-using std::abs;
-
 const string &SymbolInfo::getName() const {
 	return name;
 }
@@ -854,7 +858,7 @@ int64_p SymbolInfo::hashValue() const {
 
 	for (int i = 0; i < key.length(); i++) {
 		if (i % 2 == 0) {
-			value += abs(reverseDigits(key[i])) * (int64_p) pow(19, i);
+			value += (reverseDigits(key[i])) * (int64_p) pow(19, i); // std::abs
 		} else {
 			value += abs((key[i]) * (int) pow(23, i));
 		}
