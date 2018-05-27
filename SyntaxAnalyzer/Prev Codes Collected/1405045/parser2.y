@@ -55,14 +55,14 @@ SymbolInfo* symVal;
 %error-verbose
 %%
 
-start : program
+start: program
 		{
 		//write your code in this block in all the similar blocks below
 			logFile << "Line " << lCount << " : start : program\n"<< endl;
 		}
 		;
 
-program : program unit
+program: program unit
 		{
 			logFile << "Line " << lCount << " : program : program unit\n"<< endl;
 		} 
@@ -73,7 +73,7 @@ program : program unit
 		}
 		;
 	
-unit : 	var_declaration
+unit: 	var_declaration
 		{
 			logFile << "Line " << lCount << " : unit : var_declaration\n"<< endl;
 		}
@@ -89,7 +89,7 @@ unit : 	var_declaration
      	}
      	;
      
-func_declaration : 	type_specifier ID LPAREN parameter_list RPAREN SEMICOLON
+func_declaration: 	type_specifier ID LPAREN parameter_list RPAREN SEMICOLON
 					{
 						logFile << "Line " << lCount << " : func_declaration : 	type_specifier ID LPAREN parameter_list RPAREN SEMICOLON\n"; 
 						logFile << $2->getName() << endl << endl;
@@ -115,7 +115,7 @@ func_declaration : 	type_specifier ID LPAREN parameter_list RPAREN SEMICOLON
 					}
 		 			;
 		 
-func_definition : type_specifier ID LPAREN parameter_list RPAREN compound_statement
+func_definition: type_specifier ID LPAREN parameter_list RPAREN compound_statement
 				{
 				logFile << "Line " << lCount << " : func_definition : type_specifier ID LPAREN parameter_list RPAREN compound_statement\n";
 				logFile << $2->getName() << endl << endl;
@@ -173,7 +173,7 @@ func_definition : type_specifier ID LPAREN parameter_list RPAREN compound_statem
 				}
  		 		;
  		 
-parameter_list  : parameter_list COMMA type_specifier ID
+parameter_list: parameter_list COMMA type_specifier ID
 				{
 					logFile << "Line " << lCount << " : parameter_list  : parameter_list COMMA type_specifier ID\n";
 					logFile << $4->getName() << endl << endl;
@@ -220,7 +220,7 @@ parameter_list  : parameter_list COMMA type_specifier ID
 				}
  				;
  		
-compound_statement : 	LCURL 
+compound_statement: 	LCURL 
 						{
 							table.enterScope(); 
 							for(int i = 0; i<params.size(); i++) table.Insert(params[i]);
@@ -232,7 +232,7 @@ compound_statement : 	LCURL
  		    			| LCURL RCURL{logFile << "Line " << lCount << " : compound_statement : LCURL RCURL\n"<< endl;}
  		    			;
  		    
-var_declaration : type_specifier declaration_list SEMICOLON{logFile << "Line " << lCount << " : var_declaration : type_specifier declaration_list SEMICOLON\n"<< endl;}
+var_declaration: type_specifier declaration_list SEMICOLON{logFile << "Line " << lCount << " : var_declaration : type_specifier declaration_list SEMICOLON\n"<< endl;}
 				|type_specifier declaration_list error
 				{
 						errorFile << "Error at line " << lCount << "; missing" << endl << endl;
@@ -240,7 +240,7 @@ var_declaration : type_specifier declaration_list SEMICOLON{logFile << "Line " <
 				} 		 		
 				;
  		 
-type_specifier	: INT
+type_specifier: INT
 				{
 					logFile << "Line " << lCount << " : type_specifier	: INT\n"<< endl; 
 					SymbolInfo* s= new SymbolInfo("INT");
@@ -263,7 +263,7 @@ type_specifier	: INT
 				}
  				;
  		
-declaration_list : 	declaration_list COMMA ID
+declaration_list: 	declaration_list COMMA ID
 					{
 						logFile << "Line " << lCount << " : declaration_list : 	declaration_list COMMA ID\n";
 						logFile << $3->getName() << endl << endl;
@@ -382,11 +382,11 @@ declaration_list : 	declaration_list COMMA ID
 					}						
 					;
  		  
-statements : statement{logFile << "Line " << lCount << " : statements : statement\n"<< endl;}
+statements: statement{logFile << "Line " << lCount << " : statements : statement\n"<< endl;}
 	   | statements statement{logFile << "Line " << lCount << " : statements : statements statement\n"<< endl;}
 	   ;
 	   
-statement : var_declaration{logFile << "Line " << lCount << " : statement : var_declaration\n"<< endl;}
+statement: var_declaration{logFile << "Line " << lCount << " : statement : var_declaration\n"<< endl;}
 	  | expression_statement{logFile << "Line " << lCount << " : statement : expression_statement\n"<< endl;}
 	  | compound_statement{logFile << "Line " << lCount << " : statement : compound_statement\n"<< endl;}
 	  | FOR LPAREN expression_statement expression_statement expression RPAREN statement
@@ -410,7 +410,7 @@ statement : var_declaration{logFile << "Line " << lCount << " : statement : var_
 		} 		 			
 	  ;
 	  
-expression_statement 	: SEMICOLON{logFile << "Line " << lCount << " : expression_statement : SEMICOLON\n"<< endl;}			
+expression_statement: SEMICOLON{logFile << "Line " << lCount << " : expression_statement : SEMICOLON\n"<< endl;}			
 						| expression SEMICOLON {logFile << "Line " << lCount << " : expression_statement : expression SEMICOLON\n"<< endl;}
 						|expression error
 						{
@@ -419,7 +419,7 @@ expression_statement 	: SEMICOLON{logFile << "Line " << lCount << " : expression
 						} 		 		
 						;
 	  
-variable : 	ID
+variable: 	ID
 			{
 				logFile << "Line " << lCount << " : variable : ID\n";
 				logFile << $1->getName() << endl << endl;
@@ -472,7 +472,7 @@ variable : 	ID
 			} 
 	 		;
 	 
-expression : logic_expression	
+expression: logic_expression	
 			{
 				logFile << "Line " << lCount << " : expression : logic_expression\n"<< endl;
 				$$ = $1;
@@ -544,7 +544,7 @@ expression : logic_expression
 			} 	
 	   		;
 			
-logic_expression 	: rel_expression
+logic_expression: rel_expression
 					{
 						logFile << "Line " << lCount << " : logic_expression : rel_expression\n"<< endl;
 						$$ = $1; 
@@ -628,7 +628,7 @@ logic_expression 	: rel_expression
 					} 	
 		 			;
 			
-rel_expression	: simple_expression 
+rel_expression: simple_expression 
 				{
 					logFile << "Line " << lCount << " : rel_expression : simple_expression\n"<< endl;
 					$$ = $1;
@@ -735,7 +735,7 @@ rel_expression	: simple_expression
 				}	
 				;
 				
-simple_expression 	: term
+simple_expression: term
 					{
 						logFile << "Line " << lCount << " : simple_expression : term\n"<< endl;
 						$$ = $1;
@@ -979,7 +979,7 @@ simple_expression 	: term
 					} 	
 					;
 					
-term :	unary_expression
+term:	unary_expression
 		{
 			logFile << "Line " << lCount << " : term : unary_expression\n"<< endl;
 			$$ = $1;
@@ -1386,7 +1386,7 @@ unary_expression: ADDOP unary_expression
 				}
 		 		;
 	
-factor	: variable{logFile << "Line " << lCount << " : factor : variable\n"<< endl;} 
+factor: variable{logFile << "Line " << lCount << " : factor : variable\n"<< endl;} 
 		| ID LPAREN argument_list RPAREN
 		{
 
@@ -1487,11 +1487,11 @@ factor	: variable{logFile << "Line " << lCount << " : factor : variable\n"<< end
 		}
 		;
 	
-argument_list	: arguments{logFile << "Line " << lCount << " : argument_list : arguments\n"<< endl;}
+argument_list: arguments{logFile << "Line " << lCount << " : argument_list : arguments\n"<< endl;}
 				|
 				;
 
-arguments	:arguments COMMA logic_expression {logFile << "Line " << lCount << " : arguments : arguments COMMA logic_expression\n"<< endl;}
+arguments: arguments COMMA logic_expression {logFile << "Line " << lCount << " : arguments : arguments COMMA logic_expression\n"<< endl;}
 			|logic_expression{logFile << "Line " << lCount << " : arguments : logic_expression\n"<< endl;}
 			;
  

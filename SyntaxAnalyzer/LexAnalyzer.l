@@ -3,25 +3,7 @@
 %{
 
 #include "LexBase.h"
-
-
-#define IF_TOKEN "IF"
-#define FOR_TOKEN "FOR"
-#define DO_TOKEN "D0"
-#define INT_TOKEN "INT"
-#define FLOAT_TOKEN "FLOAT"
-#define VOID_TOKEN "VOID"
-#define SWITCH_TOKEN "SWITCH"
-#define DEFAULT_TOKEN "DEFAULT"
-
-#define ELSE_TOKEN "ELSE"
-#define WHILE_TOKEN "WHILE"
-#define BREAK_TOKEN "BREAK"
-#define CHAR_TOKEN "CHAR"
-#define DOUBLE_TOKEN "DOUBLE"
-#define RETURN_TOKEN "RETURN"
-#define CASE_TOKEN "CASE"
-#define CONTINUE_TOKEN "CONTINUE"
+#include "y.tab.h"
 
 
 #define ADDOP_TOKEN "ADDOP"
@@ -97,9 +79,7 @@ STAR_NOT_FOLLOWED_BY_SLASH [\*][^/]
 
 SLASH_COMMENT "//"({ANYTHING_EXCEPT_NEWLINE}*({SLASH}({NEWLINE}))?{ANYTHING_EXCEPT_NEWLINE}*)*
 
-/* UNFINISHED_STAR_COMMENT {STAR_COMMENT_START}({ANYTHING_EXCEPT_STAR}|{STAR_NOT_FOLLOWED_BY_SLASH})* */
 UNFINISHED_STAR_COMMENT {STAR_COMMENT_START}({ANYTHING_EXCEPT_STAR}|([\*]+[^*/]))*
-/* STAR_COMMENT {UNFINISHED_STAR_COMMENT}{STAR_COMMENT_END} */
 STAR_COMMENT {UNFINISHED_STAR_COMMENT}[\*]*{STAR_COMMENT_END}
 
 
@@ -131,22 +111,24 @@ ADDOP ("+"|"-")
 {UNFINISHED_STRING}		{printError("Unfinished string");}
 
 
-"if" 		|
-"for" 		|
-"do" 		|
-"int" 		|
-"float" 	|
-"void" 		|
-"switch" 	|
-"default" 	|
-"else" 		|
-"while" 	|
-"break" 	|
-"char" 		|
-"double" 	|
-"return"	|
-"case" 		|
-"continue" 	{addToken_keyword();}
+
+"if" 				{return IF;}
+"for" 			{return FOR;}
+"do" 				{return DO;}
+"int" 			{return INT;}
+"float" 		{return FLOAT;}
+"void" 			{return VOID;}
+"switch" 		{return SWITCH;}
+"default" 	{return DEFAULT;}
+"else" 			{return ELSE;}
+"while" 		{return WHILE;}
+"break" 		{return BREAK;}
+"char" 			{return CHAR;}
+"double" 		{return DOUBLE;}
+"return"		{return RETURN;}
+"case" 			{return CASE;}
+"continue"	{return CONTINUE;}
+
 
 
 
@@ -181,27 +163,27 @@ ADDOP ("+"|"-")
 
 %%
 
-int main(int argc,char *argv[]){
+// int main(int argc,char *argv[]){
 
-	if(argc!=2){
-		printf("Please provide input file name and try again\n");
-		return 0;
-	}
-	FILE *fin=fopen(argv[1],"r");
-	if(fin==NULL){
-		printf("Cannot open specified file\n");
-		return 0;
-	}
+// 	if(argc!=2){
+// 		printf("Please provide input file name and try again\n");
+// 		return 0;
+// 	}
+// 	FILE *fin=fopen(argv[1],"r");
+// 	if(fin==NULL){
+// 		printf("Cannot open specified file\n");
+// 		return 0;
+// 	}
 
-	logout = fopen("log.txt","w");
-	tokenout = fopen("token.txt","w");
+// 	logout = fopen("log.txt","w");
+// 	tokenout = fopen("token.txt","w");
 
-	yyin= fin;
-	yylex();
-	// hashTable.setPrintEmptyListOn(true);
-	hashTable.printAllScope(stdout);
-	fclose(yyin);
-	fclose(tokenout);
-	fclose(logout);
-	return 0;
-}
+// 	yyin= fin;
+// 	yylex();
+// 	// hashTable.setPrintEmptyListOn(true);
+// 	hashTable.printAllScope(stdout);
+// 	fclose(yyin);
+// 	fclose(tokenout);
+// 	fclose(logout);
+// 	return 0;
+// }
