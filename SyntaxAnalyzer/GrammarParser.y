@@ -1,5 +1,5 @@
 %{
-#include "SyntaxBase.h"
+#include "SynBase.h"
 
 
 
@@ -12,8 +12,10 @@ SymbolInfo* symVal;
 /* %token INCOP DECOP ASSIGNOP LPAREN RPAREN LCURL RCURL LTHIRD RTHIRD SEMICOLON COMMA STRING NOT PRINTLN */
 %token IF FOR DO INT FLOAT VOID SWITCH DEFAULT ELSE WHILE BREAK CHAR DOUBLE RETURN CASE CONTINUE
 /* %token ADDOP INCOP MULOP RELOP LOGICOP BITOP ASSIGNOP NOT */
-%token INCOP ASSIGNOP NOT
+%token INCOP DECOP ASSIGNOP NOT
 %token LPAREN RPAREN LCURL RCURL LTHIRD RTHIRD COMMA SEMICOLON
+%token PRINTLN
+
 %token <symVal>ID
 %token <symVal>CONST_INT
 %token <symVal>CONST_FLOAT
@@ -164,7 +166,7 @@ int main(int argc,char *argv[])
 	//yyin=fp;
 	yyparse();
 
-	logFile << "Total Lines : " << lCount << endl << endl;
+	logFile << "Total Lines : " << line_count << endl << endl;
 	logFile << "Total Errors : " << semErrors << endl;
 	logFile.close();
 	errorFile.close();

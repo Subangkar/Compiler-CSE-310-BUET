@@ -130,3 +130,11 @@ SymbolTable/cmake-build-debug/CMakeFiles/
 
 **/y.tab.c
 **/lex.yy.c
+
+SyntaxAnalyzer/y\.output
+
+SyntaxAnalyzer/y\.tab\.h
+
+SyntaxAnalyzer/Prev Codes Collected/1405045/y\.output
+
+SyntaxAnalyzer/Prev Codes Collected/1405045/y\.tab\.h

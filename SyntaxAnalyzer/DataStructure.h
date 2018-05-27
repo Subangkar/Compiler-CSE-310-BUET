@@ -18,6 +18,7 @@
 #include <iomanip>
 #include <fstream>
 #include <vector>
+#include <cstring>
 
 using std::ostream;
 

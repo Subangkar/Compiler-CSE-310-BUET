@@ -9,6 +9,9 @@
 //#define SYMBOL_TABLE_SIZE 73
 
 
+#include "y.tab.h"
+
+
 #include "DataStructure.h"
 #include "Utils.h"
 #include <locale>
@@ -51,6 +54,12 @@ void insertToHashTable(string token_symbol, string token_name) {
 	// hashTable.insert(token_symbol, token_name);
 	// hashTable.printAllScope(logout);
 
+}
+
+
+void assignSymbol(string name,string type) {
+	SymbolInfo *symbol = new SymbolInfo(name,type);
+	yylval.symVal = symbol;
 }
 
 

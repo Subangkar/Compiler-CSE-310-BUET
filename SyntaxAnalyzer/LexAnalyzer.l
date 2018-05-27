@@ -3,7 +3,6 @@
 %{
 
 #include "LexBase.h"
-#include "y.tab.h"
 
 
 #define ADDOP_TOKEN "ADDOP"
@@ -132,23 +131,27 @@ ADDOP ("+"|"-")
 
 
 
-{ADDOP}							{addToken_operator(ADDOP_TOKEN);}
-("++"|"--")						{addToken_operator(INCOP_TOKEN);}
-("*"|"/"|"%")					{addToken_operator(MULOP_TOKEN);}
-("<="|">="|"=="|"!="|"<"|">") 	{addToken_operator(RELOP_TOKEN);}
-("&&"|"||")						{addToken_operator(LOGICOP_TOKEN);}
-("&"|"|"|"^"|"<<"|">>")			{addToken_operator(BITOP_TOKEN);}
-("=")							{addToken_operator(ASSIGNOP_TOKEN);}
-"!"								{addToken_operator(NOT_TOKEN);}
-"("								{addToken_operator(LPAREN_TOKEN);}
-")"								{addToken_operator(RPAREN_TOKEN);}
-"{"								{addToken_operator(LCURL_TOKEN);}
-"}"								{addToken_operator(RCURL_TOKEN);}
-"["								{addToken_operator(LTHIRD_TOKEN);}
-"]"								{addToken_operator(RTHIRD_TOKEN);}
-","								{addToken_operator(COMMA_TOKEN);}
-";"								{addToken_operator(SEMICOLON_TOKEN);}
 
+"++"							{return INCOP;}
+"--"							{return DECOP;}
+("=")							{return ASSIGNOP;}
+"!"								{return NOT;}
+
+"("								{return LPAREN;}
+")"								{return RPAREN;}
+"{"								{return LCURL;}
+"}"								{return RCURL;}
+"["								{return LTHIRD;}
+"]"								{return RTHIRD;}
+","								{return COMMA;}
+";"								{return SEMICOLON;}
+
+("+"|"-")							{addToken_operator(ADDOP_TOKEN);return ADDOP;}
+("*"|"/"|"%")					{addToken_operator(MULOP_TOKEN);return MULOP;}
+("&&"|"||")						{addToken_operator(LOGICOP_TOKEN);return LOGICOP;}
+("<="|">="|"=="|"!="|"<"|">") 	{addToken_operator(RELOP_TOKEN);return RELOP;}
+
+("&"|"|"|"^"|"<<"|">>")			{addToken_operator(BITOP_TOKEN);return BITOP;}
 
 
 
@@ -159,6 +162,7 @@ ADDOP ("+"|"-")
 {ANYTHING} {printError("Unrecognized character");}
 
 <<EOF>> {fprintf(logout,"\nTotal Line Number: %d\nTotal Errors: %d\n",line_count,err_count); return 0;}
+
 
 
 %%
