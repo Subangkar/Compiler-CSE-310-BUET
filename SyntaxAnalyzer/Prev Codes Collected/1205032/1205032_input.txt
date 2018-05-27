@@ -1,0 +1,9 @@
+#include<stdio.h>
+void main()
+{
+id1 = id2+ id3;
+if(id1=id2)
+	x1=x1+4;
+else
+	x1=x1-4;
+}
