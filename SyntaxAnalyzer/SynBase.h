@@ -13,7 +13,7 @@
 #define SYMBOL_TABLE_SIZE 73
 
 
-std::ofstream logFile, errorFile;
+std::ofstream logFile, errorFile, ruleFile;
 SymbolTable *table;
 
 int IDargs = 0;
