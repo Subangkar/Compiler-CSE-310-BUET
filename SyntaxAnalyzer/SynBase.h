@@ -6,8 +6,8 @@
 #define SYNTAXANALYZER_SYNBASE_H
 
 
-#include "DataStructure.h"
 #include <iostream>
+#include "DataStructure.h"
 
 
 #define SYMBOL_TABLE_SIZE 73

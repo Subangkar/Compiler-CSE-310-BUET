@@ -161,7 +161,7 @@ ADDOP ("+"|"-")
 
 {ANYTHING} {printError("Unrecognized character");}
 
-<<EOF>> {fprintf(logout,"\nTotal Line Number: %d\nTotal Errors: %d\n",line_count,err_count); return 0;}
+<<EOF>> {return 0;}
 
 
 
@@ -191,3 +191,5 @@ ADDOP ("+"|"-")
 // 	fclose(logout);
 // 	return 0;
 // }
+
+//fprintf(logout,"\nTotal Line Number: %d\nTotal Errors: %d\n",line_count,err_count); 

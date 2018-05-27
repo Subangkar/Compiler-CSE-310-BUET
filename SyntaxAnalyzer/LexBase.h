@@ -9,13 +9,14 @@
 //#define SYMBOL_TABLE_SIZE 73
 
 
-#include "y.tab.h"
 
 
-#include "DataStructure.h"
+
+#include "DataStructure.h" // SymbolInfo Defined Here
+#include "y.tab.h" // SymbolInfo Used Here
 #include "Utils.h"
 #include <locale>
-#include <sstream>
+
 
 
 //SymbolTable hashTable(SYMBOL_TABLE_SIZE);

@@ -2,7 +2,6 @@
 #include "SynBase.h"
 
 
-
 %}
 %union{
 SymbolInfo* symVal;
@@ -161,7 +160,7 @@ int main(int argc,char *argv[])
 
 	logFile.open("log.txt");
 	errorFile.open("errors.txt");
-	ruleFile.open("rules.txt");	
+	ruleFile.open("rules.txt");
 
 	//	logFile << "Kichu" << endl;
 	//yyin=fp;
