@@ -499,6 +499,7 @@ public:
 	vector<T> get() const; //returns a vector of all the strings in the HashTable
 
 	void printTable(FILE *printStream = stdout);
+	void printTable(ofstream&);
 
 	// returns the original data pointer if exists otherwise NULL
 	T *get(const T &key);
@@ -708,6 +709,34 @@ void HashTable<T>::printTable(FILE *printStream) {
 
 //			cout << endl;
 			fprintf(printStream, "\n");
+
+		}
+
+	}
+}
+
+template<typename T>
+void HashTable<T>::printTable(ofstream& cout) {
+	for (int i = 0; i < arrSize; ++i) {
+
+		if (printEmptyListOn || arr[i].length())
+		{
+			cout << " " << i << " --> ";
+			cout << " " << std::setw(3) << std::setfill('0') << i << " --> ";
+//			fprintf(printStream, " %03d --> ", i);
+
+
+			vector<T> vc = arr[i].get();
+
+			for (int j = 0; j < vc.size(); j++) {
+				cout << vc[j];
+//				fprintf(printStream,"%s",vc[j].printString().data());
+//				fprintf(printStream, "%s", (char *) vc[j]);
+				cout << vc[j].printString();
+			}
+
+			cout << endl;
+//			fprintf(printStream, "\n");
 
 		}
 
