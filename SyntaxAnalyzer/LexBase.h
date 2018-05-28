@@ -13,6 +13,7 @@
 
 
 #include "DataStructure.h" // SymbolInfo Defined Here
+//#include "SymTable.h"
 #include "y.tab.h" // SymbolInfo Used Here
 #include "Utils.h"
 #include <locale>

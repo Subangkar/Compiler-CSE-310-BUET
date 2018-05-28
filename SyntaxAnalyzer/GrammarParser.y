@@ -4,7 +4,6 @@
 #include "SynBase.h"
 #endif // SYMTABLE
 
-
 %}
 %union{
 SymbolInfo* symVal;
@@ -170,8 +169,8 @@ int main(int argc,char *argv[])
 	//yyin=fp;
 	yyparse();
 
-	logFile << "Total Lines : " << line_count << endl << endl;
-	logFile << "Total Errors : " << semErrors << endl;
+	logFile << "Total Lines : " << line_count << std::endl << std::endl;
+	logFile << "Total Errors : " << semErrors << std::endl;
 	logFile.close();
 	errorFile.close();
 
