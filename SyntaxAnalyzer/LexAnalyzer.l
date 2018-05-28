@@ -2,10 +2,7 @@
 
 %{
 
-
-
 #include "LexBase.h"
-
 
 #define ADDOP_TOKEN "ADDOP"
 #define MULOP_TOKEN "MULOP"
@@ -84,7 +81,6 @@ UNFINISHED_STAR_COMMENT {STAR_COMMENT_START}({ANYTHING_EXCEPT_STAR}|([\*]+[^*/])
 STAR_COMMENT {UNFINISHED_STAR_COMMENT}[\*]*{STAR_COMMENT_END}
 
 
-
 %%
 
 
@@ -156,7 +152,6 @@ STAR_COMMENT {UNFINISHED_STAR_COMMENT}[\*]*{STAR_COMMENT_END}
 ("&"|"|"|"^"|"<<"|">>") {addToken_operator(BITOP_TOKEN);return BITOP;}
 
 
-
 {IDENTIFIER}      {addToken_identifier(); return ID;}
 
 {NOT_IDENTIFIER}  {printLexError("Invalid numeric constant or identifier");}
@@ -165,33 +160,4 @@ STAR_COMMENT {UNFINISHED_STAR_COMMENT}[\*]*{STAR_COMMENT_END}
 
 <<EOF>> {return 0;}
 
-
-
 %%
-
-// int main(int argc,char *argv[]){
-
-// 	if(argc!=2){
-// 		printf("Please provide input file name and try again\n");
-// 		return 0;
-// 	}
-// 	FILE *fin=fopen(argv[1],"r");
-// 	if(fin==NULL){
-// 		printf("Cannot open specified file\n");
-// 		return 0;
-// 	}
-
-// 	logout = fopen("log.txt","w");
-// 	tokenout = fopen("token.txt","w");
-
-// 	yyin= fin;
-// 	yylex();
-// 	// hashTable.setPrintEmptyListOn(true);
-// 	hashTable.printAllScope(stdout);
-// 	fclose(yyin);
-// 	fclose(tokenout);
-// 	fclose(logout);
-// 	return 0;
-// }
-
-//fprintf(logout,"\nTotal Line Number: %d\nTotal Errors: %d\n",line_count,err_count_lex);
