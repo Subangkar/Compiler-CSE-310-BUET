@@ -82,7 +82,7 @@ UNFINISHED_STAR_COMMENT {STAR_COMMENT_START}({ANYTHING_EXCEPT_STAR}|([\*]+[^*/])
 STAR_COMMENT {UNFINISHED_STAR_COMMENT}[\*]*{STAR_COMMENT_END}
 
 
-ADDOP ("+"|"-")
+
 %%
 
 
@@ -97,17 +97,17 @@ ADDOP ("+"|"-")
 
 
 
-{INTEGER}				{addToken_const_int();}
-{FLOATING_POINT}		{addToken_const_float();}
-{CHARACTER} 			{addToken_const_char();}
-{STRING}				{addToken_string();}
+{INTEGER}         {addToken_const_int(); return CONST_INT;}
+{FLOATING_POINT}  {addToken_const_float(); return CONST_FLOAT;}
+{CHARACTER} 			{addToken_const_char(); return CONST_CHAR;}
+{STRING}				  {addToken_string(); return STRING;}
 
-{TOO_DECPOINT}			{printError("Too many decimal point");}
-{ILL_NUM}				{printError("Ill formed number");}
-{UNFINISHED_CHARACTER}	{printError("Unfinished character");}
-{EMPTY_CHARACTER}		{printError("Empty character");}
-{MULTI_CHARACTER}		{printError("Multi character constant ");}
-{UNFINISHED_STRING}		{printError("Unfinished string");}
+{TOO_DECPOINT}			   {printError("Too many decimal point");}
+{ILL_NUM}				       {printError("Ill formed number");}
+{UNFINISHED_CHARACTER} {printError("Unfinished character");}
+{EMPTY_CHARACTER}		   {printError("Empty character");}
+{MULTI_CHARACTER}		   {printError("Multi character constant ");}
+{UNFINISHED_STRING}		 {printError("Unfinished string");}
 
 
 
@@ -146,20 +146,20 @@ ADDOP ("+"|"-")
 ","								{return COMMA;}
 ";"								{return SEMICOLON;}
 
-("+"|"-")							{addToken_operator(ADDOP_TOKEN);return ADDOP;}
-("*"|"/"|"%")					{addToken_operator(MULOP_TOKEN);return MULOP;}
-("&&"|"||")						{addToken_operator(LOGICOP_TOKEN);return LOGICOP;}
+("+"|"-")							  {addToken_operator(ADDOP_TOKEN);return ADDOP;}
+("*"|"/"|"%")					  {addToken_operator(MULOP_TOKEN);return MULOP;}
+("&&"|"||")             {addToken_operator(LOGICOP_TOKEN);return LOGICOP;}
 ("<="|">="|"=="|"!="|"<"|">") 	{addToken_operator(RELOP_TOKEN);return RELOP;}
 
-("&"|"|"|"^"|"<<"|">>")			{addToken_operator(BITOP_TOKEN);return BITOP;}
+("&"|"|"|"^"|"<<"|">>") {addToken_operator(BITOP_TOKEN);return BITOP;}
 
 
 
-{IDENTIFIER}		{addToken_identifier();}
+{IDENTIFIER}      {addToken_identifier();}
 
-{NOT_IDENTIFIER}	{printError("Invalid numeric constant or identifier");}
+{NOT_IDENTIFIER}  {printError("Invalid numeric constant or identifier");}
 
-{ANYTHING} {printError("Unrecognized character");}
+{ANYTHING}        {printError("Unrecognized character");}
 
 <<EOF>> {return 0;}
 
@@ -192,4 +192,4 @@ ADDOP ("+"|"-")
 // 	return 0;
 // }
 
-//fprintf(logout,"\nTotal Line Number: %d\nTotal Errors: %d\n",line_count,err_count); 
+//fprintf(logout,"\nTotal Line Number: %d\nTotal Errors: %d\n",line_count,err_count);

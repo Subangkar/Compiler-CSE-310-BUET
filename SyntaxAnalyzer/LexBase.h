@@ -59,29 +59,27 @@ void insertToHashTable(string token_symbol, string token_name) {
 
 
 void assignSymbol(string name,string type) {
-	SymbolInfo *symbol = new SymbolInfo(name,type);
-	yylval.symVal = symbol;
+	yylval.symVal = new SymbolInfo(name,type);
+}
+
+void assignSymbol(string type) {
+	yylval.symVal = new SymbolInfo(yytext,type);
 }
 
 
-void addToken_keyword(string token_name) {
-//	fprintf(tokenout, TOKEN_PRINT_KEY, token_name.data());
-	printLog(line_count, token_name, yytext);
-	keyword_count++;
-}
-
-void addToken_keyword() {
-	string token_name = StringParser::toUpperCase(yytext);
-//	fprintf(tokenout, TOKEN_PRINT_KEY, token_name.data());
-	printLog(line_count, token_name, yytext);
-	keyword_count++;
-}
+//void addToken_keyword() {
+//	string token_name = StringParser::toUpperCase(yytext);
+////	fprintf(tokenout, TOKEN_PRINT_KEY, token_name.data());
+//	printLog(line_count, token_name, yytext);
+//	keyword_count++;
+//}
 
 void addToken_identifier() {
 	string token_name = "ID";
 //	fprintf(tokenout, TOKEN_PRINT_SYMBOL, token_name.data(), yytext);
-	printLog(line_count, token_name, yytext);
-	insertToHashTable(yytext, token_name);
+//	printLog(line_count, token_name, yytext);
+//	insertToHashTable(yytext, token_name);
+	assignSymbol(token_name);
 }
 
 void addToken_string() {
@@ -96,29 +94,32 @@ void addToken_string() {
 
 	//	string_literal=StringParser::parse(string_literal);
 //	fprintf(tokenout, TOKEN_PRINT_SYMBOL, token_name.data(), string_literal.data());
-	printLog(line_count, token_name, yytext);
+//	printLog(line_count, token_name, yytext);
 //	printLog(line_count, token_name, string_literal.data());
 
 	line_count += StringUtils::occCount(yytext, '\n');
 
 //	insertToHashTable(string_literal,token_name);
+	assignSymbol(string_literal,token_name);
 }
 
 
 void addToken_const_int() {
 	string token_name = "CONST_INT";
 //	fprintf(tokenout, TOKEN_PRINT_SYMBOL, token_name.data(), yytext);
-	printLog(line_count, token_name, yytext);
+//	printLog(line_count, token_name, yytext);
 
-	insertToHashTable(yytext, token_name);
+//	insertToHashTable(yytext, token_name);
+	assignSymbol(token_name);
 }
 
 void addToken_const_float() {
 	string token_name = "CONST_FLOAT";
 //	fprintf(tokenout, TOKEN_PRINT_SYMBOL, token_name.data(), yytext);
-	printLog(line_count, token_name, yytext);
+//	printLog(line_count, token_name, yytext);
 
-	insertToHashTable(yytext, token_name);
+//	insertToHashTable(yytext, token_name);
+	assignSymbol(token_name);
 }
 
 void addToken_const_char() {
@@ -128,16 +129,18 @@ void addToken_const_char() {
 	StringUtils::replaceLast(char_literal, "\'", "");
 
 //	fprintf(tokenout, TOKEN_PRINT_SYMBOL, token_name.data(), char_literal.data());
-	printLog(line_count, token_name, yytext);
+//	printLog(line_count, token_name, yytext);
 
-	insertToHashTable(yytext, token_name);
+//	insertToHashTable(yytext, token_name);
+	assignSymbol(char_literal,token_name);
 }
 
 void addToken_operator(const string &token_name) {
 //	fprintf(tokenout, TOKEN_PRINT_SYMBOL, token_name.data(), yytext);
-	printLog(line_count, token_name, yytext);
+//	printLog(line_count, token_name, yytext);
 
 	// insertToHashTable(yytext, token_name);
+	assignSymbol(token_name);
 }
 
 

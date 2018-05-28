@@ -1,5 +1,8 @@
 %{
+#ifndef SYMTABLE
+#define SYMTABLE
 #include "SynBase.h"
+#endif // SYMTABLE
 
 
 %}
@@ -14,6 +17,7 @@ SymbolInfo* symVal;
 %token INCOP DECOP ASSIGNOP NOT
 %token LPAREN RPAREN LCURL RCURL LTHIRD RTHIRD COMMA SEMICOLON
 %token PRINTLN
+%token STRING
 
 %token <symVal>ID
 %token <symVal>CONST_INT
