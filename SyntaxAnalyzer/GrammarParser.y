@@ -163,16 +163,15 @@ int main(int argc,char *argv[])
 
 	logFile.open("log.txt");
 	errorFile.open("errors.txt");
-	ruleFile.open("rules.txt");
+	parserFile.open("parser.txt");
 
-	//	logFile << "Kichu" << endl;
-	//yyin=fp;
 	yyparse();
 
 	logFile << "Total Lines : " << line_count << std::endl << std::endl;
 	logFile << "Total Errors : " << semErrors << std::endl;
 	logFile.close();
 	errorFile.close();
+	parserFile.close();
 
 	return 0;
 }

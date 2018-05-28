@@ -38,7 +38,7 @@ public:
 			: HashTable(size), parentScope(parentScope), id(id) {}
 
 
-	~ScopeTable() override;
+	~ScopeTable() override {}
 
 
 	ScopeTable *getParentScope() const {
@@ -96,6 +96,10 @@ public:
 	HASH_POS GetPos(const SymbolInfo &key) {
 		return HASH_POS(getLOC(key), getPOS(key));
 	}
+
+	void setPrintEmptyList(bool stat){
+		setPrintEmptyListOn(stat);
+	}
 };
 
 
@@ -115,7 +119,7 @@ class SymbolTable {
 	int64_p tableSize;
 
 public:
-	SymbolTable(int64_p size = HASH_TABLE_MAXSIZE) {
+	explicit SymbolTable(int64_p size = HASH_TABLE_MAXSIZE) {
 		max_id = 0;
 		currentScope = nullptr;
 		tableSize = size;

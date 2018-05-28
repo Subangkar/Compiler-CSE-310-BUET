@@ -95,7 +95,7 @@ STAR_COMMENT {UNFINISHED_STAR_COMMENT}[\*]*{STAR_COMMENT_END}
 {SLASH_COMMENT}	|
 {STAR_COMMENT}			{comment();}
 
-{UNFINISHED_STAR_COMMENT}	{printError("Unfinished comment");}
+{UNFINISHED_STAR_COMMENT}	{printLexError("Unfinished comment");}
 
 
 
@@ -104,12 +104,12 @@ STAR_COMMENT {UNFINISHED_STAR_COMMENT}[\*]*{STAR_COMMENT_END}
 {CHARACTER} 			{addToken_const_char(); return CONST_CHAR;}
 {STRING}				  {addToken_string(); return STRING;}
 
-{TOO_DECPOINT}			   {printError("Too many decimal point");}
-{ILL_NUM}				       {printError("Ill formed number");}
-{UNFINISHED_CHARACTER} {printError("Unfinished character");}
-{EMPTY_CHARACTER}		   {printError("Empty character");}
-{MULTI_CHARACTER}		   {printError("Multi character constant ");}
-{UNFINISHED_STRING}		 {printError("Unfinished string");}
+{TOO_DECPOINT}			   {printLexError("Too many decimal point");}
+{ILL_NUM}				       {printLexError("Ill formed number");}
+{UNFINISHED_CHARACTER} {printLexError("Unfinished character");}
+{EMPTY_CHARACTER}		   {printLexError("Empty character");}
+{MULTI_CHARACTER}		   {printLexError("Multi character constant ");}
+{UNFINISHED_STRING}		 {printLexError("Unfinished string");}
 
 
 
@@ -157,11 +157,11 @@ STAR_COMMENT {UNFINISHED_STAR_COMMENT}[\*]*{STAR_COMMENT_END}
 
 
 
-{IDENTIFIER}      {addToken_identifier();}
+{IDENTIFIER}      {addToken_identifier(); return ID;}
 
-{NOT_IDENTIFIER}  {printError("Invalid numeric constant or identifier");}
+{NOT_IDENTIFIER}  {printLexError("Invalid numeric constant or identifier");}
 
-{ANYTHING}        {printError("Unrecognized character");}
+{ANYTHING}        {printLexError("Unrecognized character");}
 
 <<EOF>> {return 0;}
 
@@ -194,4 +194,4 @@ STAR_COMMENT {UNFINISHED_STAR_COMMENT}[\*]*{STAR_COMMENT_END}
 // 	return 0;
 // }
 
-//fprintf(logout,"\nTotal Line Number: %d\nTotal Errors: %d\n",line_count,err_count);
+//fprintf(logout,"\nTotal Line Number: %d\nTotal Errors: %d\n",line_count,err_count_lex);

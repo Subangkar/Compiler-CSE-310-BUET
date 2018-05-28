@@ -14,8 +14,8 @@
 #define SYMBOL_TABLE_SIZE 73
 
 
-std::ofstream logFile, errorFile, ruleFile;
-SymbolTable *table;
+std::ofstream logFile, errorFile, parserFile;
+SymbolTable table(SYMBOL_TABLE_SIZE);
 
 int IDargs = 0;
 vector<string> args;

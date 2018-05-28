@@ -11,10 +11,6 @@
 // Created by SubangkarKr on 07-Apr-18.
 //
 
-#ifndef SYMBOLTABLE_SYMBOLINFO_H
-#define SYMBOLTABLE_SYMBOLINFO_H
-
-
 
 class SymbolInfo {
 
@@ -106,6 +102,5 @@ private:
 		return revN;
 	}
 };
-#endif //SYMBOLTABLE_SYMBOLINFO_H
 
 #endif //SYNTAXANALYZER_SYMBOLNFO_H
