@@ -1,8 +1,7 @@
-/*
-Subangkar-HP-Ubuntu18
-*/
+int main()
+{
+  int x,y,z;
 
-int main(){
 
-	return 0;
+  z=x==y;
 }

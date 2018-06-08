@@ -19,11 +19,11 @@ extern FILE *yyin;
 
 SymbolTable table(13);
 int IDargs = 0;
-vector<string> args; 
+vector<string> args;
 bool funcDef = false;
 extern int lCount;
 int semErrors;
-vector<SymbolInfo> params; 
+vector<SymbolInfo> params;
 
 ofstream logFile, errorFile;
 
@@ -39,10 +39,10 @@ SymbolInfo* symVal;
 }
 
 %token COMMENT IF ELSE FOR WHILE DO BREAK CONTINUE INT FLOAT CHAR DOUBLE VOID RETURN SWITCH CASE DEFAULT INCOP DECOP ASSIGNOP LPAREN RPAREN LCURL RCURL LTHIRD RTHIRD SEMICOLON COMMA STRING NOT PRINTLN
-%token <symVal>ID 
-%token <symVal>CONST_INT 
-%token <symVal>CONST_FLOAT 
-%token <symVal>CONST_CHAR 
+%token <symVal>ID
+%token <symVal>CONST_INT
+%token <symVal>CONST_FLOAT
+%token <symVal>CONST_CHAR
 %token <symVal>ADDOP
 %token <symVal>MULOP
 %token <symVal>LOGICOP
@@ -65,33 +65,33 @@ start: program
 program: program unit
 		{
 			logFile << "Line " << lCount << " : program : program unit\n"<< endl;
-		} 
-		| 
+		}
+		|
 		unit
-		{	
+		{
 			logFile << "Line " << lCount << " : program : unit\n"<< endl;
 		}
 		;
-	
+
 unit: 	var_declaration
-		{
-			logFile << "Line " << lCount << " : unit : var_declaration\n"<< endl;
-		}
-     	| 
+			{
+				logFile << "Line " << lCount << " : unit : var_declaration\n"<< endl;
+			}
+     	|
      	func_declaration
-     	{
-			logFile << "Line " << lCount << " : unit : func_declaration\n"<< endl;
-     	}
-     	| 
+	     	{
+					logFile << "Line " << lCount << " : unit : func_declaration\n"<< endl;
+	     	}
+     	|
      	func_definition
-     	{
-			logFile << "Line " << lCount << " : unit : func_definition\n"<< endl;
-     	}
+	     	{
+				logFile << "Line " << lCount << " : unit : func_definition\n"<< endl;
+	     	}
      	;
-     
+
 func_declaration: 	type_specifier ID LPAREN parameter_list RPAREN SEMICOLON
 					{
-						logFile << "Line " << lCount << " : func_declaration : 	type_specifier ID LPAREN parameter_list RPAREN SEMICOLON\n"; 
+						logFile << "Line " << lCount << " : func_declaration : 	type_specifier ID LPAREN parameter_list RPAREN SEMICOLON\n";
 						logFile << $2->getName() << endl << endl;
 						SymbolInfo *temp = table.lookUp($2->getName(), "FUNC");
 						if(temp != NULL){
@@ -102,7 +102,7 @@ func_declaration: 	type_specifier ID LPAREN parameter_list RPAREN SEMICOLON
 							temp2->setIDType("FUNC");
 							temp2->setFuncRet($1->getVarType());
 							for(int i = 0; i<args.size(); i++){
-								temp2->ParamList.push_back(args[i]);					
+								temp2->ParamList.push_back(args[i]);
 							}
 							args.clear();
 						}
@@ -114,7 +114,7 @@ func_declaration: 	type_specifier ID LPAREN parameter_list RPAREN SEMICOLON
 						semErrors++;
 					}
 		 			;
-		 
+
 func_definition: type_specifier ID LPAREN parameter_list RPAREN compound_statement
 				{
 				logFile << "Line " << lCount << " : func_definition : type_specifier ID LPAREN parameter_list RPAREN compound_statement\n";
@@ -124,7 +124,7 @@ func_definition: type_specifier ID LPAREN parameter_list RPAREN compound_stateme
 					errorFile << "Error at line " << lCount << " Parameter mismatch for Function "<< $2->getName() << endl << endl;
 					args.clear(); IDargs = 0;
 					semErrors++;
-				}												
+				}
 				if(temp != NULL){
 					//logFile << "Function " << $2->getName() <<" already declared" << endl;
 					if(temp->isFuncDefined()== true){
@@ -136,21 +136,21 @@ func_definition: type_specifier ID LPAREN parameter_list RPAREN compound_stateme
 					else if(temp->getFuncRet() != $1->getVarType()){
 						errorFile << "Error at line " << lCount << "Function "<< $2->getName() <<" :return type doesn't match declaration" << endl << endl;
 						semErrors++;
-						args.clear();IDargs = 0; 
-					} 
+						args.clear();IDargs = 0;
+					}
 					else if(temp->ParamList.size() != args.size()){
 						errorFile << "Error at line " << lCount << "Function "<< $2->getName() <<" :Parameter list doesn not match declaration" << endl << endl;
 						args.clear();IDargs = 0;
-						semErrors++;					
+						semErrors++;
 					}
 					else{
 						for(int i = 0; i<temp->ParamList.size(); i++){
 							if(temp->ParamList[i] != args[i]){
 								errorFile << "Error at line " << lCount << "Function "<< $2->getName()<< " :argument mismatch" << endl << endl;
 								args.clear();IDargs = 0;
-								semErrors++;	
+								semErrors++;
 							}
-						}				
+						}
 					}
 				}
 				else{
@@ -161,37 +161,37 @@ func_definition: type_specifier ID LPAREN parameter_list RPAREN compound_stateme
 					temp->setFuncRet($1->getVarType());
 					//
 					for(int i = 0; i<args.size(); i++){
-						temp->ParamList.push_back(args[i]);					
+						temp->ParamList.push_back(args[i]);
 					}
 					temp->setFuncDefined();
 				}
 				args.clear();
 				IDargs = 0;
-				
-	
+
+
 				//funcParam.exitScope();
 				}
  		 		;
- 		 
+
 parameter_list: parameter_list COMMA type_specifier ID
 				{
 					logFile << "Line " << lCount << " : parameter_list  : parameter_list COMMA type_specifier ID\n";
 					logFile << $4->getName() << endl << endl;
 					args.push_back(variable_type);//changed from $3->getVarType()
 					IDargs++;
-					//SymbolInfo* temp = funcParam.InsertandGet($4->getName(), $4->getType());					
+					//SymbolInfo* temp = funcParam.InsertandGet($4->getName(), $4->getType());
 					//temp->setIDType("VAR");
 					//temp->setVarType($3->getVarType());
 					$4->setIDType("VAR");
 					$4->setVarType(variable_type);//changed from $3->getVarType()
 					SymbolInfo* temp = new SymbolInfo($4->getName(), $4->getType());
 					temp->setIDType("VAR");
-					
+
 					params.push_back(*temp);
-				
-				} 
- 				| parameter_list COMMA type_specifier	
-				{					
+
+				}
+ 				| parameter_list COMMA type_specifier
+				{
 					logFile << "Line " << lCount << " : parameter_list  : parameter_list COMMA type_specifier\n"<< endl;
 					args.push_back($3->getVarType());
 				}
@@ -208,7 +208,7 @@ parameter_list: parameter_list COMMA type_specifier ID
 					$2->setIDType("VAR");
 					$2->setVarType(variable_type);//$1->getVarType()
 					params.push_back(*$2);
-				
+
 				}
  				| type_specifier
 				{
@@ -219,10 +219,10 @@ parameter_list: parameter_list COMMA type_specifier ID
 				|{//logFile << "Empty parameter " << lCount << endl;
 				}
  				;
- 		
-compound_statement: 	LCURL 
+
+compound_statement: 	LCURL
 						{
-							table.enterScope(); 
+							table.enterScope();
 							for(int i = 0; i<params.size(); i++) table.Insert(params[i]);
 							params.clear();
 						} statements {table.printAll(logFile);}RCURL{table.exitScope();}
@@ -231,24 +231,24 @@ compound_statement: 	LCURL
 						}
  		    			| LCURL RCURL{logFile << "Line " << lCount << " : compound_statement : LCURL RCURL\n"<< endl;}
  		    			;
- 		    
+
 var_declaration: type_specifier declaration_list SEMICOLON{logFile << "Line " << lCount << " : var_declaration : type_specifier declaration_list SEMICOLON\n"<< endl;}
 				|type_specifier declaration_list error
 				{
 						errorFile << "Error at line " << lCount << "; missing" << endl << endl;
 						semErrors++;
-				} 		 		
+				}
 				;
- 		 
+
 type_specifier: INT
 				{
-					logFile << "Line " << lCount << " : type_specifier	: INT\n"<< endl; 
+					logFile << "Line " << lCount << " : type_specifier	: INT\n"<< endl;
 					SymbolInfo* s= new SymbolInfo("INT");
 					variable_type = "INT";
 					$$ = s;
 				}
  				| FLOAT
-				{	
+				{
 					logFile << "Line " << lCount << " : type_specifier	: FLOAT\n"<< endl;
 					SymbolInfo* s= new SymbolInfo("FLOAT");
 					variable_type = "FLOAT";
@@ -262,7 +262,7 @@ type_specifier: INT
 					$$ = s;
 				}
  				;
- 		
+
 declaration_list: 	declaration_list COMMA ID
 					{
 						logFile << "Line " << lCount << " : declaration_list : 	declaration_list COMMA ID\n";
@@ -274,8 +274,8 @@ declaration_list: 	declaration_list COMMA ID
 						else{
 							SymbolInfo* temp = table.lookUp($3->getName(), "VAR");
 							if(temp != NULL){
-							errorFile << "Error at line " << lCount << ": Variable "<< $3->getName() <<" already declared" << endl << endl;	
-								semErrors++;	
+							errorFile << "Error at line " << lCount << ": Variable "<< $3->getName() <<" already declared" << endl << endl;
+								semErrors++;
 							}
 							else{
 								//SymbolInfo* temp2 = table.InsertandGet($3->getName(), $3->getType());
@@ -302,7 +302,7 @@ declaration_list: 	declaration_list COMMA ID
 							SymbolInfo* temp = table.lookUp($3->getName(), "ARA");
 							if(temp!= NULL){
 							errorFile << "Error at line " << lCount << " : Array "<< $3->getName()<< " already declared" << endl << endl;
-								semErrors++;			
+								semErrors++;
 							}
 							else{
 								SymbolInfo* temp2 = new SymbolInfo($3->getName(), $3->getType());
@@ -310,22 +310,22 @@ declaration_list: 	declaration_list COMMA ID
 								temp2->setIDType("ARA");
 								int araSize = atoi(($5->getName()).c_str());
 								temp2->setAraSize(araSize);
-								if(variable_type == "INT"){								
+								if(variable_type == "INT"){
 									for(int i = temp2->ints.size(); i<araSize; i++){
 										temp2->ints.push_back(0);
-									}							
+									}
 								}
-								else if(variable_type == "FLOAT"){								
+								else if(variable_type == "FLOAT"){
 									for(int i = temp2->floats.size(); i<araSize; i++){
 										temp2->floats.push_back(0);
-									}							
+									}
 								}
-								else if(variable_type == "CHAR"){								
+								else if(variable_type == "CHAR"){
 									for(int i = temp2->chars.size(); i<araSize; i++){
 										temp2->chars.push_back('\0');
-									}							
+									}
 								}
-								table.Insert(*temp2);						
+								table.Insert(*temp2);
 								//table.printAll(logFile);
 							}
 						}
@@ -342,15 +342,15 @@ declaration_list: 	declaration_list COMMA ID
 						else{
 							SymbolInfo* temp = table.lookUp($1->getName(), "ARA");
 							if(temp!= NULL){
-							errorFile << "Error at line " << lCount << ": Variable "<< $1->getName() <<" already declared" << endl << endl;	
-								semErrors++;		
+							errorFile << "Error at line " << lCount << ": Variable "<< $1->getName() <<" already declared" << endl << endl;
+								semErrors++;
 							}
 							else{
 								SymbolInfo* temp2 = new SymbolInfo($1->getName(), $1->getType());
 								temp2->setVarType(variable_type);
 								temp2->setIDType("VAR");
 								table.Insert(*temp2);
-								//table.printAll(logFile);		
+								//table.printAll(logFile);
 							}
 						}
 					}
@@ -366,7 +366,7 @@ declaration_list: 	declaration_list COMMA ID
 						else{
 							SymbolInfo* temp = table.lookUp($1->getName(), "ARA");
 							if(temp!= NULL){
-								errorFile << "Error at line " << lCount << ": Array "<< $1->getName() <<" already declared" << endl << endl;	
+								errorFile << "Error at line " << lCount << ": Array "<< $1->getName() <<" already declared" << endl << endl;
 								semErrors++;
 							}
 							else{
@@ -376,24 +376,24 @@ declaration_list: 	declaration_list COMMA ID
 								int araSize = atoi(($3->getName()).c_str());
 								temp2->setAraSize(araSize);
 								table.Insert(*temp2);
-								//table.printAll(logFile);			
+								//table.printAll(logFile);
 							}
 						}
-					}						
+					}
 					;
- 		  
+
 statements: statement{logFile << "Line " << lCount << " : statements : statement\n"<< endl;}
 	   | statements statement{logFile << "Line " << lCount << " : statements : statements statement\n"<< endl;}
 	   ;
-	   
+
 statement: var_declaration{logFile << "Line " << lCount << " : statement : var_declaration\n"<< endl;}
 	  | expression_statement{logFile << "Line " << lCount << " : statement : expression_statement\n"<< endl;}
 	  | compound_statement{logFile << "Line " << lCount << " : statement : compound_statement\n"<< endl;}
 	  | FOR LPAREN expression_statement expression_statement expression RPAREN statement
 		{logFile << "Line " << lCount << " : statement : FOR LPAREN expression_statement expression_statement expression RPAREN statement\n"<< endl;}
 	  | IF LPAREN expression RPAREN statement %prec second_precedence
-		{logFile << "Line " << lCount << " : statement : IF LPAREN expression RPAREN statement\n"<< endl;} 
-	  | IF LPAREN expression RPAREN statement ELSE statement 
+		{logFile << "Line " << lCount << " : statement : IF LPAREN expression RPAREN statement\n"<< endl;}
+	  | IF LPAREN expression RPAREN statement ELSE statement
 		{logFile << "Line " << lCount << " : statement : IF LPAREN expression RPAREN statement ELSE statement\n"<< endl;}
 	  | WHILE LPAREN expression RPAREN statement{logFile << "Line " << lCount << " : statement : WHILE LPAREN expression RPAREN statement\n"<< endl;}
 	  | PRINTLN LPAREN ID RPAREN SEMICOLON{logFile << "Line " << lCount << " : statement : PRINTLN LPAREN ID RPAREN SEMICOLON\n"<< endl;}
@@ -401,24 +401,24 @@ statement: var_declaration{logFile << "Line " << lCount << " : statement : var_d
 	{
 		errorFile << "Error at line " << lCount << "; missing" << endl << endl;
 		semErrors++;
-	} 		 		
+	}
 	  | RETURN expression SEMICOLON{logFile << "Line " << lCount << " : statement : RETURN expression SEMICOLON\n"<< endl;}
 	  |RETURN expression error
 	{
 			errorFile << "Error at line " << lCount << "; missing" << endl << endl;
 			semErrors++;
-		} 		 			
+		}
 	  ;
-	  
-expression_statement: SEMICOLON{logFile << "Line " << lCount << " : expression_statement : SEMICOLON\n"<< endl;}			
+
+expression_statement: SEMICOLON{logFile << "Line " << lCount << " : expression_statement : SEMICOLON\n"<< endl;}
 						| expression SEMICOLON {logFile << "Line " << lCount << " : expression_statement : expression SEMICOLON\n"<< endl;}
 						|expression error
 						{
 							errorFile << "Error at line " << lCount << "; missing" << endl << endl;
 							semErrors++;
-						} 		 		
+						}
 						;
-	  
+
 variable: 	ID
 			{
 				logFile << "Line " << lCount << " : variable : ID\n";
@@ -426,30 +426,30 @@ variable: 	ID
 				SymbolInfo* temp = table.lookUp($1->getName(),"VAR");
 				if(temp == NULL){
 					//logFile << "Variable " << $1->getName() << " doesn't exist" << endl;
-					errorFile << "Error at line " << lCount << " : " << $1->getName() << " doesn't exist" <<  endl << endl;					
+					errorFile << "Error at line " << lCount << " : " << $1->getName() << " doesn't exist" <<  endl << endl;
 					semErrors++;
 				}
 				else{
 					$$ = temp;
 					//variable_type = temp->getVarType();
-				}			
-			} 		
+				}
+			}
 	 		| ID LTHIRD expression RTHIRD
 			{
 				logFile << "Line " << lCount << " : variable : ID LTHIRD expression RTHIRD\n";
 				logFile << $1->getName() << endl << endl;
 				SymbolInfo* temp = table.lookUp($1->getName(),"ARA");
 				if(temp == NULL){
-				errorFile << "Error at line " << lCount << " : " <<$1->getName() << " doesn't exist" <<  endl << endl;					
-					semErrors++;				
+				errorFile << "Error at line " << lCount << " : " <<$1->getName() << " doesn't exist" <<  endl << endl;
+					semErrors++;
 				}
 				else{
 					//$$ = temp;
 					if($3->ints[0] >= temp->getAraSize()){
-				errorFile << "Error at line " << lCount << " : " <<$1->getName() << " array index out of bounds" <<  endl << endl;				
+				errorFile << "Error at line " << lCount << " : " <<$1->getName() << " array index out of bounds" <<  endl << endl;
 						semErrors++;
 						//temp->setAraIndex(0);
-					} 
+					}
 					else temp->setAraIndex($3->ints[0]);
 					if(temp->getVarType() == "INT"){
 						while(temp->ints.size() <= temp->getAraIndex()){
@@ -468,11 +468,11 @@ variable: 	ID
 					}
 					$$ = temp;
 					//variable_type = temp->getVarType();
-				}			
-			} 
+				}
+			}
 	 		;
-	 
-expression: logic_expression	
+
+expression: logic_expression
 			{
 				logFile << "Line " << lCount << " : expression : logic_expression\n"<< endl;
 				$$ = $1;
@@ -540,18 +540,18 @@ expression: logic_expression
 				//$$->floats[0] = 0 ;
 				//logFile << $$->getName()<< " = " << $$->ints[0] << endl;
 				//logFile << $$->getName()<< " = " << $$->floats[0] << endl;
-				table.printAll(logFile);				
-			} 	
+				table.printAll(logFile);
+			}
 	   		;
-			
+
 logic_expression: rel_expression
 					{
 						logFile << "Line " << lCount << " : logic_expression : rel_expression\n"<< endl;
-						$$ = $1; 
+						$$ = $1;
 						$$->ints.push_back(0);
 						$$->floats.push_back(0);
 						//logFile << "At Rel, value " << $$->floats[0]<< " Type = " << $$->getVarType() << endl;
-					} 	
+					}
 		 			| rel_expression LOGICOP rel_expression
 					{
 						logFile << "Line " << lCount << " : logic_expression : rel_expression LOGICOP rel_expression\n"<< endl;
@@ -565,7 +565,7 @@ logic_expression: rel_expression
 							if($1->getVarType() == "FLOAT"){
 								$1->floats.push_back(0);
 								if($1->floats[0] == 0){
-									temp->ints[0] = 0;								
+									temp->ints[0] = 0;
 								}
 								else if($3->getVarType() == "FLOAT"){
 									$3->floats.push_back(0);
@@ -596,7 +596,7 @@ logic_expression: rel_expression
 							if($1->getVarType() == "FLOAT"){
 								$1->floats.push_back(0);
 								if($1->floats[0] != 0){
-									temp->ints[0] = 1;								
+									temp->ints[0] = 1;
 								}
 								else if($3->getVarType() == "FLOAT"){
 									$3->floats.push_back(0);
@@ -612,7 +612,7 @@ logic_expression: rel_expression
 								$1->ints.push_back(0);
 								if($1->ints[0] != 0) temp->ints[0] = 1;
 								else if($3->getVarType() == "FLOAT"){
-									$3->floats.push_back(0);									
+									$3->floats.push_back(0);
 									if($3->floats[0] != 0) temp->ints[0] = 1;
 									else temp->ints[0] =0;
 								}
@@ -623,12 +623,12 @@ logic_expression: rel_expression
 								}
 							}
 						}
-						$$ = temp;	
+						$$ = temp;
 						//logFile << "At rel LOGICOP rel, value " << $$->ints[0] << " Type = " << $$->getVarType() << endl;
-					} 	
+					}
 		 			;
-			
-rel_expression: simple_expression 
+
+rel_expression: simple_expression
 				{
 					logFile << "Line " << lCount << " : rel_expression : simple_expression\n"<< endl;
 					$$ = $1;
@@ -645,7 +645,7 @@ rel_expression: simple_expression
 					string type2 = $3->getVarType();
 					if(relop == "=="){
 						if(type1 != type2){
-							//logFile << "Type mismatch for == operand" << endl;						
+							//logFile << "Type mismatch for == operand" << endl;
 						}
 						else if(type1 == "INT"){
 							if($1->ints[0] == $3->ints[0]) temp->ints[0] =1;
@@ -653,16 +653,16 @@ rel_expression: simple_expression
 						}
 						else if(type1 == "FLOAT"){
 							if($1->floats[0] == $3->floats[0]) temp->ints[0] =1;
-							else temp->ints[0] =0;		
+							else temp->ints[0] =0;
 						}
 						else if(type1 == "CHAR"){
 							if($1->chars[0] == $3->chars[0]) temp->ints[0] =1;
-							else temp->ints[0] =0;		
+							else temp->ints[0] =0;
 						}
 					}
 					else if(relop == "!="){
 						if(type1 != type2){
-							//logFile << "Type mismatch for != operand" << endl;						
+							//logFile << "Type mismatch for != operand" << endl;
 						}
 						else if(type1 == "INT"){
 							if($1->ints[0] != $3->ints[0]) temp->ints[0] =1;
@@ -670,11 +670,11 @@ rel_expression: simple_expression
 						}
 						else if(type1 == "FLOAT"){
 							if($1->floats[0] != $3->floats[0]) temp->ints[0] =1;
-							else temp->ints[0] =0;	
+							else temp->ints[0] =0;
 						}
 						else if(type1 == "CHAR"){
 							if($1->chars[0] != $3->chars[0]) temp->ints[0] =1;
-							else temp->ints[0] =0;	
+							else temp->ints[0] =0;
 						}
 					}
 					else if(relop == "<=" || relop == "<"){
@@ -731,10 +731,10 @@ rel_expression: simple_expression
 						}
 
 					}
-					$$ = temp;	
-				}	
+					$$ = temp;
+				}
 				;
-				
+
 simple_expression: term
 					{
 						logFile << "Line " << lCount << " : simple_expression : term\n"<< endl;
@@ -742,7 +742,7 @@ simple_expression: term
 						$$->ints.push_back(0);
 						$$->floats.push_back(0);
 						//logFile << "At Term,value " << $$->floats[0]<< " Type = " << $$->getVarType() << endl;
-					} 
+					}
 		 			| simple_expression ADDOP term
 					{
 						logFile << "Line " << lCount << " : simple_expression : simple_expression ADDOP term\n"<< endl;
@@ -750,11 +750,11 @@ simple_expression: term
 						//logFile << $1->ints[0] << "+" << $3->ints[0] << endl;
 						if(addop == "+"){
 							if($1->getIDType() == "VAR"){
-								if($3->getIDType() == "VAR"){						
+								if($3->getIDType() == "VAR"){
 									if($1->getVarType() == "FLOAT"){
 										SymbolInfo* temp = new SymbolInfo("FLOAT");
 										if($3->getVarType() == "INT"){
-											temp->floats[0] =$1->floats[0] + $3->ints[0];							
+											temp->floats[0] =$1->floats[0] + $3->ints[0];
 										}
 										else{
 											temp->floats[0]=$1->floats[0] + $3->floats[0];
@@ -764,7 +764,7 @@ simple_expression: term
 									else if($3->getVarType() == "FLOAT"){
 										SymbolInfo* temp = new SymbolInfo("FLOAT");
 										if($1->getVarType() == "INT"){
-											temp->floats[0]=$1->ints[0] + $3->floats[0];							
+											temp->floats[0]=$1->ints[0] + $3->floats[0];
 										}
 										else{
 											temp->floats[0]= $1->floats[0] + $3->floats[0];
@@ -777,11 +777,11 @@ simple_expression: term
 										$$ = temp;
 									}
 								}
-								else if($3->getIDType() == "ARA"){						
+								else if($3->getIDType() == "ARA"){
 									if($1->getVarType() == "FLOAT"){
 										SymbolInfo* temp = new SymbolInfo("FLOAT");
 										if($3->getVarType() == "INT"){
-											temp->floats[0] = $1->floats[0] + $3->ints[$3->getAraIndex()];							
+											temp->floats[0] = $1->floats[0] + $3->ints[$3->getAraIndex()];
 										}
 										else{
 											temp->floats[0]= $1->floats[0] + $3->floats[$3->getAraIndex()];
@@ -791,7 +791,7 @@ simple_expression: term
 									else if($3->getVarType() == "FLOAT"){
 										SymbolInfo* temp = new SymbolInfo("FLOAT");
 										if($1->getVarType() == "INT"){
-											temp->floats[0]=$1->ints[0] + $3->floats[$3->getAraIndex()];							
+											temp->floats[0]=$1->ints[0] + $3->floats[$3->getAraIndex()];
 										}
 										else{
 											temp->floats[0] = $1->floats[0] + $3->floats[$3->getAraIndex()];
@@ -806,11 +806,11 @@ simple_expression: term
 								}
 							}
 							else if($1->getIDType() == "ARA"){
-								if($3->getIDType() == "VAR"){						
+								if($3->getIDType() == "VAR"){
 									if($1->getVarType() == "FLOAT"){
 										SymbolInfo* temp = new SymbolInfo("FLOAT");
 										if($3->getVarType() == "INT"){
-											temp->floats[0] =$1->floats[$1->getAraIndex()] + $3->ints[0];							
+											temp->floats[0] =$1->floats[$1->getAraIndex()] + $3->ints[0];
 										}
 										else{
 											temp->floats[0]=$1->floats[$1->getAraIndex()] + $3->floats[0];
@@ -820,7 +820,7 @@ simple_expression: term
 									else if($3->getVarType() == "FLOAT"){
 										SymbolInfo* temp = new SymbolInfo("FLOAT");
 										if($1->getVarType() == "INT"){
-											temp->floats[0]=$1->ints[$1->getAraIndex()] + $3->floats[0];							
+											temp->floats[0]=$1->ints[$1->getAraIndex()] + $3->floats[0];
 										}
 										else{
 											temp->floats[0]=$1->floats[$1->getAraIndex()] + $3->floats[0];
@@ -833,7 +833,7 @@ simple_expression: term
 										$$ = temp;
 									}
 								}
-								else if($3->getIDType() == "ARA"){						
+								else if($3->getIDType() == "ARA"){
 									if($1->getVarType() == "FLOAT"){
 										SymbolInfo* temp = new SymbolInfo("FLOAT");
 										if($3->getVarType() == "INT"){
@@ -864,11 +864,11 @@ simple_expression: term
 						}
 						else if(addop == "-"){
 							if($1->getIDType() == "VAR"){
-								if($3->getIDType() == "VAR"){						
+								if($3->getIDType() == "VAR"){
 									if($1->getVarType() == "FLOAT"){
 										SymbolInfo* temp = new SymbolInfo("FLOAT");
 										if($3->getVarType() == "INT"){
-											temp->floats[0]=$1->floats[0] - $3->ints[0];							
+											temp->floats[0]=$1->floats[0] - $3->ints[0];
 										}
 										else{
 											temp->floats[0]=$1->floats[0] - $3->floats[0];
@@ -878,7 +878,7 @@ simple_expression: term
 									else if($3->getVarType() == "FLOAT"){
 										SymbolInfo* temp = new SymbolInfo("FLOAT");
 										if($1->getVarType() == "INT"){
-											temp->floats[0]=$1->ints[0] - $3->floats[0];							
+											temp->floats[0]=$1->ints[0] - $3->floats[0];
 										}
 										else{
 											temp->floats[0]=$1->floats[0] - $3->floats[0];
@@ -891,11 +891,11 @@ simple_expression: term
 										$$ = temp;
 									}
 								}
-								else if($3->getIDType() == "ARA"){						
+								else if($3->getIDType() == "ARA"){
 									if($1->getVarType() == "FLOAT"){
 										SymbolInfo* temp = new SymbolInfo("FLOAT");
 										if($3->getVarType() == "INT"){
-											temp->floats[0]=$1->floats[0] - $3->ints[$3->getAraIndex()];							
+											temp->floats[0]=$1->floats[0] - $3->ints[$3->getAraIndex()];
 										}
 										else{
 											temp->floats[0]=$1->floats[0] - $3->floats[$3->getAraIndex()];
@@ -905,7 +905,7 @@ simple_expression: term
 									else if($3->getVarType() == "FLOAT"){
 										SymbolInfo* temp = new SymbolInfo("FLOAT");
 										if($1->getVarType() == "INT"){
-											temp->floats[0]=$1->ints[0] - $3->floats[$3->getAraIndex()];							
+											temp->floats[0]=$1->ints[0] - $3->floats[$3->getAraIndex()];
 										}
 										else{
 											temp->floats[0]=$1->floats[0] - $3->floats[$3->getAraIndex()];
@@ -920,11 +920,11 @@ simple_expression: term
 								}
 							}
 							else if($1->getIDType() == "ARA"){
-								if($3->getIDType() == "VAR"){						
+								if($3->getIDType() == "VAR"){
 									if($1->getVarType() == "FLOAT"){
 										SymbolInfo* temp = new SymbolInfo("FLOAT");
 										if($3->getVarType() == "INT"){
-											temp->floats[0]=$1->floats[$1->getAraIndex()] - $3->ints[0];							
+											temp->floats[0]=$1->floats[$1->getAraIndex()] - $3->ints[0];
 										}
 										else{
 											temp->floats[0]= $1->floats[$1->getAraIndex()] - $3->floats[0];
@@ -934,7 +934,7 @@ simple_expression: term
 									else if($3->getVarType() == "FLOAT"){
 										SymbolInfo* temp = new SymbolInfo("FLOAT");
 										if($1->getVarType() == "INT"){
-											temp->floats[0]=$1->ints[$1->getAraIndex()] - $3->floats[0];							
+											temp->floats[0]=$1->ints[$1->getAraIndex()] - $3->floats[0];
 										}
 										else{
 											temp->floats[0]=$1->floats[$1->getAraIndex()] - $3->floats[0];
@@ -947,7 +947,7 @@ simple_expression: term
 										$$ = temp;
 									}
 								}
-								else if($3->getIDType() == "ARA"){						
+								else if($3->getIDType() == "ARA"){
 									if($1->getVarType() == "FLOAT"){
 										SymbolInfo* temp = new SymbolInfo("FLOAT");
 										if($3->getVarType() == "INT"){
@@ -976,9 +976,9 @@ simple_expression: term
 								}
 							}
 						}
-					} 	
+					}
 					;
-					
+
 term:	unary_expression
 		{
 			logFile << "Line " << lCount << " : term : unary_expression\n"<< endl;
@@ -994,12 +994,12 @@ term:	unary_expression
 
 			if(mulop == "*")
 			{
-				if($1->getIDType() == "VAR"){	
-					if($3->getIDType() == "VAR"){		
+				if($1->getIDType() == "VAR"){
+					if($3->getIDType() == "VAR"){
 						if($1->getVarType() == "FLOAT"){
 							SymbolInfo* temp = new SymbolInfo("FLOAT");
 							if($3->getVarType() == "INT"){
-								temp->floats[0]=$1->floats[0] * $3->ints[0];							
+								temp->floats[0]=$1->floats[0] * $3->ints[0];
 							}
 							else{
 								temp->floats[0]=$1->floats[0] * $3->floats[0];
@@ -1009,7 +1009,7 @@ term:	unary_expression
 						else if($3->getVarType() == "FLOAT"){
 							SymbolInfo* temp = new SymbolInfo("FLOAT");
 							if($1->getVarType() == "INT"){
-								temp->floats[0]=$1->ints[0] * $3->floats[0];							
+								temp->floats[0]=$1->ints[0] * $3->floats[0];
 							}
 							else{
 								temp->floats[0]=$1->floats[0] * $3->floats[0];
@@ -1022,11 +1022,11 @@ term:	unary_expression
 							$$ = temp;
 						}
 					}
-					else if($3->getIDType() == "ARA"){		
+					else if($3->getIDType() == "ARA"){
 						if($1->getVarType() == "FLOAT"){
 							SymbolInfo* temp = new SymbolInfo("FLOAT");
 							if($3->getVarType() == "INT"){
-								temp->floats[0]=$1->floats[0] * $3->ints[$3->getAraIndex()];							
+								temp->floats[0]=$1->floats[0] * $3->ints[$3->getAraIndex()];
 							}
 							else{
 								temp->floats[0]=$1->floats[0] * $3->floats[$3->getAraIndex()];
@@ -1036,7 +1036,7 @@ term:	unary_expression
 						else if($3->getVarType() == "FLOAT"){
 							SymbolInfo* temp = new SymbolInfo("FLOAT");
 							if($1->getVarType() == "INT"){
-								temp->floats[0]=$1->ints[0] * $3->floats[$3->getAraIndex()];							
+								temp->floats[0]=$1->ints[0] * $3->floats[$3->getAraIndex()];
 							}
 							else{
 								temp->floats[0]=$1->floats[0] * $3->floats[$3->getAraIndex()];
@@ -1050,12 +1050,12 @@ term:	unary_expression
 						}
 					}
 				}
-				else if($1->getIDType() == "ARA"){	
-					if($3->getIDType() == "VAR"){		
+				else if($1->getIDType() == "ARA"){
+					if($3->getIDType() == "VAR"){
 						if($1->getVarType() == "FLOAT"){
 							SymbolInfo* temp = new SymbolInfo("FLOAT");
 							if($3->getVarType() == "INT"){
-								temp->floats[0]=$1->floats[$1->getAraIndex()] * $3->ints[0];							
+								temp->floats[0]=$1->floats[$1->getAraIndex()] * $3->ints[0];
 							}
 							else{
 								temp->floats[0]=$1->floats[$1->getAraIndex()] * $3->floats[0];
@@ -1065,7 +1065,7 @@ term:	unary_expression
 						else if($3->getVarType() == "FLOAT"){
 							SymbolInfo* temp = new SymbolInfo("FLOAT");
 							if($1->getVarType() == "INT"){
-								temp->floats[0]=$1->ints[$1->getAraIndex()] * $3->floats[0];							
+								temp->floats[0]=$1->ints[$1->getAraIndex()] * $3->floats[0];
 							}
 							else{
 								temp->floats[0]=$1->floats[$1->getAraIndex()] * $3->floats[0];
@@ -1078,7 +1078,7 @@ term:	unary_expression
 							$$ = temp;
 						}
 					}
-					else if($3->getIDType() == "ARA"){		
+					else if($3->getIDType() == "ARA"){
 						if($1->getVarType() == "FLOAT"){
 							SymbolInfo* temp = new SymbolInfo("FLOAT");
 							if($3->getVarType() == "INT"){
@@ -1118,8 +1118,8 @@ term:	unary_expression
 								else{
 									temp->floats[0]=numeric_limits<float>::infinity();
 							errorFile << "Error at line " << lCount <<" : Divide by zero"<<endl << endl;
-									semErrors++; 
-								}							
+									semErrors++;
+								}
 							}
 							else if($3->getIDType() == "ARA"){
 								if($3->ints[$3->getAraIndex()] != 0)temp->floats[0]=$1->floats[0] / $3->ints[$3->getAraIndex()];
@@ -1137,7 +1137,7 @@ term:	unary_expression
 									temp->floats[0]=numeric_limits<float>::infinity();
 							errorFile << "Error at line " << lCount <<" : Divide by zero"<<endl << endl;
 									semErrors++;
-								}							
+								}
 							}
 							else if($3->getIDType() == "ARA"){
 								if($3->ints[$3->getAraIndex()] != 0){
@@ -1159,7 +1159,7 @@ term:	unary_expression
 									temp->floats[0]=numeric_limits<float>::infinity();
 							errorFile << "Error at line " << lCount <<" : Divide by zero"<<endl << endl;
 									semErrors++;
-								}							
+								}
 							}
 							else if($3->getIDType() == "ARA"){
 								if($3->floats[$3->getAraIndex()] != 0)temp->floats[0]=$1->floats[0] / $3->floats[$3->getAraIndex()];
@@ -1177,7 +1177,7 @@ term:	unary_expression
 									temp->floats[0]=numeric_limits<float>::infinity();
 							errorFile << "Error at line " << lCount <<" : Divide by zero"<<endl << endl;
 									semErrors++;
-								}							
+								}
 							}
 							else if($3->getIDType() == "ARA"){
 								if($3->floats[$3->getAraIndex()] != 0){
@@ -1203,7 +1203,7 @@ term:	unary_expression
 									temp->floats[0]=numeric_limits<float>::infinity();
 							errorFile << "Error at line " << lCount <<" : Divide by zero"<<endl << endl;
 									semErrors++;
-								}							
+								}
 							}
 							else if($3->getIDType() == "ARA"){
 								if($3->floats[$3->getAraIndex()] != 0)temp->floats[0]=$1->ints[0] / $3->floats[$3->getAraIndex()];
@@ -1221,7 +1221,7 @@ term:	unary_expression
 									temp->floats[0]=numeric_limits<float>::infinity();
 							errorFile << "Error at line " << lCount <<" : Divide by zero"<<endl << endl;
 									semErrors++;
-								}							
+								}
 							}
 							else if($3->getIDType() == "ARA"){
 								if($3->floats[$3->getAraIndex()] != 0){
@@ -1243,7 +1243,7 @@ term:	unary_expression
 									temp->floats[0]=numeric_limits<float>::infinity();
 							errorFile << "Error at line " << lCount <<" : Divide by zero"<<endl << endl;
 									semErrors++;
-								}							
+								}
 							}
 							else if($3->getIDType() == "ARA"){
 								if($3->floats[$3->getAraIndex()] != 0)temp->floats[0]=$1->floats[0] / $3->floats[$3->getAraIndex()];
@@ -1261,7 +1261,7 @@ term:	unary_expression
 									temp->floats[0]=numeric_limits<float>::infinity();
 							errorFile << "Error at line " << lCount <<" : Divide by zero"<<endl << endl;
 									semErrors++;
-								}							
+								}
 							}
 							else if($3->getIDType() == "ARA"){
 								if($3->floats[$3->getAraIndex()] != 0){
@@ -1274,13 +1274,13 @@ term:	unary_expression
 								}
 							}
 						}
-					}				
+					}
 					$$ = temp;
 				}
 				else if($3->getVarType() == "INT" && $1->getVarType() == "INT"){
 					SymbolInfo* temp = new SymbolInfo("INT");
-					if($1->getIDType() == "VAR"){	
-						if($3->getIDType() == "VAR"){			
+					if($1->getIDType() == "VAR"){
+						if($3->getIDType() == "VAR"){
 							if($3->ints[0] != 0)temp->ints[0]=$1->ints[0] / $3->ints[0];
 							else{
 								temp->ints[0]=numeric_limits<int>::max();
@@ -1298,7 +1298,7 @@ term:	unary_expression
 						}
 					}
 					else if($1->getIDType() == "ARA"){
-						if($3->getIDType() == "VAR"){			
+						if($3->getIDType() == "VAR"){
 							if($3->ints[0] != 0)temp->ints[0]=$1->ints[$1->getAraIndex()] / $3->ints[0];
 							else{
 								temp->ints[0]=numeric_limits<int>::max();
@@ -1313,7 +1313,7 @@ term:	unary_expression
 							}
 							else{
 								temp->floats[0]=numeric_limits<int>::max();
-							errorFile << "Error at line " << lCount <<" : Divide by zero"<<endl << endl;	
+							errorFile << "Error at line " << lCount <<" : Divide by zero"<<endl << endl;
 								semErrors++;
 							}
 						}
@@ -1331,11 +1331,11 @@ term:	unary_expression
 				else if($1->getVarType() == "INT" && $3->getVarType() == "INT"){
 					if($1->getIDType() == "VAR"){
 						if($3->getIDType() == "VAR")temp->ints[0]=($1->ints[0])%($3->ints[0]);
-						else temp->ints[0]= ($1->ints[0])%($3->ints[$3->getAraIndex()]);					
+						else temp->ints[0]= ($1->ints[0])%($3->ints[$3->getAraIndex()]);
 					}
 					else{
 						if($3->getIDType() == "VAR")temp->ints[0]=($1->ints[$1->getAraIndex()])%($3->ints[0]);
-						else temp->ints[0]=($1->ints[$1->getAraIndex()])%($3->ints[$3->getAraIndex()]);					
+						else temp->ints[0]=($1->ints[$1->getAraIndex()])%($3->ints[$3->getAraIndex()]);
 					}
 				}
 				$$ = temp;
@@ -1343,7 +1343,7 @@ term:	unary_expression
 		}
      	;
 
-unary_expression: ADDOP unary_expression  
+unary_expression: ADDOP unary_expression
 				{
 					logFile << "Line " << lCount << " : unary_expression : ADDOP unary_expression\n"<< endl;
 					if($1->getName() == "-"){
@@ -1356,7 +1356,7 @@ unary_expression: ADDOP unary_expression
 					}
 					$$ = $2;
 				}
-		 		| NOT unary_expression 
+		 		| NOT unary_expression
 				{
 					logFile << "Line " << lCount << " : unary_expression : NOT unary_expression\n"<< endl;
 					SymbolInfo* temp = new SymbolInfo("INT");
@@ -1369,14 +1369,14 @@ unary_expression: ADDOP unary_expression
 					else if($2->getVarType() == "FLOAT"){
 						if($2->getIDType() == "VAR") value = (int)$2->floats[0];
 						else if($2->getIDType() == "ARA") value = (int)$2->floats[$2->getAraIndex()];
-					} 
+					}
 					if(value != 0) value = 0;
 					else value = 1;
 
 					temp->ints[0]=value;
 					$$=temp;
 				}
-		 		| factor 
+		 		| factor
 				{
 					logFile << "Line " << lCount << " : unary_expression : factor\n"<< endl;
 					$$ = $1;
@@ -1385,8 +1385,8 @@ unary_expression: ADDOP unary_expression
 					//logFile << "At Factor, value " << $$->floats[0] << " Type = " << $$->getVarType() << endl;
 				}
 		 		;
-	
-factor: variable{logFile << "Line " << lCount << " : factor : variable\n"<< endl;} 
+
+factor: variable{logFile << "Line " << lCount << " : factor : variable\n"<< endl;}
 		| ID LPAREN argument_list RPAREN
 		{
 
@@ -1400,8 +1400,8 @@ factor: variable{logFile << "Line " << lCount << " : factor : variable\n"<< endl
 			else{
 				if(temp->getFuncRet() == "VOID"){
 					errorFile << "Error at line " << lCount <<" : Function " <<$1->getName() <<" returns void"<<endl << endl;
-				} 
-				else{ 
+				}
+				else{
 					SymbolInfo *temp2 = new SymbolInfo($1->getFuncRet());
 					if(temp2->getVarType() == "INT")temp2->ints[0] = 0;
 					else if(temp2->getVarType() == "FLOAT")temp2->floats[0] = 0;
@@ -1415,17 +1415,17 @@ factor: variable{logFile << "Line " << lCount << " : factor : variable\n"<< endl
 			logFile << "Line " << lCount << " : factor : LPAREN expression RPAREN\n"<< endl;
 			$$ = $2;
 		}
-		| CONST_INT 
-		{ 
+		| CONST_INT
+		{
 			logFile << "Line " << lCount << " : factor : CONST_INT\n";
 			logFile << $1->getName() << endl << endl;
-			$1->setVarType("INT");			
+			$1->setVarType("INT");
 			$1->ints[0]= atoi($1->getName().c_str());
 			$1->setIDType("VAR");
-			$$ = $1;	
-			
-		} 
-		| CONST_FLOAT 
+			$$ = $1;
+
+		}
+		| CONST_FLOAT
 		{
 			logFile << "Line " << lCount << " : factor : CONST_FLOAT\n";
 			logFile << $1->getName() << endl << endl;
@@ -1448,45 +1448,45 @@ factor: variable{logFile << "Line " << lCount << " : factor : variable\n"<< endl
 			//logFile << "Line " << lCount << " : factor : variable INCOP\n"<< endl;
 			if($1->getIDType() == "ARA"){
 				if($1->getVarType() == "INT"){
-					$1->ints[$1->getAraIndex()] = $1->ints[$1->getAraIndex()]+1; 
+					$1->ints[$1->getAraIndex()] = $1->ints[$1->getAraIndex()]+1;
 				}
 				else if($1->getVarType() == "FLOAT"){
-					$1->floats[$1->getAraIndex()] = $1->floats[$1->getAraIndex()]+1.0; 
-				}			
+					$1->floats[$1->getAraIndex()] = $1->floats[$1->getAraIndex()]+1.0;
+				}
 			}
 			else if($1->getIDType() == "VAR"){
 				if($1->getVarType() == "INT"){
-					$1->ints[0] = $1->ints[0]+1; 
+					$1->ints[0] = $1->ints[0]+1;
 				}
 				else if($1->getVarType() == "FLOAT"){
-					$1->floats[0] = $1->floats[0]+1.0; 
-				}					
+					$1->floats[0] = $1->floats[0]+1.0;
+				}
 			}
 			$$ = $1;
-		} 
+		}
 		| variable DECOP
 		{
 			logFile << "Line " << lCount << " : factor : variable DECOP\n"<< endl;
 			if($1->getIDType() == "ARA"){
 				if($1->getVarType() == "INT"){
-					$1->ints[$1->getAraIndex()] = $1->ints[$1->getAraIndex()]-1; 
+					$1->ints[$1->getAraIndex()] = $1->ints[$1->getAraIndex()]-1;
 				}
 				else if($1->getVarType() == "FLOAT"){
-					$1->floats[$1->getAraIndex()] = $1->floats[$1->getAraIndex()]-1.0; 
-				}			
+					$1->floats[$1->getAraIndex()] = $1->floats[$1->getAraIndex()]-1.0;
+				}
 			}
 			else if($1->getIDType() == "VAR"){
 				if($1->getVarType() == "INT"){
-					$1->ints[0] = $1->ints[0]-1; 
+					$1->ints[0] = $1->ints[0]-1;
 				}
 				else if($1->getVarType() == "FLOAT"){
-					$1->floats[0] = $1->floats[0]-1.0; 
-				}					
+					$1->floats[0] = $1->floats[0]-1.0;
+				}
 			}
 			$$ = $1;
 		}
 		;
-	
+
 argument_list: arguments{logFile << "Line " << lCount << " : argument_list : arguments\n"<< endl;}
 				|
 				;
@@ -1494,7 +1494,7 @@ argument_list: arguments{logFile << "Line " << lCount << " : argument_list : arg
 arguments: arguments COMMA logic_expression {logFile << "Line " << lCount << " : arguments : arguments COMMA logic_expression\n"<< endl;}
 			|logic_expression{logFile << "Line " << lCount << " : arguments : logic_expression\n"<< endl;}
 			;
- 
+
 
 %%
 int main(int argc,char *argv[])
@@ -1508,16 +1508,15 @@ int main(int argc,char *argv[])
 
 	logFile.open("1405045_log.txt");
 	errorFile.open("1405045_errors.txt");
-	
+
 	//	logFile << "Kichu" << endl;
 	//yyin=fp;
 	yyparse();
-	
-	logFile << "Total Lines : " << lCount << endl << endl; 
+
+	logFile << "Total Lines : " << lCount << endl << endl;
 	logFile << "Total Errors : " << semErrors << endl;
 	logFile.close();
 	errorFile.close();
 
 	return 0;
 }
-

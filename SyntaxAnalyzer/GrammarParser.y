@@ -4,6 +4,10 @@
 #include "SynBase.h"
 #endif // SYMTABLE
 
+string buf;
+string relBuf;
+int i=0;
+
 %}
 %union{
 SymbolInfo* symVal;
@@ -40,10 +44,19 @@ SymbolInfo* symVal;
 
 
 
-start: program;
+start: program
+	{
+		printLog("program");
+	};
 
 program: program unit
+		{
+			printLog("program unit");
+		}
 	| unit
+		{
+			printLog("unit");
+		}
 	;
 
 unit: var_declaration
@@ -57,6 +70,9 @@ func_declaration: type_specifier ID LPAREN parameter_list RPAREN SEMICOLON
 
 func_definition: type_specifier ID LPAREN parameter_list RPAREN compound_statement
 		| type_specifier ID LPAREN RPAREN compound_statement
+			{
+				//logFile<<"Function Def"<<endl;
+			}
  		;
 
 
@@ -80,17 +96,24 @@ type_specifier: INT
  		;
 
 declaration_list: declaration_list COMMA ID
+				{
+					logFile << buf << "," << $3->getName() <<endl;
+					buf = buf + "," + $3->getName();
+				}
  		  | declaration_list COMMA ID LTHIRD CONST_INT RTHIRD
  		  | ID
+				{
+					buf=$1->getName();
+				}
  		  | ID LTHIRD CONST_INT RTHIRD
  		  ;
 
-statements: statement
-	   | statements statement
+statements: statement {printLog("statement");}
+	   | statements statement {printLog("statements statement");}
 	   ;
 
 statement: var_declaration
-	  | expression_statement
+	  | expression_statement {printLog("expression_statement");}
 	  | compound_statement
 	  | FOR LPAREN expression_statement expression_statement expression RPAREN statement
 	  | IF LPAREN expression RPAREN statement
@@ -101,15 +124,15 @@ statement: var_declaration
 	  ;
 
 expression_statement: SEMICOLON
-			| expression SEMICOLON
+			| expression SEMICOLON {printLog("expression SEMICOLON");}
 			;
 
 variable: ID
 	 | ID LTHIRD expression RTHIRD
 	 ;
 
- expression: logic_expression
-	   | variable ASSIGNOP logic_expression
+expression: logic_expression
+	   | variable ASSIGNOP logic_expression {printLog("variable ASSIGNOP logic_expression");}
 	   ;
 
 logic_expression: rel_expression
@@ -118,13 +141,31 @@ logic_expression: rel_expression
 
 rel_expression: simple_expression
 		| simple_expression RELOP simple_expression
+			{
+				string s2=simpEx.top();
+				simpEx.pop();
+				string s1=simpEx.top();
+				simpEx.pop();
+				relEx.push(s1+"=="+s2);
+				logFile << relEx.top() << endl;
+				printLog(s1+"=="+s2);
+			}
 		;
 
 simple_expression: term
+				{
+					simpEx.push(termV.top());termV.pop();
+				}
 		  | simple_expression ADDOP term
 		  ;
 
 term:	unary_expression
+				{
+					++i;
+					string x = "2";
+					x[0]=i+'0';
+					termV.push(x);
+				}
      |  term MULOP unary_expression
      ;
 
@@ -165,6 +206,7 @@ int main(int argc,char *argv[])
 	errorFile.open("errors.txt");
 	parserFile.open("parser.txt");
 
+	printLog("start");
 	yyparse();
 
 	logFile << "Total Lines : " << line_count << std::endl << std::endl;
