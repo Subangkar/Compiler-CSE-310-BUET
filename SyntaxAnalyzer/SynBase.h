@@ -14,8 +14,6 @@
 using std::stack;
 
 
-
-
 #define SYMBOL_TABLE_SIZE 73
 
 
@@ -29,12 +27,10 @@ int semErrors;
 vector<SymbolInfo> params;
 
 
-stack<string> relEx,simpEx,termV;
+//stack<string> relEx, simpEx, termV;
 
 extern FILE *yyin;
 extern int line_count;
-
-
 
 
 int yyparse();
@@ -42,54 +38,100 @@ int yyparse();
 int yylex();
 
 
-
 void yyerror(const char *s) {
 	//write your code
 }
 
 
-void printLog(string str)
-{
-  logFile << str << endl;
+void printLog(string str) {
+	logFile << str << endl;
 }
 
+const string ruleName[] = {"start","program","unit" ,"func_declaration","func_definition","parameter_list","compound_statement","var_declaration","type_specifier","declaration_list","statements","statement","expression_statement","variable","expression","logic_expression","rel_expression","simple_expression","term","unary_expression","factor","argument_list","arguments"};
 
-enum TERMINAL_TYPE
-{
-	start=0,program,unit ,func_declaration,func_definition,parameter_list,compound_statement,var_declaration,type_specifier,declaration_list,statements,statement,expression_statement,variable,expression,logic_expression,rel_expression	,simple_expression	,term,unary_expression,factor,argument_list,arguments
+enum NONTERMINAL_TYPE {
+	start = 0,
+	program,
+	unit,
+	func_declaration,
+	func_definition,
+	parameter_list,
+	compound_statement,
+	var_declaration,
+	type_specifier,
+	declaration_list,
+	statements,
+	statement,
+	expression_statement,
+	variable,
+	expression,
+	logic_expression,
+	rel_expression,
+	simple_expression,
+	term,
+	unary_expression,
+	factor,
+	argument_list,
+	arguments
 };
 
-class NonTerminalBuffer
-{
+class NonTerminalBuffer {
 private:
-	stack<string> terminalBuf[TERMINAL_TYPE::arguments+1];
+	stack<string> terminalBuf[NONTERMINAL_TYPE::arguments + 1];
 public:
-	string getValue(TERMINAL_TYPE terminalNo)
-	{
-		if(terminalNo<start || terminalNo>arguments) return string("");
-		return terminalBuf[terminalNo].top();
+	string getValue(NONTERMINAL_TYPE nonterminal) {
+		if (nonterminal < start || nonterminal > arguments) return string("");
+		return terminalBuf[nonterminal].top();
 	}
 
-	string extractValue(TERMINAL_TYPE terminalNo)
-	{
-		if(terminalNo<start || terminalNo>arguments) return string("");
+	string extractValue(NONTERMINAL_TYPE nonterminal) {
+		if (nonterminal < start || nonterminal > arguments) return string("");
 
-		if(terminalBuf[terminalNo].empty()) return "";
+		if (terminalBuf[nonterminal].empty()) return "";
 
-		string str = terminalBuf[terminalNo].top();
-		terminalBuf[terminalNo].pop();
+		string str = terminalBuf[nonterminal].top();
+		terminalBuf[nonterminal].pop();
 		return str;
 	}
 
-	void pushValue(TERMINAL_TYPE terminalNo,string val)
-	{
-		if(terminalNo<start || terminalNo>arguments) return;
+	void pushValue(NONTERMINAL_TYPE nonterminal, const string &val) {
+		if (nonterminal < start || nonterminal > arguments) return;
 
-		terminalBuf[terminalNo].push(val);
+		terminalBuf[nonterminal].push(val);
 	}
 };
 
 
 NonTerminalBuffer nonTerminalBuffer;
+
+
+void pushVal(NONTERMINAL_TYPE nonterminal, const string &val) {
+	nonTerminalBuffer.pushValue(nonterminal, val);
+}
+
+string popVal(NONTERMINAL_TYPE nonterminal) {
+	string val = nonTerminalBuffer.extractValue(nonterminal);
+	return val+((val[val.length()-1]==' ')?"":" ");
+}
+
+
+
+void printRule(string rule) {
+	logFile << "At line no: " << line_count << " " << rule << endl << endl;
+}
+
+// after pushing value
+void printCode(NONTERMINAL_TYPE ruleNonterminal){
+	logFile << nonTerminalBuffer.getValue(ruleNonterminal) << endl << endl;
+}
+
+
+void printRuleLog(NONTERMINAL_TYPE nonterminal,string rule)
+{
+	printRule(ruleName[nonterminal]+": "+rule);
+	printCode(nonterminal);
+}
+
+
 
 #endif //SYNTAXANALYZER_SYNBASE_H
