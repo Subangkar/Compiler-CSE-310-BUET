@@ -17,21 +17,22 @@ class SymbolInfo {
 	string name;
 	string type;
 
-	string IDType;
-	string VarType;
+	string IDType;// FUNC, VAR, ARA
+	string VarType; // INT, FLOAT
 
-	string FuncRet;
-	bool FuncDefined = false;	//true, false	//true,false
+	string FuncRet;// INT, FLOAT, VOID
+	bool FuncDefined = false;
 
 	size_t ArrSize;
+	size_t ArrIndex;
 
 public:
 
-	vector<string> ParamList;	//INT, FLOAT, STRING, CHAR
+	vector<string> ParamList;    //INT, FLOAT, STRING, CHAR
 
 	vector<int> ints;
 	vector<float> floats;
-	vector<char> chars;
+//	vector<char> chars;
 
 
 	explicit operator string() const {
@@ -50,12 +51,11 @@ public:
 	}
 
 
-
-	const string &getName() const { return name;};
+	const string &getName() const { return name; };
 
 //	explicit SymbolInfo(string name, string type = "");
 
-	explicit SymbolInfo(const string name, const string type = "") : name(name), type(type) {}
+	explicit SymbolInfo(const string name, const string type = "") : name(name), type(type) {ArrIndex=0;}
 
 	void setName(const string &name) {
 		this->name = name;
@@ -83,6 +83,8 @@ public:
 
 	void setVarType(const string &VarType) {
 		SymbolInfo::VarType = VarType;
+		if (VarType == "INT") ints.push_back(0);
+		else if (VarType == "FLOAT") floats.push_back(0);
 	}
 
 	const string &getFuncRet() const {
@@ -98,7 +100,19 @@ public:
 	}
 
 	void setArrSize(size_t ArrSize) {
+		if(VarType!="ARA")
+			return;
 		SymbolInfo::ArrSize = ArrSize;
+	}
+
+	size_t getArrIndex() const {
+		return ArrIndex;
+	}
+
+	void setArrIndex(size_t ArrIndex) {
+		if(VarType!="ARA")
+			return;
+		SymbolInfo::ArrIndex = ArrIndex;
 	}
 
 	bool isFuncDefined() const {
@@ -107,6 +121,28 @@ public:
 
 	void setFuncDefined(bool FuncDefined) {
 		SymbolInfo::FuncDefined = FuncDefined;
+	}
+
+	int setIndexValue(int val) {
+		while (ints.size() <= getArrIndex()) ints.push_back(0);
+		return ints[getArrIndex()] = val;
+	}
+
+	float setIndexValue(float val) {
+		while (floats.size() <= getArrIndex()) floats.push_back(0);
+		return floats[getArrIndex()] = val;
+	}
+
+	int setVarValue(int val) {
+		if (ints.empty()) ints.push_back(val);
+		else ints[0] = val;
+		return ints[0];
+	}
+
+	float setVarValue(float val) {
+		if (floats.empty()) floats.push_back(val);
+		else floats[0] = val;
+		return floats[0];
 	}
 
 	SymbolInfo(const SymbolInfo &symbolInfo) {
@@ -125,7 +161,7 @@ public:
 		return !(rhs == *this);
 	}
 
-	int64_p hashValue() const{
+	int64_p hashValue() const {
 
 		string key = this->name;
 
@@ -149,7 +185,7 @@ public:
 
 private:
 
-	int64_p reverseDigits(int64_p n) const{
+	int64_p reverseDigits(int64_p n) const {
 		int64_p revN = 0;
 		while (n > 0) {
 			revN = revN * 10 + n % 10;

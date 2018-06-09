@@ -94,11 +94,15 @@ func_declaration: type_specifier ID LPAREN parameter_list RPAREN SEMICOLON
 
 func_definition: type_specifier ID LPAREN parameter_list RPAREN compound_statement
 			{
+				addFuncDef($2,$1);
+
 				pushVal(func_definition,popVal(type_specifier)+$2->getName()+"("+popVal(parameter_list)+")"+popVal(compound_statement));
 				printRuleLog(func_definition,"type_specifier ID LPAREN parameter_list RPAREN compound_statement");
 			}
 		| type_specifier ID LPAREN RPAREN compound_statement
 			{
+				addFuncDef($2,$1);
+
 				pushVal(func_definition,popVal(type_specifier)+$2->getName()+"("+")"+popVal(compound_statement));
 				printRuleLog(func_definition,"type_specifier ID LPAREN RPAREN compound_statement");
 			}
@@ -107,34 +111,46 @@ func_definition: type_specifier ID LPAREN parameter_list RPAREN compound_stateme
 
 parameter_list: parameter_list COMMA type_specifier ID
 			{
+					addIDenArgtoParamList($4);
+
 			   	pushVal(parameter_list,popVal(parameter_list)+","+popVal(type_specifier)+$4->getName());
 					printRuleLog(parameter_list,"parameter_list COMMA type_specifier ID");
 			}
 		| parameter_list COMMA type_specifier
 			{
-				pushVal(parameter_list,popVal(parameter_list)+","+popVal(type_specifier));
-				printRuleLog(statements,"parameter_list COMMA type_specifier");
+					addTypeArgtoParamList(variable_type);
+
+					pushVal(parameter_list,popVal(parameter_list)+","+popVal(type_specifier));
+					printRuleLog(statements,"parameter_list COMMA type_specifier");
 			}
  		| type_specifier ID
 			{
+					addIDenArgtoParamList($2);
+
 			   	pushVal(parameter_list,popVal(type_specifier)+$2->getName());
 					printRuleLog(parameter_list,"type_specifier ID");
 			}
 		| type_specifier
 			{
+					addTypeArgtoParamList(variable_type);
+
 		   		pushVal(parameter_list,popVal(type_specifier));
 					printRuleLog(parameter_list,"type_specifier");
 			}
  		;
 
 
-compound_statement: LCURL statements RCURL
+compound_statement: LCURL {enterFuncScope();} statements RCURL
 			{
+					exitFuncScope();
+
 			   	pushVal(compound_statement,"{"+popVal(statements)+"}");
 					printRuleLog(compound_statement,"LCURL statements RCURL");
 			}
- 		  | LCURL RCURL
+ 		  | LCURL {enterFuncScope();} RCURL
 			{
+					exitFuncScope();
+
 			   	pushVal(compound_statement,"{}");
 					printRuleLog(compound_statement,"LCURL RCURL");
 			}
@@ -149,16 +165,22 @@ var_declaration: type_specifier declaration_list SEMICOLON
 
 type_specifier: INT
 			{
+				$$ = getType("INT");
+
 		   	pushVal(type_specifier,"int");
 				printRuleLog(type_specifier,"INT");
 			}
  		| FLOAT
 			{
+				$$ = getType("FLOAT");
+
 				pushVal(type_specifier,"float");
 				printRuleLog(type_specifier,"FLOAT");
 			}
  		| VOID
 			{
+				$$ = getType("VOID");
+
 				pushVal(type_specifier,"void");
 				printRuleLog(type_specifier,"VOID");
 			}
@@ -166,21 +188,29 @@ type_specifier: INT
 
 declaration_list: declaration_list COMMA ID
 			{
+				insertVar($3);
+
 		   	pushVal(declaration_list,popVal(declaration_list)+","+$3->getName());
 				printRuleLog(declaration_list,"declaration_list");
 			}
  		  | declaration_list COMMA ID LTHIRD CONST_INT RTHIRD
 			{
+				insertArr($3,$5);
+
 				pushVal(declaration_list,popVal(declaration_list)+","+$3->getName()+"["+$5->getName()+"]");
 				printRuleLog(declaration_list,"declaration_list COMMA ID LTHIRD CONST_INT RTHIRD");
 			}
  		  | ID
 			{
+				insertVar($1);
+
 		   	pushVal(declaration_list,$1->getName());
 				printRuleLog(declaration_list,"ID");
 			}
  		  | ID LTHIRD CONST_INT RTHIRD
 			{
+				insertArr($1,$3);
+
 				pushVal(declaration_list,$1->getName()+"["+$3->getName()+"]");
 				printRuleLog(declaration_list,"ID LTHIRD CONST_INT RTHIRD");
 			}
@@ -217,7 +247,7 @@ statement: var_declaration
 				pushVal(statement,(string("for")+"("+popVal(expression_statement)+popVal(expression_statement)+popVal(expression)+")"+popVal(statement)));
 				printRuleLog(statement,"FOR LPAREN expression_statement expression_statement expression RPAREN statement");
 			}
-	  | IF LPAREN expression RPAREN statement
+	  | IF LPAREN expression RPAREN statement %prec second_precedence
 			{
 				pushVal(statement,(string("if")+"("+popVal(expression)+")"+popVal(statement)));
 				printRuleLog(statement,"IF LPAREN expression RPAREN statement");
@@ -257,11 +287,34 @@ expression_statement: SEMICOLON
 
 variable: ID
 			{
+				SymbolInfo* temp = table.lookUp($1->getName());
+				if(temp == nullptr){
+					printErrorLog($1->getName() + " doesn't exist");
+				}
+				else{
+					$$ = temp;
+				}
+
 				pushVal(variable,$1->getName());
 				printRuleLog(variable,"ID");
 			}
 	 | ID LTHIRD expression RTHIRD
 	 		{
+				SymbolInfo* temp = table.lookUp($1->getName(),"ARA");
+				if(temp == NULL){
+					printErrorLog($1->getName() + " doesn't exist");
+				}
+				else{
+					//$$ = temp;
+					if($3->ints[0] >= temp->getArrSize()){
+						printErrorLog($1->getName() + " array index out of bounds");
+						//temp->setAraIndex(0);
+					}
+					else temp->setArrIndex($3->ints[0]);
+					$$ = temp;
+					//variable_type = temp->getVarType();
+				}
+
 				pushVal(variable,($1->getName()+"["+popVal(expression)+"]"));
 				printRuleLog(variable,"ID LTHIRD expression RTHIRD");
 			}
@@ -269,11 +322,17 @@ variable: ID
 
 expression: logic_expression
 				{
+					$$ = $1;
+					$$->ints.push_back(0);
+					$$->floats.push_back(0);
+
 					pushVal(expression,popVal(logic_expression));
 					printRuleLog(expression,"logic_expression");
 				}
 	   | variable ASSIGNOP logic_expression
 		 		{
+					/* $$ = getAssignExpVal($1,$3); */
+
 					pushVal(expression,popVal(variable)+"="+popVal(logic_expression));
 					printRuleLog(expression,"variable ASSIGNOP logic_expression");
 				}
@@ -281,11 +340,17 @@ expression: logic_expression
 
 logic_expression: rel_expression
 				{
+					$$ = $1;
+					$$->ints.push_back(0);
+					$$->floats.push_back(0);
+
 					pushVal(logic_expression,popVal(rel_expression));
 					printRuleLog(logic_expression,"rel_expression");
 				}
 		 | rel_expression LOGICOP rel_expression
 		 		{
+					/* $$ = getLogicOpVal($1,$3,$2); */
+
 					string r2 = popVal(rel_expression);
 					string r1 = popVal(rel_expression);
 					pushVal(logic_expression,r1+$2->getName()+r2);

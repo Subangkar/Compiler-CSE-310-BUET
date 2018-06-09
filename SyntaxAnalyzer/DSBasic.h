@@ -613,31 +613,6 @@ HashTable<T> &HashTable<T>::operator=(const HashTable <T> &h) //assignment opera
 	return *this;
 }
 
-//template <typename T>
-//bool HashTable<T>::insert(const string& s) //inserts string s if it doesn't exist in the hash table and returns 1 if insertion successful, 0 otherwise
-//{
-//	int hash=hashFunc(s);
-//	bool successOrFail=arr[hash].insert(s);
-//	numOfItems++;
-//	return successOrFail;
-//}
-
-//template <typename T>
-//bool HashTable<T>::remove(const string& s) //removes string s if s exist in the hash table and returns 1 if removal successful, 0 otherwise
-//{
-//	int hash=hashFunc(s);
-//	bool successOrFail=arr[hash].remove(s);
-//	numOfItems--;
-//	return successOrFail;
-//}
-
-//template <typename T>
-//bool HashTable<T>::search(const string& s) const //returns 1 if s exist in the hash table, 0 otherwise
-//{
-//	int hash=hashFunc(s);
-//	bool found=arr[hash].search(s);
-//	return found;
-//}
 
 template<typename T>
 int HashTable<T>::size() const //returns numOfItems
@@ -660,13 +635,6 @@ double HashTable<T>::loadFactor() const //returns the load factor of the hash ta
 template<typename T>
 bool HashTable<T>::insert(const T &s) {
 	int64_p hash = hashFunc(s);
-//
-//	if (arr[hash].insert(s)) {
-//		numOfItems++;
-//		return HASH_POS(hash, arr[hash].length() - 1);
-//	}
-//	return HASH_POS(EOF, EOF);
-
 	bool successOrFail = arr[hash].insert(s);
 	if (successOrFail) numOfItems++;
 	return successOrFail;
@@ -674,7 +642,7 @@ bool HashTable<T>::insert(const T &s) {
 
 template<typename T>
 bool HashTable<T>::remove(const T &s) {
-	int hash = hashFunc(s);
+	int hash = static_cast<int>(hashFunc(s));
 	bool successOrFail = arr[hash].remove(s);
 	numOfItems--;
 	return successOrFail;
@@ -682,7 +650,7 @@ bool HashTable<T>::remove(const T &s) {
 
 template<typename T>
 bool HashTable<T>::search(const T &s) const {
-	int hash = hashFunc(s);
+	int hash = static_cast<int>(hashFunc(s));
 	bool found = arr[hash].search(s);
 	return found;
 }
@@ -693,25 +661,15 @@ void HashTable<T>::printTable(FILE *printStream) {
 
 		if (printEmptyListOn || arr[i].length())
 		{
-//			cout << " " << i << " --> ";
-//			cout << " " << std::setw(3) << std::setfill('0') << i << " --> ";
 			fprintf(printStream, " %03d --> ", i);
 
-
 			vector<T> vc = arr[i].get();
-
 			for (int j = 0; j < vc.size(); j++) {
-//				cout << vc[j];
 				fprintf(printStream,"%s",vc[j].printString().data());
 //				fprintf(printStream, "%s", (char *) vc[j]);
-//				cout << vc[j].printString();
 			}
-
-//			cout << endl;
 			fprintf(printStream, "\n");
-
 		}
-
 	}
 }
 
@@ -723,21 +681,14 @@ void HashTable<T>::printTable(ofstream& cout) {
 		{
 			cout << " " << i << " --> ";
 			cout << " " << std::setw(3) << std::setfill('0') << i << " --> ";
-//			fprintf(printStream, " %03d --> ", i);
-
 
 			vector<T> vc = arr[i].get();
-
 			for (int j = 0; j < vc.size(); j++) {
 				cout << vc[j];
-//				fprintf(printStream,"%s",vc[j].printString().data());
-//				fprintf(printStream, "%s", (char *) vc[j]);
 //				cout << vc[j].printString();
 			}
 
 			cout << endl;
-//			fprintf(printStream, "\n");
-
 		}
 
 	}
@@ -752,7 +703,7 @@ T *HashTable<T>::get(const T &key) {
 
 template<typename T>
 int64_t HashTable<T>::getLOC(const T &key) {
-	return arr[hashFunc(key)].search(key) ? hashFunc(key) : EOF;
+	return static_cast<int64_t>(arr[hashFunc(key)].search(key) ? hashFunc(key) : EOF);
 }
 
 template<typename T>

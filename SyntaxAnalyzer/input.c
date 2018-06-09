@@ -17,3 +17,10 @@ int main()
 
 
 }
+
+void oot(int x,float y)
+{
+  int t;
+  float oot;
+  t = x+y;
+}

@@ -84,10 +84,12 @@ public:
 		printTable(printStream);
 	}
 
-	void Print(ofstream& out) {
+	void Print(ofstream &out) {
 		out << " ScopeTable # " << id << endl;
 		printTable(out);
-	}	HASH_POS GetPos(const string &key) {
+	}
+
+	HASH_POS GetPos(const string &key) {
 		return GetPos(SymbolInfo(key));
 	}
 
@@ -95,14 +97,13 @@ public:
 		return HASH_POS(getLOC(key), getPOS(key));
 	}
 
-	void setPrintEmptyList(bool stat){
+	void setPrintEmptyList(bool stat) {
 		setPrintEmptyListOn(stat);
 	}
 };
 
 
 #endif //SYMBOLTABLE_SCOPETABLE_H
-
 
 
 #ifndef SYMBOLTABLE_SYMBOLTABLE_H
@@ -138,42 +139,18 @@ public:
 		ScopeTable *scopeTable = new ScopeTable(currentScope, max_id + 1, tableSize);
 		currentScope = scopeTable;
 		max_id++;
-#ifdef DEBUG
-		cout << " New ScopeTable with id " << currentScope->getId() << " created" << endl;
-#endif // DEBUG
 	}
 
 	void exitScope() {
 		if (currentScope) {
 			ScopeTable *p = currentScope->getParentScope();
-#ifdef DEBUG
-			cout << " ScopeTable with id " << currentScope->getId() << " removed" << endl;
-#endif // DEBUG
 			delete currentScope;
 			currentScope = p;
 		}
 	}
 
 	bool insert(const SymbolInfo &symbol) {
-//	HASH_POS symbolPos = currentScope->insert(symbol);
-//	if (symbolPos.isValid())
-//		cout << " Inserted in ScopeTable# " << currentScope->getId() << " at position " << symbolPos << endl;
-//	else cout << " " << symbol << " already exists in current ScopeTable" << endl;
-//	return symbolPos.isValid();
-
-		if (currentScope == nullptr) return false;
-
-		if (currentScope->Insert(symbol)) {
-#ifdef DEBUG
-			cout << " Inserted in ScopeTable# " << currentScope->getId() << " at position " << currentScope->GetPos(symbol)
-			 << endl;
-#endif // DEBUG
-			return true;
-		}
-#ifdef DEBUG
-		cout << " " << symbol << " already exists in current ScopeTable" << endl;
-#endif // DEBUG
-		return false;
+		return currentScope && currentScope->Insert(symbol);
 	}
 
 	bool insert(const string &name, const string &type) {
@@ -181,51 +158,27 @@ public:
 	}
 
 	bool remove(const SymbolInfo &symbol) {
-		ScopeTable *scope = currentScope;
-
-//	while (scope && !scope->GetPos(symbol).isValid()) {
-//		scope = scope->getParentScope();
-//	}
-
-//	if (scope) {
-//		cout << " Deleted From ScopeTable# " << scope->getId() << " at position " << scope->GetPos(symbol) << endl;
-//		return scope->Delete(symbol.getName());
-//	}
-
-
-		if (scope && scope->Delete(symbol.getName())) {
-#ifdef DEBUG
-			//		cout << " Deleted From ScopeTable# " << scope->getId() << " at position " << scope->GetPos(symbol) << endl;
-				cout << " Deleted From current ScopeTable " << endl;
-#endif // DEBUG
-			return true;
-		}
-
-#ifdef DEBUG
-		cout << symbol.getName() << " not found" << endl;
-#endif // DEBUG
-		return false;
+		return currentScope && currentScope->Delete(symbol.getName());
 	}
 
 	bool remove(const string &name) {
 		return remove(SymbolInfo(name));
 	}
-	SymbolInfo *lookUp(const string &symbol) {
+
+	SymbolInfo *lookUp(const string &symbol, bool inCurrentScopeOnly = false) {
 		ScopeTable *scope = currentScope;
 		while (scope) {
 			HASH_POS hashPos = scope->GetPos(symbol);
 			if (hashPos.isValid()) {
 				return scope->LookUp(symbol);
-			} else scope = scope->getParentScope();
+			} else if (inCurrentScopeOnly) return nullptr;
+			else scope = scope->getParentScope();
 		}
-#ifdef DEBUG
-		cout << " Not found" << endl;
-#endif // DEBUG
+
 		return nullptr;
 	}
 
-	SymbolInfo *lookUp(const SymbolInfo& symbolInfo)
-	{
+	SymbolInfo *lookUp(const SymbolInfo &symbolInfo, bool inCurrentScopeOnly = false) {
 		return lookUp(symbolInfo.getName());
 	}
 
@@ -241,7 +194,7 @@ public:
 
 	}
 
-	void printAllScope(ofstream& out) {
+	void printAllScope(ofstream &out) {
 		for (ScopeTable *scope = currentScope; scope; scope = scope->getParentScope()) {
 			scope->Print(out);
 			out << std::endl;
@@ -253,7 +206,6 @@ public:
 
 
 #endif //SYMBOLTABLE_SYMBOLTABLE_H
-
 
 
 #endif //DATA_STRUCTURE_H
