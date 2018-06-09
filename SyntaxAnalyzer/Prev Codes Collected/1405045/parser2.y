@@ -93,6 +93,7 @@ func_declaration: 	type_specifier ID LPAREN parameter_list RPAREN SEMICOLON
 					{
 						logFile << "Line " << lCount << " : func_declaration : 	type_specifier ID LPAREN parameter_list RPAREN SEMICOLON\n";
 						logFile << $2->getName() << endl << endl;
+
 						SymbolInfo *temp = table.lookUp($2->getName(), "FUNC");
 						if(temp != NULL){
 							errorFile << "Error at line " << lCount << " Function "<< $2->getName() <<" already declared" << endl << endl;

@@ -100,7 +100,7 @@ string indent(string fileName)//Autoindent a file
 }
 
 
-
+SymbolTable st;
 int main() {
 
 	string code = "int main(){int x ,y ,z ;y =8 ;int d ;d =x +y ; z =(x ==y ) ; } ";
@@ -112,6 +112,11 @@ int main() {
 	StringUtils::replaceAll(code,"\n\n}","\n}");
 //	StringUtils::replaceAll(code,"}","\n}");
 	cout << indent(code)<<endl;
+
+	st.insert(SymbolInfo("oot","FUNC"));
+	st.insert(SymbolInfo("oot","FUNC"));
+
+	st.printAllScope();
 
 	return 0;
 }

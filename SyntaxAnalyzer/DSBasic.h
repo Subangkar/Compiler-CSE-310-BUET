@@ -702,7 +702,7 @@ void HashTable<T>::printTable(FILE *printStream) {
 
 			for (int j = 0; j < vc.size(); j++) {
 //				cout << vc[j];
-//				fprintf(printStream,"%s",vc[j].printString().data());
+				fprintf(printStream,"%s",vc[j].printString().data());
 //				fprintf(printStream, "%s", (char *) vc[j]);
 //				cout << vc[j].printString();
 			}
@@ -732,7 +732,7 @@ void HashTable<T>::printTable(ofstream& cout) {
 				cout << vc[j];
 //				fprintf(printStream,"%s",vc[j].printString().data());
 //				fprintf(printStream, "%s", (char *) vc[j]);
-				cout << vc[j].printString();
+//				cout << vc[j].printString();
 			}
 
 			cout << endl;

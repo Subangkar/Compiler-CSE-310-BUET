@@ -65,7 +65,7 @@ public:
 		return static_cast<int>(std::count(str.begin(), str.end(), ch));
 	}
 
-	static int occCount(const string &dest, string src) {
+	static int occCount(const string &dest, const string &src) {
 		int occurrences = 0;
 		string::size_type pos = 0;
 		while ((pos = dest.find(src, pos)) != string::npos) {
@@ -75,11 +75,13 @@ public:
 		return occurrences;
 	}
 
-	static void replaceAll(string &source, string const &find, string const &replace) {
+	static bool replaceAll(string &source, string const &find, string const &replace) {
+		if(source.find(find, 0)==string::npos) return false;
 		for (string::size_type i = 0; (i = source.find(find, i)) != string::npos;) {
 			source.replace(i, find.length(), replace);
 			i += replace.length();
 		}
+		return true;
 	}
 
 	// not checked
@@ -101,15 +103,15 @@ public:
 class CodeParser {
 public:
 
-	static string indent(const string &fileName)//Autoindent a file
+	static string indent(const string fileName)//Autoindent a file
 	{
 
 		int pos = 0, count = 0, j = 0;
 		string ch;
 		stringstream file(fileName);
 		pos = StringUtils::occCount(fileName, "\n");
-		vector<string> hold(pos + 1);//holds the actual content of the line.
-		vector<int> bracketcount(pos + 1);//keeps track of number of nested brackets
+		vector<string> hold(static_cast<unsigned long>(pos + 1));//holds the actual content of the line.
+		vector<int> bracketcount(static_cast<unsigned long>(pos + 1));//keeps track of number of nested brackets
 
 		while (getline(file, hold[count])) {
 			count++;
@@ -180,20 +182,30 @@ public:
 		return file2.str();
 	}
 
-	static string formatCCode(const string &code) {
+	static string formatCCode(const string code) {
 		string formattedCode = code;
 
+		while(StringUtils::replaceAll(formattedCode, " ;", ";"));
 		StringUtils::replaceAll(formattedCode, ";", ";\n");
 		StringUtils::replaceAll(formattedCode, ";\n\n", ";\n");
 
-		StringUtils::replaceAll(formattedCode, "\n ", "\n");
+		while(StringUtils::replaceAll(formattedCode, "\n ", "\n"));
 
 		StringUtils::replaceAll(formattedCode, "{", "\n{\n");
 
 		StringUtils::replaceAll(formattedCode, "}", "\n}");
-		StringUtils::replaceAll(formattedCode, "\n\n}", "\n}");
+		while(StringUtils::replaceAll(formattedCode, "\n\n}", "\n}"));
 
-		return indent(formattedCode);
+
+		while(StringUtils::replaceAll(formattedCode, "  = ", " = "));
+		while(StringUtils::replaceAll(formattedCode, " =  ", " = "));
+
+		while(StringUtils::replaceAll(formattedCode, "  == ", " == "));
+		while(StringUtils::replaceAll(formattedCode, " ==  ", " == "));
+
+
+//		return indent(formattedCode);
+		return formattedCode;
 	}
 };
 

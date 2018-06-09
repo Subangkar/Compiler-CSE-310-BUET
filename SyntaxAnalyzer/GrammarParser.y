@@ -78,11 +78,15 @@ unit: var_declaration
 
 func_declaration: type_specifier ID LPAREN parameter_list RPAREN SEMICOLON
 			{
+				insertFunc($2,$1);
+
 				pushVal(func_declaration,popVal(type_specifier)+$2->getName()+"("+popVal(parameter_list)+")"+";");
 				printRuleLog(func_declaration,"type_specifier ID LPAREN parameter_list RPAREN SEMICOLON");
 			}
 		| type_specifier ID LPAREN RPAREN SEMICOLON
 			{
+				insertFunc($2,$1);
+
 				pushVal(func_declaration,popVal(type_specifier)+$2->getName()+"("+")"+";");
 				printRuleLog(func_declaration,"type_specifier ID LPAREN RPAREN SEMICOLON");
 			}
@@ -418,9 +422,16 @@ int main(int argc,char *argv[])
 	yyparse();
 	logFile << "Total Lines : " << line_count << std::endl << std::endl;
 	logFile << "Total Errors : " << semErrors << std::endl;
+
+	table.printAllScope(logFile);
+
+
+
 	logFile.close();
 	errorFile.close();
 	parserFile.close();
+
+	table.printAllScope();
 
 	return 0;
 }

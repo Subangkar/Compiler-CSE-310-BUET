@@ -80,14 +80,12 @@ public:
 	}
 
 	void Print(FILE *printStream = stdout) {
-		//	cout << " ScopeTable # " << id << endl;
 		fprintf(printStream, " ScopeTable # %d\n", id);
 		printTable(printStream);
 	}
 
 	void Print(ofstream& out) {
 		out << " ScopeTable # " << id << endl;
-//		fprintf(printStream, " ScopeTable # %d\n", id);
 		printTable(out);
 	}	HASH_POS GetPos(const string &key) {
 		return GetPos(SymbolInfo(key));
@@ -217,9 +215,6 @@ public:
 		while (scope) {
 			HASH_POS hashPos = scope->GetPos(symbol);
 			if (hashPos.isValid()) {
-#ifdef DEBUG
-				cout << " Found in ScopeTable# " << scope->getId() << " at position " << hashPos << endl;
-#endif // DEBUG
 				return scope->LookUp(symbol);
 			} else scope = scope->getParentScope();
 		}
@@ -229,6 +224,10 @@ public:
 		return nullptr;
 	}
 
+	SymbolInfo *lookUp(const SymbolInfo& symbolInfo)
+	{
+		return lookUp(symbolInfo.getName());
+	}
 
 	void printCurrentScope() {
 		currentScope->Print();
@@ -245,7 +244,6 @@ public:
 	void printAllScope(ofstream& out) {
 		for (ScopeTable *scope = currentScope; scope; scope = scope->getParentScope()) {
 			scope->Print(out);
-//			fprintf(printStream, "\n");
 			out << std::endl;
 		}
 

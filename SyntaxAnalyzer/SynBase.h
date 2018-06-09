@@ -29,8 +29,6 @@ int semErrors;
 vector<SymbolInfo> params;
 
 
-//stack<string> relEx, simpEx, termV;
-
 extern FILE *yyin;
 extern int line_count;
 
@@ -82,7 +80,7 @@ private:
 	stack<string> terminalBuf[NONTERMINAL_TYPE::arguments + 1];
 public:
 	string getValue(NONTERMINAL_TYPE nonterminal) {
-		if (nonterminal < start || nonterminal > arguments) return string("");
+		if (nonterminal < start || nonterminal > arguments || terminalBuf[nonterminal].empty()) return string("");
 		return terminalBuf[nonterminal].top();
 	}
 
@@ -126,6 +124,7 @@ void printRule(const string &rule) {
 // after pushing value
 void printCode(NONTERMINAL_TYPE ruleNonterminal){
 	logFile << CodeParser::formatCCode(nonTerminalBuffer.getValue(ruleNonterminal)) << endl << endl;
+//	logFile << (nonTerminalBuffer.getValue(ruleNonterminal)) << endl << endl;
 }
 
 
@@ -135,12 +134,42 @@ void printRuleLog(NONTERMINAL_TYPE nonterminal, const string &rule)
 	printCode(nonterminal);
 }
 
+void printErrorLog(string msg)
+{
+	errorFile << " >> Error at line " << line_count << msg << endl << endl;
+	++semErrors;
+}
 
 
 
+SymbolInfo* insertToTable(SymbolInfo* symbolInfo)
+{
+	table.insert(*symbolInfo);
+	return table.lookUp(symbolInfo->getName());
+}
 
 
+// function ret type not set
+void insertFunc(SymbolInfo* funcVal,SymbolInfo* retVal)
+{
+	if(table.lookUp(*funcVal) != nullptr){
+		printErrorLog("Function "+funcVal->getName()+" already declared");
+		return;
+	}
+	table.printAllScope(logFile);
+	funcVal->setType("FUNC");
+	SymbolInfo* temp = insertToTable(funcVal);
+	temp->setIDType("FUNC");
+//	temp->setFuncRet(retVal->getVarType());
+	temp->ParamList = args;
+	args.clear();
+	table.printAllScope(logFile);
+}
 
+void insertID(SymbolInfo* idVal)
+{
+
+}
 
 
 
