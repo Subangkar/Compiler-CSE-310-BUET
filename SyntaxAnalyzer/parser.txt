@@ -50,25 +50,25 @@ At line no: 6 term: unary_expression
 
 At line no: 6 simple_expression: term
 
-At line no: 7 variable: ID
+At line no: 6 variable: ID
 
-At line no: 7 factor: variable
+At line no: 6 factor: variable
 
-At line no: 7 unary_expression: factor
+At line no: 6 unary_expression: factor
 
-At line no: 7 term: unary_expression
+At line no: 6 term: unary_expression
 
-At line no: 7 simple_expression: simple_expression ADDOP term
+At line no: 6 simple_expression: simple_expression ADDOP term
 
-At line no: 7 rel_expression: simple_expression
+At line no: 6 rel_expression: simple_expression
 
-At line no: 7 logic_expression: rel_expression
+At line no: 6 logic_expression: rel_expression
 
-At line no: 7 expression: logic_expression
+At line no: 6 expression: logic_expression
 
-At line no: 7 statement: RETURN expression error
+At line no: 6 statement: RETURN expression SEMICOLON
 
-At line no: 7 statements: statement
+At line no: 6 statements: statement
 
 At line no: 7 compound_statement: LCURL statements RCURL
 

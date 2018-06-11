@@ -3,7 +3,7 @@ int x,y,z; float a;
 void foo();
 
 int var(int a, int b){
-	return a+b
+	return a+b;
 }
 
 void foo(){
