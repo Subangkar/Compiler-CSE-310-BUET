@@ -14,9 +14,8 @@ int main()
   oot(x,4.2);
   y=8;
   int d;
-  d = x+y;
   z=(x==flt);
-  d = x && y;
+  d = x + flt;
   z=0;
   int p;
   p=9;

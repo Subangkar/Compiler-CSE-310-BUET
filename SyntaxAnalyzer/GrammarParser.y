@@ -380,11 +380,19 @@ rel_expression: simple_expression
 
 simple_expression: term
 				{
+					$$ = $1;
+					$$->ints.push_back(0);
+					$$->floats.push_back(0);
+
 					pushVal(simple_expression,popVal(term));
 					printRuleLog(simple_expression,"term");
 				}
 		  | simple_expression ADDOP term
 				{
+					/* if(getAddtnOpVal($1,$3,$2)!=nullptr) */
+					$$ = getAddtnOpVal($1,$3,$2);
+					/* printDebug(string("term Val: ") + "float: " + to_string($3->floats[0])+ "int: " + to_string($3->ints[0])); */
+
 					pushVal(simple_expression,popVal(simple_expression)+$2->getName()+popVal(term));
 					printRuleLog(simple_expression,"simple_expression ADDOP term");
 				}
@@ -392,11 +400,19 @@ simple_expression: term
 
 term:	unary_expression
 				{
+					$$ = $1;
+					$$->ints.push_back(0);
+					$$->floats.push_back(0);
+
 					pushVal(term,popVal(unary_expression));
 					printRuleLog(term,"unary_expression");
 				}
      | term MULOP unary_expression
 		 		{
+					$$ = $1;
+					$$->ints.push_back(0);
+					$$->floats.push_back(0);
+
 					pushVal(term,popVal(term)+$2->getName()+popVal(unary_expression));
 					printRuleLog(term,"term MULOP unary_expression");
 				}
