@@ -409,9 +409,9 @@ term:	unary_expression
 				}
      | term MULOP unary_expression
 		 		{
-					$$ = $1;
-					$$->ints.push_back(0);
-					$$->floats.push_back(0);
+					/* printDebug($1->getName()+"Term Val : "+to_string($1->getVarType()=="INT" ? $1->ints[0]:$1->floats[0])); */
+
+					$$ = getMultpOpVal($1,$3,$2);
 
 					pushVal(term,popVal(term)+$2->getName()+popVal(unary_expression));
 					printRuleLog(term,"term MULOP unary_expression");
@@ -430,6 +430,13 @@ unary_expression: ADDOP unary_expression
 				}
 		 | factor
 		 		{
+					/* printDebug($1->getName()+"Fact Val : "+to_string($1->getVarType()=="INT" ? $1->ints[0]:$1->floats[0])); */
+					/* $$ = $1;
+					$$->ints.push_back(0);
+					$$->floats.push_back(0); */
+
+					/* printDebug($1->getName()+"Fact Type : "+$1->getVarType()); */
+
 					pushVal(unary_expression,popVal(factor));
 					printRuleLog(unary_expression,"factor");
 				}
@@ -457,6 +464,7 @@ factor: variable
 	| CONST_INT
 		{
 			$$ = getConstVal($1,INT_TYPE);
+			/* printDebug($1->getName()+"CONST_INT Val : "+to_string($1->ints[0])); */
 
 			pushVal(factor,$1->getName());
 			printRuleLog(factor,"CONST_INT");

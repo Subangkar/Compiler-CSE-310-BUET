@@ -200,7 +200,7 @@ public:
 
 	bool isArrayVar() { return type == "ID" && IDType == ARRAY; }
 
-	bool isVariable() { return type == "ID" && IDType == VARIABLE; }
+	bool isVariable() { return IDType == VARIABLE; } //type == "ID" &&
 
 	bool isVoidFunc() { return isFunction() && getFuncRet() == VOID_TYPE; }
 

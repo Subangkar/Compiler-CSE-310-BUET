@@ -266,6 +266,23 @@ void exitFuncScope() {
 }
 
 
+
+SymbolInfo *getConstVal(SymbolInfo *constVal, const string &const_type) {
+	constVal->setIDType(VARIABLE);
+	constVal->setVarType(const_type);
+
+	if (const_type == FLOAT_TYPE) {
+		constVal->floats.push_back(0);
+		constVal->floats[0] = static_cast<float>(atof(constVal->getName().data()));
+	}
+	else if (const_type == INT_TYPE) {
+		constVal->ints.push_back(0);
+		constVal->ints[0] = atoi(constVal->getName().data());
+	}
+	return constVal;
+}
+
+
 SymbolInfo *getAssignExpVal(SymbolInfo *lhs, SymbolInfo *rhs) {
 	if (lhs->isArrayVar()) {
 		lhs->ints.push_back(0);
@@ -423,11 +440,9 @@ SymbolInfo *getAddtnOpVal(SymbolInfo *left, SymbolInfo *right, SymbolInfo *op) {
 	const string &addop = op->getName();
 	SymbolInfo *opVal = new SymbolInfo("", "");
 	if (left->getVarType() == FLOAT_TYPE || right->getVarType() == FLOAT_TYPE) {
-		opVal->setVarType(FLOAT_TYPE);
-		opVal->floats.push_back(0);
+		getConstVal(opVal,FLOAT_TYPE);
 	} else {
-		opVal->setVarType(INT_TYPE);
-		opVal->ints.push_back(0);
+		getConstVal(opVal,INT_TYPE);
 	}
 
 	if (addop == "+") {
@@ -596,54 +611,320 @@ SymbolInfo *getAddtnOpVal(SymbolInfo *left, SymbolInfo *right, SymbolInfo *op) {
 			}
 		}
 	}
-	if(opVal->getVarType()==FLOAT_TYPE)
-		printDebug(addop + " Operation Val: " + to_string(opVal->floats[0]));
-	else if(opVal->getVarType()==INT_TYPE)
-		printDebug(addop + " Operation Val: " + to_string(opVal->ints[0]));
+//	if (opVal->getVarType() == FLOAT_TYPE)
+//		printDebug(addop + " Operation Val: " + to_string(opVal->floats[0]));
+//	else if (opVal->getVarType() == INT_TYPE)
+//		printDebug(addop + " Operation Val: " + to_string(opVal->ints[0]));
 
 	return opVal;
 //	return nullptr;
 }
 
+SymbolInfo *getMultpOpVal(SymbolInfo *left, SymbolInfo *right, SymbolInfo *op) {
+	const string &mulOp = op->getName();
 
-SymbolInfo *getFuncCallValue(SymbolInfo *funcVal) {
-	SymbolInfo *func = table.lookUp(funcVal->getName());
-	if (func == nullptr) {
-		printErrorLog("Function " + funcVal->getName() + " doesn't exist");
-	} else if (!func->isFunction()) {
-		printErrorLog(funcVal->getName() + " + is not a function");
-	} else if (func->isVoidFunc()) {
-		printErrorLog("Function " + funcVal->getName() + " returns void");
+	if (mulOp == "%" && (left->getVarType() == FLOAT_TYPE || right->getVarType() == FLOAT_TYPE)) {
+		printErrorLog("Float operand for mod operator");
+		return nullptr;
 	}
-//	else if(func->ParamList!= nullptr){
-//
-//	}
-	else {
-		SymbolInfo *retVal = new SymbolInfo("", "");
-		retVal->setVarType(funcVal->getFuncRet());
-		if (retVal->getVarType() == INT_TYPE)retVal->ints[0] = 0;
-		else if (retVal->getVarType() == FLOAT_TYPE)retVal->floats[0] = 0;
-//			else if(retVal->getVarType() == CHAR_TYPE)retVal->chars[0] = '\0';
-		return retVal;
+	SymbolInfo *opVal = new SymbolInfo("", "");
+	if (left->getVarType() == FLOAT_TYPE || right->getVarType() == FLOAT_TYPE) {
+		getConstVal(opVal,FLOAT_TYPE);
+	} else {
+		getConstVal(opVal,INT_TYPE);
 	}
-	return nullptr;
+
+	if (mulOp == "*") {
+		if (left->isVariable()) {
+			if (right->isVariable()) {
+				if (left->getVarType() == FLOAT_TYPE) {
+
+					if (right->getVarType() == INT_TYPE) {
+						opVal->floats[0] = left->floats[0] * right->ints[0];
+					} else {
+						opVal->floats[0] = left->floats[0] * right->floats[0];
+					}
+
+				} else if (right->getVarType() == FLOAT_TYPE) {
+
+					if (left->getVarType() == INT_TYPE) {
+						opVal->floats[0] = left->ints[0] * right->floats[0];
+					} else {
+						opVal->floats[0] = left->floats[0] * right->floats[0];
+					}
+
+				} else if (right->getVarType() == INT_TYPE && left->getVarType() == INT_TYPE) {
+
+					opVal->ints[0] = left->ints[0] * right->ints[0];
+
+				}
+			} else if (right->isArrayVar()) {
+				if (left->getVarType() == FLOAT_TYPE) {
+
+					if (right->getVarType() == INT_TYPE) {
+						opVal->floats[0] = left->floats[0] * right->ints[right->getArrIndex()];
+					} else {
+						opVal->floats[0] = left->floats[0] * right->floats[right->getArrIndex()];
+					}
+
+				} else if (right->getVarType() == FLOAT_TYPE) {
+
+					if (left->getVarType() == INT_TYPE) {
+						opVal->floats[0] = left->ints[0] * right->floats[right->getArrIndex()];
+					} else {
+						opVal->floats[0] = left->floats[0] * right->floats[right->getArrIndex()];
+					}
+
+				} else if (right->getVarType() == INT_TYPE && left->getVarType() == INT_TYPE) {
+
+					opVal->ints[0] = left->ints[0] * right->ints[0];
+
+				}
+			}
+		} else if (left->isArrayVar()) {
+			if (right->isVariable()) {
+				if (left->getVarType() == FLOAT_TYPE) {
+
+					if (right->getVarType() == INT_TYPE) {
+						opVal->floats[0] = left->floats[left->getArrIndex()] * right->ints[0];
+					} else {
+						opVal->floats[0] = left->floats[left->getArrIndex()] * right->floats[0];
+					}
+
+				} else if (right->getVarType() == FLOAT_TYPE) {
+
+					if (left->getVarType() == INT_TYPE) {
+						opVal->floats[0] = left->ints[left->getArrIndex()] * right->floats[0];
+					} else {
+						opVal->floats[0] = left->floats[left->getArrIndex()] * right->floats[0];
+					}
+
+				} else if (right->getVarType() == INT_TYPE && left->getVarType() == INT_TYPE) {
+
+					opVal->ints[0] = left->ints[left->getArrIndex()] * right->ints[0];
+
+				}
+			} else if (right->isArrayVar()) {
+				if (left->getVarType() == FLOAT_TYPE) {
+
+					if (right->getVarType() == INT_TYPE) {
+						opVal->floats[0] = left->floats[left->getArrIndex()] * right->ints[right->getArrIndex()];
+					} else {
+						opVal->floats[0] = left->floats[left->getArrIndex()] * right->floats[right->getArrIndex()];
+					}
+
+				} else if (right->getVarType() == FLOAT_TYPE) {
+
+					if (left->getVarType() == INT_TYPE) {
+						opVal->floats[0] = left->ints[left->getArrIndex()] * right->floats[right->getArrIndex()];
+					} else {
+						opVal->floats[0] = left->floats[left->getArrIndex()] * right->floats[right->getArrIndex()];
+					}
+
+				} else if (right->getVarType() == INT_TYPE && left->getVarType() == INT_TYPE) {
+
+					opVal->ints[0] = left->ints[left->getArrIndex()] * right->ints[0];
+
+				}
+			}
+		}
+	} else if (mulOp == "/") {
+		if (left->getVarType() == FLOAT_TYPE) {
+
+			if (right->getVarType() == INT_TYPE) {
+				if (left->isVariable()) {
+					if (right->isVariable()) {
+						if (right->ints[0] != 0)opVal->floats[0] = left->floats[0] / right->ints[0];
+						else {
+							opVal->floats[0] = numeric_limits<float>::infinity();
+							printErrorLog("Divide by zero");
+						}
+					} else if (right->isArrayVar()) {
+						if (right->ints[right->getArrIndex()] != 0)
+							opVal->floats[0] = left->floats[0] / right->ints[right->getArrIndex()];
+						else {
+							opVal->floats[0] = numeric_limits<float>::infinity();
+							printErrorLog("Divide by zero");
+						}
+					}
+				} else if (left->isArrayVar()) {
+					if (right->isVariable()) {
+						if (right->ints[0] != 0)opVal->floats[0] = left->floats[left->getArrIndex()] / right->ints[0];
+						else {
+							opVal->floats[0] = numeric_limits<float>::infinity();
+							printErrorLog("Divide by zero");
+						}
+					} else if (right->isArrayVar()) {
+						if (right->ints[right->getArrIndex()] != 0) {
+							opVal->floats[0] = left->floats[left->getArrIndex()] / right->ints[right->getArrIndex()];
+						} else {
+							opVal->floats[0] = numeric_limits<float>::infinity();
+							printErrorLog("Divide by zero");
+						}
+					}
+				}
+			} else if (right->getVarType() == FLOAT_TYPE) {
+				if (left->isVariable()) {
+					if (right->isVariable()) {
+						if (right->floats[0] != 0)opVal->floats[0] = left->floats[0] / right->floats[0];
+						else {
+							opVal->floats[0] = numeric_limits<float>::infinity();
+							printErrorLog("Divide by zero");
+						}
+					} else if (right->isArrayVar()) {
+						if (right->floats[right->getArrIndex()] != 0)
+							opVal->floats[0] = left->floats[0] / right->floats[right->getArrIndex()];
+						else {
+							opVal->floats[0] = numeric_limits<float>::infinity();
+							printErrorLog("Divide by zero");
+						}
+					}
+				} else if (left->isArrayVar()) {
+					if (right->isVariable()) {
+						if (right->floats[0] != 0)
+							opVal->floats[0] = left->floats[left->getArrIndex()] / right->floats[0];
+						else {
+							opVal->floats[0] = numeric_limits<float>::infinity();
+							printErrorLog("Divide by zero");
+						}
+					} else if (right->isArrayVar()) {
+						if (right->floats[right->getArrIndex()] != 0) {
+							opVal->floats[0] = left->floats[left->getArrIndex()] / right->floats[right->getArrIndex()];
+						} else {
+							opVal->floats[0] = numeric_limits<float>::infinity();
+							printErrorLog("Divide by zero");
+						}
+					}
+				}
+			}
+
+		} else if (right->getVarType() == FLOAT_TYPE) {
+
+			if (left->getVarType() == INT_TYPE) {
+				if (left->isVariable()) {
+					if (right->isVariable()) {
+						if (right->floats[0] != 0)opVal->floats[0] = left->ints[0] / right->floats[0];
+						else {
+							opVal->floats[0] = numeric_limits<float>::infinity();
+							printErrorLog("Divide by zero");
+						}
+					} else if (right->isArrayVar()) {
+						if (right->floats[right->getArrIndex()] != 0)
+							opVal->floats[0] = left->ints[0] / right->floats[right->getArrIndex()];
+						else {
+							opVal->floats[0] = numeric_limits<float>::infinity();
+							printErrorLog("Divide by zero");
+						}
+					}
+				} else if (left->isArrayVar()) {
+					if (right->isVariable()) {
+						if (right->floats[0] != 0)opVal->floats[0] = left->ints[left->getArrIndex()] / right->floats[0];
+						else {
+							opVal->floats[0] = numeric_limits<float>::infinity();
+							printErrorLog("Divide by zero");
+						}
+					} else if (right->isArrayVar()) {
+						if (right->floats[right->getArrIndex()] != 0) {
+							opVal->floats[0] = left->ints[left->getArrIndex()] / right->floats[right->getArrIndex()];
+						} else {
+							opVal->floats[0] = numeric_limits<float>::infinity();
+							printErrorLog("Divide by zero");
+						}
+					}
+				}
+			} else if (left->getVarType() == FLOAT_TYPE) {
+				if (left->isVariable()) {
+					if (right->isVariable()) {
+						if (right->floats[0] != 0)opVal->floats[0] = left->floats[0] / right->floats[0];
+						else {
+							opVal->floats[0] = numeric_limits<float>::infinity();
+							printErrorLog("Divide by zero");
+						}
+					} else if (right->isArrayVar()) {
+						if (right->floats[right->getArrIndex()] != 0)
+							opVal->floats[0] = left->floats[0] / right->floats[right->getArrIndex()];
+						else {
+							opVal->floats[0] = numeric_limits<float>::infinity();
+							printErrorLog("Divide by zero");
+						}
+					}
+				} else if (left->isArrayVar()) {
+					if (right->isVariable()) {
+						if (right->floats[0] != 0)
+							opVal->floats[0] = left->floats[left->getArrIndex()] / right->floats[0];
+						else {
+							opVal->floats[0] = numeric_limits<float>::infinity();
+							printErrorLog("Divide by zero");
+						}
+					} else if (right->isArrayVar()) {
+						if (right->floats[right->getArrIndex()] != 0) {
+							opVal->floats[0] = left->floats[left->getArrIndex()] / right->floats[right->getArrIndex()];
+						} else {
+							opVal->floats[0] = numeric_limits<float>::infinity();
+							printErrorLog("Divide by zero");
+						}
+					}
+				}
+			}
+
+		} else if (right->getVarType() == INT_TYPE && left->getVarType() == INT_TYPE) {
+
+			if (left->isVariable()) {
+				if (right->isVariable()) {
+					if (right->ints[0] != 0)opVal->ints[0] = left->ints[0] / right->ints[0];
+					else {
+						opVal->ints[0] = numeric_limits<int>::max();
+						printErrorLog("Divide by zero");
+					}
+				} else if (right->isArrayVar()) {
+					if (right->ints[right->getArrIndex()] != 0)
+						opVal->ints[0] = left->ints[0] / right->ints[right->getArrIndex()];
+					else {
+						opVal->ints[0] = numeric_limits<int>::max();
+						printErrorLog("Divide by zero");
+					}
+				}
+			} else if (left->isArrayVar()) {
+				if (right->isVariable()) {
+					if (right->ints[0] != 0)opVal->ints[0] = left->ints[left->getArrIndex()] / right->ints[0];
+					else {
+						opVal->ints[0] = numeric_limits<int>::max();
+						printErrorLog("Divide by zero");
+					}
+				} else if (right->isArrayVar()) {
+					if (right->ints[right->getArrIndex()] != 0) {
+						opVal->ints[0] = left->ints[left->getArrIndex()] / right->ints[right->getArrIndex()];
+					} else {
+						opVal->floats[0] = numeric_limits<int>::max();
+						printErrorLog("Divide by zero");
+					}
+				}
+			}
+
+		}
+	} else if (mulOp == "%") {
+
+		opVal->setIDType("VAR");// ????
+		if (left->getVarType() == INT_TYPE && right->getVarType() == INT_TYPE) {
+			if (left->isVariable()) {
+				if (right->isVariable())opVal->ints[0] = (left->ints[0]) % (right->ints[0]);
+				else opVal->ints[0] = (left->ints[0]) % (right->ints[right->getArrIndex()]);
+			} else {
+				if (right->isVariable())opVal->ints[0] = (left->ints[left->getArrIndex()]) % (right->ints[0]);
+				else opVal->ints[0] = (left->ints[left->getArrIndex()]) % (right->ints[right->getArrIndex()]);
+			}
+		}
+
+	}
+
+//	if (opVal->getVarType() == FLOAT_TYPE)
+//		printDebug(mulOp + " Operation Val: " + to_string(opVal->floats[0]));
+//	else if (opVal->getVarType() == INT_TYPE)
+//		printDebug(mulOp + " Operation Val: " + to_string(opVal->ints[0]));
+
+	return opVal;
 }
 
-SymbolInfo *getArgValueList() {
-
-}
-
-
-SymbolInfo *getConstVal(SymbolInfo *constVal, const string &const_type) {
-	constVal->setIDType(VARIABLE);
-	constVal->setVarType(const_type);
-
-	if (const_type == FLOAT_TYPE)
-		constVal->floats[0] = static_cast<float>(atof(constVal->getName().data()));
-	else if (const_type == INT_TYPE)
-		constVal->ints[0] = atoi(constVal->getName().data());
-	return constVal;
-}
 
 SymbolInfo *getIncOpVal(SymbolInfo *varVal) {
 	if (varVal->isArrayVar()) {
@@ -677,6 +958,34 @@ SymbolInfo *getDecOpVal(SymbolInfo *varVal) {
 		}
 	}
 	return varVal;
+}
+
+
+SymbolInfo *getFuncCallValue(SymbolInfo *funcVal) {
+	SymbolInfo *func = table.lookUp(funcVal->getName());
+	if (func == nullptr) {
+		printErrorLog("Function " + funcVal->getName() + " doesn't exist");
+	} else if (!func->isFunction()) {
+		printErrorLog(funcVal->getName() + " + is not a function");
+	} else if (func->isVoidFunc()) {
+		printErrorLog("Function " + funcVal->getName() + " returns void");
+	}
+//	else if(func->ParamList!= nullptr){
+//
+//	}
+	else {
+		SymbolInfo *retVal = new SymbolInfo("", "");
+		retVal->setVarType(funcVal->getFuncRet());
+		if (retVal->getVarType() == INT_TYPE)retVal->ints[0] = 0;
+		else if (retVal->getVarType() == FLOAT_TYPE)retVal->floats[0] = 0;
+//			else if(retVal->getVarType() == CHAR_TYPE)retVal->chars[0] = '\0';
+		return retVal;
+	}
+	return nullptr;
+}
+
+SymbolInfo *getArgValueList() {
+
 }
 
 

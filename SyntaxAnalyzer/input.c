@@ -14,9 +14,13 @@ int main()
   oot(x,4.2);
   y=8;
   int d;
+  d=8+(2+x);
   z=(x==flt);
-  d = x + flt;
+  d = (x + flt)/x+5*2;
+  d= d%x + flt;
   z=0;
+  d++;
+  d=d+d;
   int p;
   p=9;
   p && z;
