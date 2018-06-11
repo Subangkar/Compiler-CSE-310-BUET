@@ -30,7 +30,7 @@ class SymbolInfo {
 	string type;
 
 	string IDType;// FUNC, VAR, ARA
-	string VarType; // INT, FLOAT
+	string VarType; // INT, FLOAT, VOID
 
 	string FuncRet;// INT, FLOAT, VOID
 	bool FuncDefined = false;
@@ -160,6 +160,19 @@ public:
 	SymbolInfo(const SymbolInfo &symbolInfo) {
 		this->name = symbolInfo.name;
 		this->type = symbolInfo.type;
+		this->ArrSize = symbolInfo.ArrSize;
+		this->ArrIndex = symbolInfo.ArrIndex;
+
+		this->VarType = symbolInfo.VarType;
+		this->IDType = symbolInfo.IDType;
+
+		this->FuncDefined = symbolInfo.FuncDefined;
+		this->FuncRet = symbolInfo.FuncRet;
+
+		this->ints = symbolInfo.ints;
+		this->floats = symbolInfo.floats;
+
+		this->ParamList = symbolInfo.ParamList;
 	}
 
 	SymbolInfo &operator=(const SymbolInfo &symbolInfo)= default;
@@ -196,9 +209,9 @@ public:
 	}
 
 
-	bool isFunction() { return type == "ID" && IDType == FUNCTION; }
+	bool isFunction() { return IDType == FUNCTION; }//type == "ID" &&
 
-	bool isArrayVar() { return type == "ID" && IDType == ARRAY; }
+	bool isArrayVar() { return IDType == ARRAY; }//type == "ID" &&
 
 	bool isVariable() { return IDType == VARIABLE; } //type == "ID" &&
 

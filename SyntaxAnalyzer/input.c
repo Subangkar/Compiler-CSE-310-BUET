@@ -1,6 +1,29 @@
-//x
-/*Commets*/
+int func(int a){
+	return a;
+}
 
+float r(int x){
+
+}
+
+void foo(int x){
+
+}
+
+int main(){
+	int a[2],c,i,j ; float c;
+	a[2.5]=1;
+  int c;
+  c[5];
+	i=2.3;
+	j=2+(2%3.7)+(5+0);
+	a=4;
+	c(3+2.3);
+	i=foo(2);
+	return 0;
+}
+
+/*
 void oot(int, float);
 
 int main()
@@ -26,6 +49,7 @@ int main()
   -d;
   z++;
   +z;
+  oot(x,2+3+y,z);
   (-gh[2]);
   p=9;
   !(!p && !z);
@@ -42,5 +66,6 @@ void oot(int x,float y)
   -oot; // prob with this one
   t=7;
   -t;
-  t = x+y;
+  t = x+t;
 }
+*/

@@ -92,17 +92,13 @@ func_declaration: type_specifier ID LPAREN parameter_list RPAREN SEMICOLON
 			}
 		;
 
-func_definition: type_specifier ID LPAREN parameter_list RPAREN compound_statement
+func_definition: type_specifier ID LPAREN parameter_list RPAREN{addFuncDef($2,$1);} compound_statement
 			{
-				addFuncDef($2,$1);
-
 				pushVal(func_definition,popVal(type_specifier)+$2->getName()+"("+popVal(parameter_list)+")"+popVal(compound_statement));
 				printRuleLog(func_definition,"type_specifier ID LPAREN parameter_list RPAREN compound_statement");
 			}
-		| type_specifier ID LPAREN RPAREN compound_statement
+		| type_specifier ID LPAREN RPAREN {addFuncDef($2,$1);} compound_statement
 			{
-				addFuncDef($2,$1);
-
 				pushVal(func_definition,popVal(type_specifier)+$2->getName()+"("+")"+popVal(compound_statement));
 				printRuleLog(func_definition,"type_specifier ID LPAREN RPAREN compound_statement");
 			}
@@ -142,17 +138,17 @@ parameter_list: parameter_list COMMA type_specifier ID
 
 compound_statement: LCURL {enterFuncScope();} statements RCURL
 			{
-					exitFuncScope();
-
 			   	pushVal(compound_statement,"{"+popVal(statements)+"}");
 					printRuleLog(compound_statement,"LCURL statements RCURL");
+
+					exitFuncScope();
 			}
  		  | LCURL {enterFuncScope();} RCURL
 			{
-					exitFuncScope();
-
 			   	pushVal(compound_statement,"{}");
 					printRuleLog(compound_statement,"LCURL RCURL");
+
+					exitFuncScope();
 			}
  		  ;
 
@@ -287,12 +283,15 @@ expression_statement: SEMICOLON
 
 variable: ID
 			{
-				SymbolInfo* temp = table.lookUp($1->getName());
-				if(temp == nullptr){
+				SymbolInfo* var = table.lookUp($1->getName());
+				if(var == nullptr){
 					printErrorLog($1->getName() + " doesn't exist");
 				}
+				else if(!var->isVariable()){
+					printErrorLog($1->getName() + " is not a variable");
+				}
 				else{
-					$$ = temp;
+					$$ = var;
 				}
 
 				pushVal(variable,$1->getName());
@@ -300,19 +299,25 @@ variable: ID
 			}
 	 | ID LTHIRD expression RTHIRD
 	 		{
-				SymbolInfo* temp = table.lookUp($1->getName(),"ARA");
-				if(temp == NULL){
+				SymbolInfo* arr = table.lookUp($1->getName());
+				if(arr == nullptr){
 					printErrorLog($1->getName() + " doesn't exist");
 				}
 				else{
-					//$$ = temp;
-					if($3->ints[0] >= temp->getArrSize()){
-						printErrorLog($1->getName() + " array index out of bounds index="+to_string($3->ints[0])+" size="+to_string(temp->getArrSize()));
-						//temp->setAraIndex(0);
+					if(!arr->isArrayVar()){
+						printErrorLog($1->getName() + " is not an array");
 					}
-					else temp->setArrIndex($3->ints[0]);
-					$$ = temp;
-					//variable_type = temp->getVarType();
+					else if(arr->getVarType()!=FLOAT_TYPE){
+						printErrorLog($1->getName() + " array index must be an integer");
+					}
+					else if($3->ints[0] >= arr->getArrSize()){
+						printErrorLog($1->getName() + " array index out of bounds index="+to_string($3->ints[0])+" size="+to_string(arr->getArrSize()));
+					}
+					else
+					{
+						arr->setArrIndex($3->ints[0]);
+						$$ = arr;
+					}
 				}
 
 				pushVal(variable,($1->getName()+"["+popVal(expression)+"]"));
@@ -410,8 +415,9 @@ term:	unary_expression
      | term MULOP unary_expression
 		 		{
 					/* printDebug($1->getName()+"Term Val : "+to_string($1->getVarType()=="INT" ? $1->ints[0]:$1->floats[0])); */
-
-					$$ = getMultpOpVal($1,$3,$2);
+					SymbolInfo* t = getMultpOpVal($1,$3,$2);
+					if(t!=nullptr)
+					$$ = t;
 
 					pushVal(term,popVal(term)+$2->getName()+popVal(unary_expression));
 					printRuleLog(term,"term MULOP unary_expression");
@@ -454,7 +460,9 @@ factor: variable
 		}
 	| ID LPAREN argument_list RPAREN
 		{
-			$$=getFuncCallValue($1);
+			SymbolInfo* t=getFuncCallValue($1);
+			if(t!=nullptr)
+			$$ = t;
 
 			pushVal(factor,$1->getName()+"("+popVal(argument_list)+")");
 			printRuleLog(factor,"ID LPAREN argument_list RPAREN");
@@ -511,11 +519,17 @@ argument_list: arguments
 
 arguments: arguments COMMA logic_expression
 					{
+						argsFunc.push_back(*$3);
+						args.push_back($3->getVarType());
+
 						pushVal(arguments,popVal(arguments)+","+popVal(logic_expression));
 						printRuleLog(argument_list,"arguments COMMA logic_expression");
 					}
 	      | logic_expression
 					{
+						argsFunc.push_back(*$1);
+						args.push_back($1->getVarType());
+
 						pushVal(arguments,popVal(logic_expression));
 						printRuleLog(argument_list,"logic_expression");
 					}

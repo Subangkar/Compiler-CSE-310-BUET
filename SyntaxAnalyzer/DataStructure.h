@@ -202,6 +202,9 @@ public:
 
 	}
 
+	int getCurrentId() const {
+		return currentScope->getId();
+	}
 };
 
 
