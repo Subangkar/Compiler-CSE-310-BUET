@@ -420,17 +420,22 @@ term:	unary_expression
 
 unary_expression: ADDOP unary_expression
 				{
+					$$ = getUniAddOpVal($2,$1);
+
 					pushVal(unary_expression,$1->getName()+popVal(unary_expression));
 					printRuleLog(unary_expression,"ADDOP unary_expression");
 				}
 		 | NOT unary_expression
 		 		{
+					$$ = getNotOpVal($2);
+
 					pushVal(unary_expression,"!"+popVal(unary_expression));
 					printRuleLog(unary_expression,"NOT unary_expression");
 				}
 		 | factor
 		 		{
 					/* printDebug($1->getName()+"Fact Val : "+to_string($1->getVarType()=="INT" ? $1->ints[0]:$1->floats[0])); */
+					// Not sure why
 					/* $$ = $1;
 					$$->ints.push_back(0);
 					$$->floats.push_back(0); */

@@ -36,15 +36,12 @@ string variable_type;
 extern FILE *yyin;
 extern int line_count;
 
+extern const char *yytext;
 
 int yyparse();
 
 int yylex();
 
-
-void yyerror(const char *s) {
-	//write your code
-}
 
 #pragma-region RULE_CODE_BUF
 
@@ -156,6 +153,14 @@ void printDebug(const string &msg) {
 	cout << ">> " << "line no " << line_count << ": " << msg << endl;
 }
 
+void yyerror(const char *s) {
+	//write your code
+//	printErrorLog("Invalid Syntax: "+string(yytext));
+//	printDebug("Syntax Error: "+string(yytext));
+	yyparse();
+}
+
+
 SymbolInfo *insertToTable(SymbolInfo *symbolInfo) {
 	table.insert(*symbolInfo);
 	return table.lookUp(symbolInfo->getName());
@@ -266,16 +271,31 @@ void exitFuncScope() {
 }
 
 
-
-SymbolInfo *getConstVal(SymbolInfo *constVal, const string &const_type) {
+SymbolInfo *getConstVal(SymbolInfo *constVal, const string &constVarType) {
 	constVal->setIDType(VARIABLE);
-	constVal->setVarType(const_type);
+	constVal->setVarType(constVarType);
 
-	if (const_type == FLOAT_TYPE) {
+	if (constVarType == FLOAT_TYPE) {
 		constVal->floats.push_back(0);
 		constVal->floats[0] = static_cast<float>(atof(constVal->getName().data()));
+	} else if (constVarType == INT_TYPE) {
+		constVal->ints.push_back(0);
+		constVal->ints[0] = atoi(constVal->getName().data());
 	}
-	else if (const_type == INT_TYPE) {
+	return constVal;
+}
+
+SymbolInfo *getConstVal(const string &value = "$CONST$", const string &constVarType = "INT") {
+	SymbolInfo *constVal = new SymbolInfo(value, "CONST");
+	constVal->setIDType(VARIABLE);
+	constVal->setVarType(constVarType);
+
+	if (constVarType == FLOAT_TYPE) {
+		constVal->setType("CONST_FLOAT");
+		constVal->floats.push_back(0);
+		constVal->floats[0] = static_cast<float>(atof(constVal->getName().data()));
+	} else if (constVarType == INT_TYPE) {
+		constVal->setType("CONST_INT");
 		constVal->ints.push_back(0);
 		constVal->ints[0] = atoi(constVal->getName().data());
 	}
@@ -440,9 +460,9 @@ SymbolInfo *getAddtnOpVal(SymbolInfo *left, SymbolInfo *right, SymbolInfo *op) {
 	const string &addop = op->getName();
 	SymbolInfo *opVal = new SymbolInfo("", "");
 	if (left->getVarType() == FLOAT_TYPE || right->getVarType() == FLOAT_TYPE) {
-		getConstVal(opVal,FLOAT_TYPE);
+		getConstVal(opVal, FLOAT_TYPE);
 	} else {
-		getConstVal(opVal,INT_TYPE);
+		getConstVal(opVal, INT_TYPE);
 	}
 
 	if (addop == "+") {
@@ -611,10 +631,10 @@ SymbolInfo *getAddtnOpVal(SymbolInfo *left, SymbolInfo *right, SymbolInfo *op) {
 			}
 		}
 	}
-//	if (opVal->getVarType() == FLOAT_TYPE)
-//		printDebug(addop + " Operation Val: " + to_string(opVal->floats[0]));
-//	else if (opVal->getVarType() == INT_TYPE)
-//		printDebug(addop + " Operation Val: " + to_string(opVal->ints[0]));
+	if (opVal->getVarType() == FLOAT_TYPE)
+		printDebug(addop + " Operation Val: " + to_string(opVal->floats[0]));
+	else if (opVal->getVarType() == INT_TYPE)
+		printDebug(addop + " Operation Val: " + to_string(opVal->ints[0]));
 
 	return opVal;
 //	return nullptr;
@@ -629,9 +649,9 @@ SymbolInfo *getMultpOpVal(SymbolInfo *left, SymbolInfo *right, SymbolInfo *op) {
 	}
 	SymbolInfo *opVal = new SymbolInfo("", "");
 	if (left->getVarType() == FLOAT_TYPE || right->getVarType() == FLOAT_TYPE) {
-		getConstVal(opVal,FLOAT_TYPE);
+		getConstVal(opVal, FLOAT_TYPE);
 	} else {
-		getConstVal(opVal,INT_TYPE);
+		getConstVal(opVal, INT_TYPE);
 	}
 
 	if (mulOp == "*") {
@@ -926,40 +946,99 @@ SymbolInfo *getMultpOpVal(SymbolInfo *left, SymbolInfo *right, SymbolInfo *op) {
 }
 
 
+// need to edit :: not copied
 SymbolInfo *getIncOpVal(SymbolInfo *varVal) {
+	SymbolInfo *opVal = new SymbolInfo("", "");
+	opVal = getConstVal(opVal, varVal->getVarType());
 	if (varVal->isArrayVar()) {
 		if (varVal->getVarType() == INT_TYPE) {
-			varVal->setIndexValue(varVal->ints[varVal->getArrIndex()] + 1);
+			opVal->ints[0] = ++varVal->ints[varVal->getArrIndex()];
 		} else if (varVal->getVarType() == FLOAT_TYPE) {
-			varVal->setIndexValue((float) (varVal->floats[varVal->getArrIndex()] + 1.0));
+			opVal->floats[0] = ++varVal->floats[varVal->getArrIndex()];
 		}
 	} else if (varVal->isVariable()) {
 		if (varVal->getVarType() == INT_TYPE) {
-			varVal->ints[0] = varVal->ints[0] + 1;
+			opVal->ints[0] = ++varVal->ints[0];
 		} else if (varVal->getVarType() == FLOAT_TYPE) {
-			varVal->floats[0] = static_cast<float>(varVal->floats[0] + 1.0);
+			opVal->floats[0] = ++varVal->floats[0];
 		}
 	}
-	return varVal;
+	return opVal;
 }
 
 SymbolInfo *getDecOpVal(SymbolInfo *varVal) {
+	SymbolInfo *opVal = new SymbolInfo("", "");
+	opVal = getConstVal(opVal, varVal->getVarType());
 	if (varVal->isArrayVar()) {
 		if (varVal->getVarType() == INT_TYPE) {
-			varVal->setIndexValue(varVal->ints[varVal->getArrIndex()] - 1);
+			opVal->ints[0] = --varVal->ints[varVal->getArrIndex()];
 		} else if (varVal->getVarType() == FLOAT_TYPE) {
-			varVal->setIndexValue((float) (varVal->floats[varVal->getArrIndex()] - 1.0));
+			opVal->floats[0] = --varVal->floats[varVal->getArrIndex()];
 		}
 	} else if (varVal->isVariable()) {
 		if (varVal->getVarType() == INT_TYPE) {
-			varVal->ints[0] = varVal->ints[0] - 1;
+			opVal->ints[0] = --varVal->ints[0];
 		} else if (varVal->getVarType() == FLOAT_TYPE) {
-			varVal->floats[0] = static_cast<float>(varVal->floats[0] - 1.0);
+			opVal->floats[0] = --varVal->floats[0];
 		}
 	}
-	return varVal;
+	return opVal;
 }
 
+SymbolInfo *getNotOpVal(SymbolInfo *factor) {
+	if (factor->getVarType() == VOID_TYPE) {
+		printErrorLog("Invalid Operand for Logical Not Operation");
+		return nullptr;
+	}
+	SymbolInfo *opVal = new SymbolInfo("", "");
+	opVal = getConstVal(opVal, INT_TYPE);
+	int value = 0;
+	if (factor->getVarType() == INT_TYPE) {
+		if (factor->isVariable()) value = factor->ints[0];
+		else if (factor->isArrayVar())value = factor->ints[factor->getArrIndex()];
+	} else if (factor->getVarType() == FLOAT_TYPE) {
+		if (factor->isVariable()) value = (int) factor->floats[0];
+		else if (factor->isArrayVar()) value = (int) factor->floats[factor->getArrIndex()];
+	}
+
+	opVal->ints[0] = !value;
+//	printDebug("NOT Exp Val: " + to_string(opVal->ints[0]));
+	return opVal;
+}
+
+SymbolInfo *getUniAddOpVal(SymbolInfo *varVal, SymbolInfo *op) {
+	if (varVal->getVarType() == VOID_TYPE) {
+		printErrorLog("Invalid Operand for Unary Operation");
+		return nullptr;
+	}
+	SymbolInfo *opVal = new SymbolInfo("", "");
+	opVal = getConstVal(opVal, varVal->getVarType());
+	const string &uniOp = op->getName();
+//	cout << varVal->getType() << endl;
+	if (varVal->getVarType() == FLOAT_TYPE) {
+		if (varVal->isVariable()) {
+			opVal->floats[0] = uniOp == "+" ? (varVal->floats[0]) : -(varVal->floats[0]);
+		} else if (varVal->isArrayVar()) {
+			opVal->floats[0] =
+					uniOp == "+" ? (varVal->floats[varVal->getArrIndex()]) : -(varVal->floats[varVal->getArrIndex()]);
+		}
+	} else if (varVal->getVarType() == INT_TYPE) {
+		if (varVal->isVariable()) {
+			opVal->ints[0] = uniOp == "+" ? (varVal->ints[0]) : -(varVal->ints[0]);
+//			cout << opVal->ints[0] << endl;
+		} else if (varVal->isArrayVar()) {
+			opVal->ints[0] =
+					uniOp == "+" ? (varVal->ints[varVal->getArrIndex()]) : -(varVal->ints[varVal->getArrIndex()]);
+		}
+	}
+
+	if (opVal->getVarType() == FLOAT_TYPE)
+		printDebug(uniOp + " Unary Operation Val: " + to_string(opVal->floats[0]));
+	else if (opVal->getVarType() == INT_TYPE)
+		printDebug(uniOp + " Unary Operation Val: " + to_string(opVal->ints[0]));
+
+	return opVal;
+}
 
 SymbolInfo *getFuncCallValue(SymbolInfo *funcVal) {
 	SymbolInfo *func = table.lookUp(funcVal->getName());

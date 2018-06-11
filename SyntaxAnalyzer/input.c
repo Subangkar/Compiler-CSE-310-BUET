@@ -13,25 +13,34 @@ int main()
   gh[45] = 6.7;
   oot(x,4.2);
   y=8;
+  // 8++;
   int d;
   d=8+(2+x);
   z=(x==flt);
   d = (x + flt)/x+5*2;
   d= d%x + flt;
   z=0;
-  d++;
-  d=d+d;
+  +d++;
+  d=(d)+(+d);
   int p;
+  -d;
+  z++;
+  +z;
+  (-gh[2]);
   p=9;
-  p && z;
+  !(!p && !z);
   p || z;
-
-
+  // (x++)++;
+  return 0;
 }
 
 void oot(int x,float y)
 {
   int t;
   float oot;
+  oot=9;
+  -oot; // prob with this one
+  t=7;
+  -t;
   t = x+y;
 }
