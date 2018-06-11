@@ -13,6 +13,8 @@
 #include <stack>
 #include <sstream>
 #include <utility>
+#include <cstdlib>
+
 
 using std::stack;
 
@@ -44,10 +46,7 @@ void yyerror(const char *s) {
 	//write your code
 }
 
-
-void printLog(string str) {
-	logFile << str << endl;
-}
+#pragma-region RULE_CODE_BUF
 
 const string ruleName[] = {"start", "program", "unit", "func_declaration", "func_definition", "parameter_list",
                            "compound_statement", "var_declaration", "type_specifier", "declaration_list", "statements",
@@ -109,6 +108,7 @@ public:
 
 
 NonTerminalBuffer nonTerminalBuffer;
+#pragma endregion
 
 
 void pushVal(NONTERMINAL_TYPE nonterminal, const string &val) {
@@ -117,6 +117,7 @@ void pushVal(NONTERMINAL_TYPE nonterminal, const string &val) {
 
 string popVal(NONTERMINAL_TYPE nonterminal) {
 	string val = nonTerminalBuffer.extractValue(nonterminal);
+	val = (isalnum(val[0]) ? " " : "") + val + (isalnum(val[val.size()]) ? " " : "");
 	return val + ((val[val.length() - 1] == ' ') ? "" : " ");
 }
 
@@ -132,21 +133,28 @@ void printCode(NONTERMINAL_TYPE ruleNonterminal) {
 }
 
 
+void printLog(const string &str) {
+	logFile << str << endl;
+}
+
 void printRuleLog(NONTERMINAL_TYPE nonterminal, const string &rule) {
 	printRule(ruleName[nonterminal] + ": " + rule);
 	printCode(nonterminal);
 }
 
-void printErrorLog(string msg) {
-	errorFile << " >> Error at line " << line_count << msg << endl << endl;
+void printErrorLog(const string &msg) {
+	errorFile << " >> Error at line " << line_count << ": " << msg << endl << endl;
 	++semErrors;
 }
 
-void printWarningLog(string msg) {
-	errorFile << " >> Warning at line " << line_count << msg << endl << endl;
+void printWarningLog(const string &msg) {
+	errorFile << " >> Warning at line " << line_count << ": " << msg << endl << endl;
 //	++semErrors;
 }
 
+void printDebug(const string &msg) {
+	cout << ">> " << "line no " << line_count << ": " << msg << endl;
+}
 
 SymbolInfo *insertToTable(SymbolInfo *symbolInfo) {
 	table.insert(*symbolInfo);
@@ -161,9 +169,9 @@ void insertFunc(SymbolInfo *funcVal, SymbolInfo *retVal) {
 		return;
 	}
 //	table.printAllScope(logFile);
-//	funcVal->setType("FUNC"); // not sure with this
+//	funcVal->setType(FUNCTION); // not sure with this
 	SymbolInfo *temp = insertToTable(funcVal);
-	temp->setIDType("FUNC");
+	temp->setIDType(FUNCTION);
 	temp->setFuncRet(retVal->getVarType());
 	temp->ParamList = args;
 	args.clear();
@@ -198,7 +206,7 @@ void addFuncDef(SymbolInfo *funcVal, SymbolInfo *retVal) {
 }
 
 SymbolInfo *insertVar(SymbolInfo *idVal) {
-	if (variable_type == "VOID") {
+	if (variable_type == VOID_TYPE) {
 		printErrorLog("variable type can't be void");
 	} else {
 		SymbolInfo *temp = table.lookUp(idVal->getName(), true);
@@ -207,7 +215,7 @@ SymbolInfo *insertVar(SymbolInfo *idVal) {
 		} else {
 			SymbolInfo *temp2 = insertToTable(idVal);
 			temp2->setVarType(variable_type);
-			temp2->setIDType("VAR");
+			temp2->setIDType(VARIABLE);
 			return temp2;
 		}
 	}
@@ -216,7 +224,7 @@ SymbolInfo *insertVar(SymbolInfo *idVal) {
 
 void insertArr(SymbolInfo *idVal, SymbolInfo *size) {
 	SymbolInfo *arr = insertVar(idVal);
-	arr->setIDType("ARA");
+	arr->setIDType(ARRAY);
 	arr->setArrSize(static_cast<size_t>(atoi(size->getName().data())));
 	for (int i = 0; i < arr->getArrSize(); i++) {
 		arr->ints.push_back(0);
@@ -227,7 +235,7 @@ void insertArr(SymbolInfo *idVal, SymbolInfo *size) {
 
 SymbolInfo *getType(string type) {
 	variable_type = std::move(type);
-	return new SymbolInfo(variable_type,variable_type);
+	return new SymbolInfo(variable_type, variable_type);
 }
 
 void addTypeArgtoParamList(const string &type) {
@@ -238,10 +246,10 @@ void addIDenArgtoParamList(SymbolInfo *idVal) {
 	addTypeArgtoParamList(variable_type);
 
 	IDargs++;
-	idVal->setIDType("VAR");
+	idVal->setIDType(VARIABLE);
 	idVal->setVarType(variable_type);//changed from rhs->getVarType()
 	SymbolInfo *temp = new SymbolInfo(idVal->getName(), idVal->getType());
-	temp->setIDType("VAR");
+	temp->setIDType(VARIABLE);
 
 	params.push_back(*temp);
 }
@@ -259,95 +267,233 @@ void exitFuncScope() {
 
 
 SymbolInfo *getAssignExpVal(SymbolInfo *lhs, SymbolInfo *rhs) {
-	if (lhs->getIDType() == "ARA") {
+	if (lhs->isArrayVar()) {
 		lhs->ints.push_back(0);
 
-		if (rhs->getVarType() == "INT") {
-			if (rhs->getIDType() == "VAR")lhs->setIndexValue(rhs->ints[0]);
+		if (rhs->getVarType() == INT_TYPE) {
+			if (rhs->isVariable())lhs->setIndexValue(rhs->ints[0]);
 			else lhs->setIndexValue(rhs->ints[rhs->getArrIndex()]);
 		} else {
 			printWarningLog("Assigning float value to integer");
-			if (rhs->getIDType() == "VAR")lhs->setIndexValue((int) rhs->floats[0]);
+			if (rhs->isVariable())lhs->setIndexValue((int) rhs->floats[0]);
 			else lhs->setIndexValue((int) rhs->floats[rhs->getArrIndex()]);
 		}
-	} else if (lhs->getIDType() == "VAR") {
-		if (rhs->getVarType() == "INT") {
-			if (rhs->getIDType() == "VAR")lhs->setVarValue(rhs->ints[0]);
+	} else if (lhs->isVariable()) {
+		if (rhs->getVarType() == INT_TYPE) {
+			if (rhs->isVariable())lhs->setVarValue(rhs->ints[0]);
 			else lhs->setVarValue(rhs->ints[rhs->getArrIndex()]);
 		} else {
 			printWarningLog("Assigning float value to integer");
-			if (rhs->getIDType() == "VAR")lhs->setVarValue(rhs->floats[0]);
+			if (rhs->isVariable())lhs->setVarValue(rhs->floats[0]);
 			else lhs->setVarValue(rhs->floats[rhs->getArrIndex()]);
 		}
 	}
 	return lhs;
 }
 
-SymbolInfo* getLogicOpVal(SymbolInfo *left,SymbolInfo *right,SymbolInfo *op){
-	SymbolInfo* opVal = new SymbolInfo("","");//new SymbolInfo("INT");// ?
-	opVal->setVarType("INT");
-	if(left->getVarType() == "CHAR" || right->getVarType() == "CHAR"){
+// need to edit
+SymbolInfo *getLogicOpVal(SymbolInfo *left, SymbolInfo *right, SymbolInfo *op) {
+	SymbolInfo *opVal = new SymbolInfo("", "");//new SymbolInfo(INT_TYPE);// ?
+	opVal->setVarType(INT_TYPE);
+	if (left->getVarType() == CHAR_TYPE || right->getVarType() == CHAR_TYPE) {
 		opVal->ints.push_back(0);
 	}
 
 	const string &logicop = op->getName();
-	if(logicop == "&&"){
-		if(left->getVarType() == "FLOAT"){
+	if (logicop == "&&") {
+		if (left->getVarType() == FLOAT_TYPE) {
 			left->floats.push_back(0);
 
-			if(right->getVarType() == "FLOAT"){
+			if (right->getVarType() == FLOAT_TYPE) {
 				right->floats.push_back(0);
 				opVal->ints[0] = (left->floats[0] == 0) && (right->floats[0] == 0);
-			}
-			else if(right->getVarType() == "INT"){
+			} else if (right->getVarType() == INT_TYPE) {
 				right->ints.push_back(0);
 				opVal->ints[0] = (left->floats[0] == 0) && (right->ints[0] == 0);
 			}
-		}
-		else if(left->getVarType() == "INT"){
+		} else if (left->getVarType() == INT_TYPE) {
 			left->ints.push_back(0);
-			if(right->getVarType() == "FLOAT"){
+			if (right->getVarType() == FLOAT_TYPE) {
 				right->floats.push_back(0);
 				opVal->ints[0] = (left->ints[0] == 0) && (right->floats[0] == 0);
-			}
-			else if(right->getVarType() == "INT"){
+			} else if (right->getVarType() == INT_TYPE) {
 				right->ints.push_back(0);
 				opVal->ints[0] = (left->ints[0] == 0) && (right->ints[0] == 0);
 			}
 		}
-	}
-	else if(logicop == "||"){
-		if(left->getVarType() == "FLOAT"){
+	} else if (logicop == "||") {
+		if (left->getVarType() == FLOAT_TYPE) {
 			left->floats.push_back(0);
-			if(left->floats[0] != 0){
+			if (left->floats[0] != 0) {
 				opVal->ints[0] = 1;
-			}
-			else if(right->getVarType() == "FLOAT"){
+			} else if (right->getVarType() == FLOAT_TYPE) {
 				right->floats.push_back(0);
-				if(right->floats[0] != 0) opVal->ints[0] = 1;
-				else opVal->ints[0] =0;
+				if (right->floats[0] != 0) opVal->ints[0] = 1;
+				else opVal->ints[0] = 0;
+			} else if (right->getVarType() == INT_TYPE) {
+				if (right->ints[0] != 0) opVal->ints[0] = 1;
+				else opVal->ints[0] = 0;
 			}
-			else if(right->getVarType() == "INT"){
-				if(right->ints[0] != 0) opVal->ints[0] = 1;
-				else opVal->ints[0] =0;
-			}
-		}
-		else if(left->getVarType() == "INT"){
+		} else if (left->getVarType() == INT_TYPE) {
 			left->ints.push_back(0);
-			if(left->ints[0] != 0) opVal->ints[0] = 1;
-			else if(right->getVarType() == "FLOAT"){
+			if (left->ints[0] != 0) opVal->ints[0] = 1;
+			else if (right->getVarType() == FLOAT_TYPE) {
 				right->floats.push_back(0);
-				if(right->floats[0] != 0) opVal->ints[0] = 1;
-				else opVal->ints[0] =0;
-			}
-			else if(right->getVarType() == "INT"){
+				if (right->floats[0] != 0) opVal->ints[0] = 1;
+				else opVal->ints[0] = 0;
+			} else if (right->getVarType() == INT_TYPE) {
 				right->ints.push_back(0);
-				if(right->ints[0] != 0) opVal->ints[0] = 1;
-				else opVal->ints[0] =0;
+				if (right->ints[0] != 0) opVal->ints[0] = 1;
+				else opVal->ints[0] = 0;
 			}
 		}
 	}
+	printDebug("Logic Exp Val: " + to_string(opVal->ints[0]));
 	return opVal;
 }
+
+SymbolInfo *getReltnOpVal(SymbolInfo *left, SymbolInfo *right, SymbolInfo *op) {
+
+	if (left->getVarType() == VOID_TYPE || right->getVarType() == VOID_TYPE) {
+		printErrorLog("Can't compare with void type expressions");
+		return nullptr;
+	}
+
+	SymbolInfo *opVal = new SymbolInfo("", "");
+	opVal->setVarType(INT_TYPE);
+	const string &relop = op->getName();
+	int leftIVal = 0, rightIVal = 0;
+	float leftFVal = 0, rightFVal = 0;
+	int &result = opVal->ints[0];
+
+
+	int8_t cmpMode = 0x00; // 0 -> int F-> float 0F -> int-float
+
+	if (left->getVarType() == INT_TYPE) {
+		leftIVal = left->ints[0];
+		cmpMode &= 0x0F;
+	} else {
+		leftFVal = left->floats[0];
+		cmpMode |= 0xF0;
+	}
+
+	if (right->getVarType() == INT_TYPE) {
+		rightIVal = right->ints[0];
+		cmpMode &= 0xF0;
+	} else {
+		rightFVal = right->floats[0];
+		cmpMode |= 0x0F;
+	}
+
+	if (cmpMode == 0x00) {
+		result = relop == "==" ? leftIVal == rightIVal :
+		         relop == "!=" ? leftIVal != rightIVal :
+		         relop == "<=" ? leftIVal <= rightIVal :
+		         relop == ">=" ? leftIVal >= rightIVal :
+		         relop == "<" ? leftIVal < rightIVal :
+		         relop == ">" ? leftIVal > rightIVal : 0;
+	} else if (cmpMode == 0x0F) {
+		result = relop == "==" ? leftIVal == rightFVal :
+		         relop == "!=" ? leftIVal != rightFVal :
+		         relop == "<=" ? leftIVal <= rightFVal :
+		         relop == ">=" ? leftIVal >= rightFVal :
+		         relop == "<" ? leftIVal < rightFVal :
+		         relop == ">" ? leftIVal > rightFVal : 0;
+	} else if (cmpMode == 0xF0) {
+		result = relop == "==" ? leftFVal == rightIVal :
+		         relop == "!=" ? leftFVal != rightIVal :
+		         relop == "<=" ? leftFVal <= rightIVal :
+		         relop == ">=" ? leftFVal >= rightIVal :
+		         relop == "<" ? leftFVal < rightIVal :
+		         relop == ">" ? leftFVal > rightIVal : 0;
+	} else if (cmpMode == 0xFF) {
+		result = relop == "==" ? leftFVal == rightFVal :
+		         relop == "!=" ? leftFVal != rightFVal :
+		         relop == "<=" ? leftFVal <= rightFVal :
+		         relop == ">=" ? leftFVal >= rightFVal :
+		         relop == "<" ? leftFVal < rightFVal :
+		         relop == ">" ? leftFVal > rightFVal : 0;
+	}
+
+	if (relop == "==" && left->getVarType() != right->getVarType()) {
+		printWarningLog("Comparision between two different types.");
+	}
+
+//	printDebug("Rel Exp Val: " + to_string(result));
+	return opVal;
+}
+
+SymbolInfo *getFuncCallValue(SymbolInfo *funcVal) {
+	SymbolInfo *func = table.lookUp(funcVal->getName());
+	if (func == nullptr) {
+		printErrorLog("Function " + funcVal->getName() + " doesn't exist");
+	} else if (!func->isFunction()) {
+		printErrorLog(funcVal->getName() + " + is not a function");
+	} else if (func->isVoidFunc()) {
+		printErrorLog("Function " + funcVal->getName() + " returns void");
+	}
+//	else if(func->ParamList!= nullptr){
+//
+//	}
+	else {
+		SymbolInfo *retVal = new SymbolInfo("", "");
+		retVal->setVarType(funcVal->getFuncRet());
+		if (retVal->getVarType() == INT_TYPE)retVal->ints[0] = 0;
+		else if (retVal->getVarType() == FLOAT_TYPE)retVal->floats[0] = 0;
+//			else if(retVal->getVarType() == CHAR_TYPE)retVal->chars[0] = '\0';
+		return retVal;
+	}
+	return nullptr;
+}
+
+SymbolInfo *getArgValueList() {
+
+}
+
+SymbolInfo *getConstVal(SymbolInfo *constVal, const string &const_type) {
+	constVal->setIDType(VARIABLE);
+	constVal->setVarType(const_type);
+
+	if (const_type == FLOAT_TYPE)
+		constVal->floats[0] = static_cast<float>(atof(constVal->getName().data()));
+	else if (const_type == INT_TYPE)
+		constVal->ints[0] = atoi(constVal->getName().data());
+	return constVal;
+}
+
+SymbolInfo *getIncOpVal(SymbolInfo *varVal) {
+	if (varVal->isArrayVar()) {
+		if (varVal->getVarType() == INT_TYPE) {
+			varVal->setIndexValue(varVal->ints[varVal->getArrIndex()] + 1);
+		} else if (varVal->getVarType() == FLOAT_TYPE) {
+			varVal->setIndexValue((float) (varVal->floats[varVal->getArrIndex()] + 1.0));
+		}
+	} else if (varVal->isVariable()) {
+		if (varVal->getVarType() == INT_TYPE) {
+			varVal->ints[0] = varVal->ints[0] + 1;
+		} else if (varVal->getVarType() == FLOAT_TYPE) {
+			varVal->floats[0] = static_cast<float>(varVal->floats[0] + 1.0);
+		}
+	}
+	return varVal;
+}
+
+SymbolInfo *getDecOpVal(SymbolInfo *varVal) {
+	if (varVal->isArrayVar()) {
+		if (varVal->getVarType() == INT_TYPE) {
+			varVal->setIndexValue(varVal->ints[varVal->getArrIndex()] - 1);
+		} else if (varVal->getVarType() == FLOAT_TYPE) {
+			varVal->setIndexValue((float) (varVal->floats[varVal->getArrIndex()] - 1.0));
+		}
+	} else if (varVal->isVariable()) {
+		if (varVal->getVarType() == INT_TYPE) {
+			varVal->ints[0] = varVal->ints[0] - 1;
+		} else if (varVal->getVarType() == FLOAT_TYPE) {
+			varVal->floats[0] = static_cast<float>(varVal->floats[0] - 1.0);
+		}
+	}
+	return varVal;
+}
+
 
 #endif //SYNTAXANALYZER_SYNBASE_H

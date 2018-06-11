@@ -182,20 +182,30 @@ public:
 		return file2.str();
 	}
 
-	static string formatCCode(const string code) {
+	static string formatCCode(const string &code) {
 		string formattedCode = code;
 
 		while(StringUtils::replaceAll(formattedCode, " ;", ";"));
 		StringUtils::replaceAll(formattedCode, ";", ";\n");
 		StringUtils::replaceAll(formattedCode, ";\n\n", ";\n");
 
-		while(StringUtils::replaceAll(formattedCode, "\n ", "\n"));
+
+		while(StringUtils::replaceAll(formattedCode, "( ", "("));
+		while(StringUtils::replaceAll(formattedCode, " (", "("));
+		while(StringUtils::replaceAll(formattedCode, ") ", ")"));
+		while(StringUtils::replaceAll(formattedCode, " )", ")"));
+
+		while(StringUtils::replaceAll(formattedCode, "{ ", "{"));
+		while(StringUtils::replaceAll(formattedCode, " {", "{"));
+		while(StringUtils::replaceAll(formattedCode, "} ", "}"));
+		while(StringUtils::replaceAll(formattedCode, " }", "}"));
+
 
 		StringUtils::replaceAll(formattedCode, "{", "\n{\n");
 
-		StringUtils::replaceAll(formattedCode, "}", "\n}");
+		StringUtils::replaceAll(formattedCode, "}", "\n}\n");
 		while(StringUtils::replaceAll(formattedCode, "\n\n}", "\n}"));
-
+		while(StringUtils::replaceAll(formattedCode, "}\n\n", "}\n"));
 
 		while(StringUtils::replaceAll(formattedCode, "  = ", " = "));
 		while(StringUtils::replaceAll(formattedCode, " =  ", " = "));
@@ -204,6 +214,14 @@ public:
 		while(StringUtils::replaceAll(formattedCode, " ==  ", " == "));
 
 
+		StringUtils::replaceAll(formattedCode, "(", " ( ");
+		StringUtils::replaceAll(formattedCode, ")", " ) ");
+
+		while(StringUtils::replaceAll(formattedCode, "\n ", "\n"));
+		while(StringUtils::replaceAll(formattedCode, " \n", "\n"));
+		while(StringUtils::replaceAll(formattedCode, "  ", " "));
+
+		StringUtils::replaceFirst(formattedCode," ","");
 //		return indent(formattedCode);
 		return formattedCode;
 	}

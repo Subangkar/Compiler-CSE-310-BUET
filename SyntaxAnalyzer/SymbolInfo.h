@@ -12,6 +12,18 @@
 //
 
 
+
+
+#define ARRAY "ARA"
+#define VARIABLE "VAR"
+#define FUNCTION "FUNC"
+#define INT_TYPE "INT"
+#define FLOAT_TYPE "FLOAT"
+#define VOID_TYPE "VOID"
+#define CHAR_TYPE "CHAR"
+
+
+
 class SymbolInfo {
 
 	string name;
@@ -55,7 +67,7 @@ public:
 
 //	explicit SymbolInfo(string name, string type = "");
 
-	explicit SymbolInfo(const string name, const string type = "") : name(name), type(type) {ArrIndex=0;}
+	explicit SymbolInfo(const string name, const string type = "") : name(name), type(type) { ArrIndex = 0; }
 
 	void setName(const string &name) {
 		this->name = name;
@@ -83,7 +95,7 @@ public:
 
 	void setVarType(const string &VarType) {
 		SymbolInfo::VarType = VarType;
-		if (VarType == "INT") ints.push_back(0);
+		if (VarType == INT_TYPE) ints.push_back(0);
 		else if (VarType == "FLOAT") floats.push_back(0);
 	}
 
@@ -100,9 +112,9 @@ public:
 	}
 
 	void setArrSize(size_t ArrSize) {
-		if(VarType!="ARA")
+		if (!isArrayVar())
 			return;
-		SymbolInfo::ArrSize = ArrSize;
+		this->ArrSize = ArrSize;
 	}
 
 	size_t getArrIndex() const {
@@ -110,7 +122,7 @@ public:
 	}
 
 	void setArrIndex(size_t ArrIndex) {
-		if(VarType!="ARA")
+		if (VarType != ARRAY)
 			return;
 		SymbolInfo::ArrIndex = ArrIndex;
 	}
@@ -182,6 +194,16 @@ public:
 		os << "< " << info.name << " : " << info.type << " > ";
 		return os;
 	}
+
+
+	bool isFunction() { return type == "ID" && IDType == FUNCTION; }
+
+	bool isArrayVar() { return type == "ID" && IDType == ARRAY; }
+
+	bool isVariable() { return type == "ID" && IDType == VARIABLE; }
+
+	bool isVoidFunc() { return isFunction() && getFuncRet() == VOID_TYPE; }
+
 
 private:
 

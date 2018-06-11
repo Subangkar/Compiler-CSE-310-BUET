@@ -165,21 +165,21 @@ var_declaration: type_specifier declaration_list SEMICOLON
 
 type_specifier: INT
 			{
-				$$ = getType("INT");
+				$$ = getType(INT_TYPE);
 
 		   	pushVal(type_specifier,"int");
 				printRuleLog(type_specifier,"INT");
 			}
  		| FLOAT
 			{
-				$$ = getType("FLOAT");
+				$$ = getType(FLOAT_TYPE);
 
 				pushVal(type_specifier,"float");
 				printRuleLog(type_specifier,"FLOAT");
 			}
  		| VOID
 			{
-				$$ = getType("VOID");
+				$$ = getType(VOID_TYPE);
 
 				pushVal(type_specifier,"void");
 				printRuleLog(type_specifier,"VOID");
@@ -307,7 +307,7 @@ variable: ID
 				else{
 					//$$ = temp;
 					if($3->ints[0] >= temp->getArrSize()){
-						printErrorLog($1->getName() + " array index out of bounds");
+						printErrorLog($1->getName() + " array index out of bounds index="+to_string($3->ints[0])+" size="+to_string(temp->getArrSize()));
 						//temp->setAraIndex(0);
 					}
 					else temp->setArrIndex($3->ints[0]);
@@ -331,7 +331,7 @@ expression: logic_expression
 				}
 	   | variable ASSIGNOP logic_expression
 		 		{
-					/* $$ = getAssignExpVal($1,$3); */
+					$$ = getAssignExpVal($1,$3);
 
 					pushVal(expression,popVal(variable)+"="+popVal(logic_expression));
 					printRuleLog(expression,"variable ASSIGNOP logic_expression");
@@ -349,7 +349,7 @@ logic_expression: rel_expression
 				}
 		 | rel_expression LOGICOP rel_expression
 		 		{
-					/* $$ = getLogicOpVal($1,$3,$2); */
+					$$ = getLogicOpVal($1,$3,$2);
 
 					string r2 = popVal(rel_expression);
 					string r1 = popVal(rel_expression);
@@ -360,11 +360,17 @@ logic_expression: rel_expression
 
 rel_expression: simple_expression
 			{
+				$$ = $1;
+				$$->ints.push_back(0);
+				$$->floats.push_back(0);
+
 				pushVal(rel_expression,popVal(simple_expression));
 				printRuleLog(rel_expression,"simple_expression");
 			}
 		| simple_expression RELOP simple_expression
 				{
+					$$ = getReltnOpVal($1,$3,$2);
+
 					string s2 = popVal(simple_expression);
 					string s1 = popVal(simple_expression);
 					pushVal(rel_expression,s1+$2->getName()+s2);
@@ -418,28 +424,45 @@ factor: variable
 			pushVal(factor,popVal(variable));
 			printRuleLog(factor,"variable");
 		}
+	| ID LPAREN argument_list RPAREN
+		{
+			$$=getFuncCallValue($1);
+
+			pushVal(factor,$1->getName()+"("+popVal(argument_list)+")");
+			printRuleLog(factor,"ID LPAREN argument_list RPAREN");
+		}
 	| LPAREN expression RPAREN
 		{
+			$$=$2;
+
 			pushVal(factor,"("+popVal(expression)+")");
 			printRuleLog(factor,"LPAREN expression RPAREN");
 		}
 	| CONST_INT
 		{
+			$$ = getConstVal($1,INT_TYPE);
+
 			pushVal(factor,$1->getName());
 			printRuleLog(factor,"CONST_INT");
 		}
 	| CONST_FLOAT
 		{
+			$$ = getConstVal($1,FLOAT_TYPE);
+
 			pushVal(factor,$1->getName());
 			printRuleLog(factor,"CONST_FLOAT");
 		}
 	| variable INCOP
 		{
+			$$ = getIncOpVal($1);
+
 			pushVal(factor,popVal(variable)+"++");
 			printRuleLog(factor,"variable INCOP");
 		}
 	| variable DECOP
 		{
+			$$ = getIncOpVal($1);
+
 			pushVal(factor,popVal(variable)+"--");
 			printRuleLog(factor,"variable DECOP");
 		}
