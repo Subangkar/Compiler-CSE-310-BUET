@@ -23,7 +23,6 @@
 #define CHAR_TYPE "CHAR"
 
 
-
 class SymbolInfo {
 
 	string name;
@@ -104,7 +103,8 @@ public:
 	}
 
 	void setFuncRet(const string &FuncRet) {
-		SymbolInfo::FuncRet = FuncRet;
+		this->FuncRet = FuncRet;
+		setVarType(FuncRet);
 	}
 
 	size_t getArrSize() const {
@@ -118,13 +118,13 @@ public:
 	}
 
 	size_t getArrIndex() const {
-		return ArrIndex;
+		return isArrayVar() ? ArrIndex : 0;
 	}
 
 	void setArrIndex(size_t ArrIndex) {
 		if (VarType != ARRAY)
 			return;
-		SymbolInfo::ArrIndex = ArrIndex;
+		this->ArrIndex = ArrIndex;
 	}
 
 	bool isFuncDefined() const {
@@ -194,7 +194,7 @@ public:
 
 		for (int i = 0; i < key.length(); i++) {
 			if (i % 2 == 0) {
-				value += (reverseDigits(key[i])) * (int64_p) pow(19, i); // std::abs
+				value += (reverseDigits(static_cast<int64_p>(key[i]))) * (int64_p) pow(19, i); // std::abs
 			} else {
 				value += abs((key[i]) * (int) pow(23, i));
 			}
@@ -209,13 +209,13 @@ public:
 	}
 
 
-	bool isFunction() { return IDType == FUNCTION; }//type == "ID" &&
+	bool isFunction() const { return IDType == FUNCTION; }//type == "ID" &&
 
-	bool isArrayVar() { return IDType == ARRAY; }//type == "ID" &&
+	bool isArrayVar() const { return IDType == ARRAY; }//type == "ID" &&
 
-	bool isVariable() { return IDType == VARIABLE; } //type == "ID" &&
+	bool isVariable() const { return IDType == VARIABLE; } //type == "ID" &&
 
-	bool isVoidFunc() { return isFunction() && getFuncRet() == VOID_TYPE; }
+	bool isVoidFunc() const { return isFunction() && getFuncRet() == VOID_TYPE; }
 
 
 private:

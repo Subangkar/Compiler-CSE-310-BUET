@@ -90,6 +90,14 @@ func_declaration: type_specifier ID LPAREN parameter_list RPAREN SEMICOLON
 				pushVal(func_declaration,popVal(type_specifier)+$2->getName()+"("+")"+";");
 				printRuleLog(func_declaration,"type_specifier ID LPAREN RPAREN SEMICOLON");
 			}
+		|type_specifier ID LPAREN parameter_list RPAREN error
+			{
+				printErrorLog("; missing");
+			}
+		|type_specifier ID LPAREN RPAREN error
+			{
+				printErrorLog("; missing");
+			}
 		;
 
 func_definition: type_specifier ID LPAREN parameter_list RPAREN{addFuncDef($2,$1);} compound_statement
@@ -157,6 +165,7 @@ var_declaration: type_specifier declaration_list SEMICOLON
 			   	pushVal(var_declaration,popVal(type_specifier)+popVal(declaration_list)+";");
 					printRuleLog(var_declaration,"type_specifier declaration_list SEMICOLON");
 			}
+			|type_specifier declaration_list error{printErrorLog("; missing");}			
 		 ;
 
 type_specifier: INT
@@ -279,46 +288,21 @@ expression_statement: SEMICOLON
 					pushVal(expression_statement,popVal(expression)+";");
 					printRuleLog(expression_statement,"expression SEMICOLON");
 				}
+			| expression error {
+				printErrorLog("SEMICOLON missing");
+			}
 			;
 
 variable: ID
 			{
-				SymbolInfo* var = table.lookUp($1->getName());
-				if(var == nullptr){
-					printErrorLog($1->getName() + " doesn't exist");
-				}
-				else if(!var->isVariable()){
-					printErrorLog($1->getName() + " is not a variable");
-				}
-				else{
-					$$ = var;
-				}
+				$$ = getVariable($1);
 
 				pushVal(variable,$1->getName());
 				printRuleLog(variable,"ID");
 			}
 	 | ID LTHIRD expression RTHIRD
 	 		{
-				SymbolInfo* arr = table.lookUp($1->getName());
-				if(arr == nullptr){
-					printErrorLog($1->getName() + " doesn't exist");
-				}
-				else{
-					if(!arr->isArrayVar()){
-						printErrorLog($1->getName() + " is not an array");
-					}
-					else if(arr->getVarType()!=FLOAT_TYPE){
-						printErrorLog($1->getName() + " array index must be an integer");
-					}
-					else if($3->ints[0] >= arr->getArrSize()){
-						printErrorLog($1->getName() + " array index out of bounds index="+to_string($3->ints[0])+" size="+to_string(arr->getArrSize()));
-					}
-					else
-					{
-						arr->setArrIndex($3->ints[0]);
-						$$ = arr;
-					}
-				}
+				$$ = getArrIndexVar($1,$3);
 
 				pushVal(variable,($1->getName()+"["+popVal(expression)+"]"));
 				printRuleLog(variable,"ID LTHIRD expression RTHIRD");
@@ -552,7 +536,8 @@ int main(int argc,char *argv[])
 
 	yyparse();
 	logFile << "Total Lines : " << line_count << std::endl << std::endl;
-	logFile << "Total Errors : " << semErrors << std::endl;
+	errorFile << "Total Errors : " << semErrors << std::endl;
+	errorFile << "Total Warning : " << warnings << std::endl;
 
 	table.printAllScope(logFile);
 

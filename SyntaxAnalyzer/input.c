@@ -1,27 +1,27 @@
-int func(int a){
-	return a;
+int x,y,z; float a;
+
+void foo();
+
+int var(int a, int b){
+	return a+b;
 }
 
-float r(int x){
-
-}
-
-void foo(int x){
-
+void foo(){
+	x=2;
+	y=x-5;
 }
 
 int main(){
-	int a[2],c,i,j ; float c;
-	a[2.5]=1;
-  int c;
-  c[5];
-	i=2.3;
-	j=2+(2%3.7)+(5+0);
-	a=4;
-	c(3+2.3);
-	i=foo(2);
+	int a[2],c,i,j ; float d;
+	a[0]=1;
+	a[1]=5;
+	i= a[0]+a[1];
+	j= 2*3+(5%3 < 4 && 8) || 2 ;
+	d=var(1,2*3)+3.5*2;
 	return 0;
 }
+
+
 
 /*
 void oot(int, float);

@@ -7,7 +7,6 @@
 
 
 #include <iostream>
-//#include "SymTable.h"
 #include "DataStructure.h"
 #include "Utils.h"
 #include <stack>
@@ -29,7 +28,8 @@ int IDargs = 0;
 vector<string> args;
 vector<SymbolInfo> argsFunc;
 bool funcDef = false;
-int semErrors;
+size_t semErrors = 0;
+size_t warnings = 0;
 vector<SymbolInfo> params;
 string variable_type;
 
@@ -122,6 +122,7 @@ string popVal(NONTERMINAL_TYPE nonterminal) {
 
 void printRule(const string &rule) {
 	logFile << "At line no: " << line_count << " " << rule << endl << endl;
+	parserFile << "At line no: " << line_count << " " << rule << endl << endl;
 }
 
 // after pushing value
@@ -147,7 +148,7 @@ void printErrorLog(const string &msg) {
 
 void printWarningLog(const string &msg) {
 	errorFile << " >> Warning at line " << line_count << ": " << msg << endl << endl;
-//	++semErrors;
+	warnings++;
 }
 
 void printDebug(const string &msg) {
@@ -161,10 +162,9 @@ void yyerror(const char *s) {
 	yyparse();
 }
 
-SymbolInfo* nullVal()
-{
-	static SymbolInfo* defVal= nullptr;
-	if(defVal== nullptr) {
+SymbolInfo *nullVal() {
+	static SymbolInfo *defVal = nullptr;
+	if (defVal == nullptr) {
 		defVal = new SymbolInfo("$NULL$", "");
 		defVal->setIDType(VARIABLE);
 		defVal->setVarType(INT_TYPE);
@@ -230,14 +230,13 @@ SymbolInfo *insertVar(SymbolInfo *idVal) {
 	if (variable_type == VOID_TYPE) {
 		printErrorLog("variable type can't be void");
 	} else {
-		SymbolInfo *temp = table.lookUp(idVal->getName(), true);
-		if (temp != nullptr) {
-			printErrorLog("Variable " + idVal->getName() + " already declared");
+		if (table.lookUp(idVal->getName(), true) != nullptr) {
+			printErrorLog("Symbol " + idVal->getName() + " already declared in this scope");
 		} else {
-			SymbolInfo *temp2 = insertToTable(idVal);
-			temp2->setVarType(variable_type);
-			temp2->setIDType(VARIABLE);
-			return temp2;
+			SymbolInfo *var = insertToTable(idVal);
+			var->setVarType(variable_type);
+			var->setIDType(VARIABLE);
+			return var;
 		}
 	}
 	return nullVal();
@@ -269,10 +268,10 @@ void addIDenArgtoParamList(SymbolInfo *idVal) {
 	IDargs++;
 	idVal->setIDType(VARIABLE);
 	idVal->setVarType(variable_type);//changed from rhs->getVarType()
-	SymbolInfo *temp = new SymbolInfo(idVal->getName(), idVal->getType());
-	temp->setIDType(VARIABLE);
+	SymbolInfo *id = new SymbolInfo(idVal->getName(), idVal->getType());
+	id->setIDType(VARIABLE);
 
-	params.push_back(*temp);
+	params.push_back(*id);
 }
 
 void enterFuncScope() {
@@ -322,23 +321,37 @@ SymbolInfo *getConstVal(const string &value = "$CONST$", const string &constVarT
 }
 
 
-SymbolInfo *getArrIndexVar(SymbolInfo* arrVal,SymbolInfo* idxVal){
-	SymbolInfo* arr = table.lookUp(arrVal->getName());
-	if(arr == nullptr){
+SymbolInfo *getVariable(SymbolInfo *varVal) {
+	SymbolInfo* var = table.lookUp(varVal->getName());
+	if(var == nullptr){
+		printErrorLog(varVal->getName() + " doesn't exist");
+	}
+	else if(!var->isVariable()){
+		if(var->isArrayVar()) printErrorLog(varVal->getName() + " is an array must be accessed with an index");
+		else printErrorLog(varVal->getName() + " is not a variable");
+	}
+	else{
+		return var;
+	}
+	return nullVal();
+}
+
+SymbolInfo *getArrIndexVar(SymbolInfo *arrVal, SymbolInfo *idxVal) {
+	SymbolInfo *arr = table.lookUp(arrVal->getName());
+	if (arr == nullptr) {
 		printErrorLog(arrVal->getName() + " doesn't exist");
 		return nullVal();
-	}
-	else {
+	} else {
 		if (!arr->isArrayVar()) {
 			printErrorLog(arrVal->getName() + " is not an array");
-		} else if (arr->getVarType() != FLOAT_TYPE) {
+		} else if (idxVal->getVarType() == FLOAT_TYPE) {
 			printErrorLog(arrVal->getName() + " array index must be an integer");
 		} else if (idxVal->ints[0] >= arr->getArrSize()) {
-			printErrorLog(arrVal->getName() + " array index out of bounds index=" + to_string(idxVal->ints[0]) + " size=" +
-			              to_string(arr->getArrSize()));
+			printErrorLog(
+					arrVal->getName() + " array index out of bounds index=" + to_string(idxVal->ints[0]) + " size=" +
+					to_string(arr->getArrSize()));
 		} else {
 			arr->setArrIndex(static_cast<size_t>(idxVal->ints[0]));
-//			$$ = arr;
 		}
 	}
 	return arr;
@@ -346,6 +359,11 @@ SymbolInfo *getArrIndexVar(SymbolInfo* arrVal,SymbolInfo* idxVal){
 
 
 SymbolInfo *getAssignExpVal(SymbolInfo *lhs, SymbolInfo *rhs) {
+	if(lhs->getVarType()==VOID_TYPE || rhs->getVarType()==VOID_TYPE){
+		printErrorLog("Assign Operation on void type");
+		return nullVal();
+	}
+
 	if (lhs->isArrayVar()) {
 		lhs->ints.push_back(0);
 
@@ -492,6 +510,7 @@ SymbolInfo *getReltnOpVal(SymbolInfo *left, SymbolInfo *right, SymbolInfo *op) {
 //	printDebug("Rel Exp Val: " + to_string(result));
 	return opVal;
 }
+
 
 SymbolInfo *getAddtnOpVal(SymbolInfo *left, SymbolInfo *right, SymbolInfo *op) {
 	if (left->getVarType() == VOID_TYPE || right->getVarType() == VOID_TYPE) {
@@ -709,8 +728,7 @@ SymbolInfo *getMultpOpVal(SymbolInfo *left, SymbolInfo *right, SymbolInfo *op) {
 			}
 		}
 
-	}
-	else if (mulOp == "*") {
+	} else if (mulOp == "*") {
 		if (left->isVariable()) {
 			if (right->isVariable()) {
 				if (left->getVarType() == FLOAT_TYPE) {
@@ -989,7 +1007,6 @@ SymbolInfo *getMultpOpVal(SymbolInfo *left, SymbolInfo *right, SymbolInfo *op) {
 }
 
 
-// need to edit :: not copied
 SymbolInfo *getIncOpVal(SymbolInfo *varVal) {
 	SymbolInfo *opVal = new SymbolInfo("", "");
 	opVal = getConstVal(opVal, varVal->getVarType());
@@ -1091,33 +1108,32 @@ SymbolInfo *getFuncCallValue(SymbolInfo *funcVal) {
 		printErrorLog(funcVal->getName() + " does not have a body");
 	} else if (func->isVoidFunc()) {
 		printErrorLog("Function " + funcVal->getName() + " returns void");
-		return getConstVal("",VOID_TYPE);
+		return getConstVal("", VOID_TYPE);
+	} else if (func->ParamList.size() != args.size()) {
+		printErrorLog(func->getName() + ": " + to_string(func->ParamList.size()) + " arguments expected" +
+		              " instead passed " + to_string(args.size()));
+	} else if (func->ParamList != args) {
+		printErrorLog(func->getName() + ": argument type Mismatch");
+//			cout<<args.size()<<endl;
+//			string req="("+func->ParamList[0],given="("+args[0];
+//			for(int i=1;i<args.size();++i){
+//				req+=","+func->ParamList[i];
+//				given+=","+args[i];
+//			}
+//			req+=")";
+//			given+=")";
+//			printWarningLog(func->getName()+": argument type Mismatch "+" Expected: "+req+" Provied: "+given);
 	} else {
-		if (func->ParamList.size() != args.size()) {
-			printErrorLog(func->getName() + ": " + to_string(func->ParamList.size()) + " arguments expected" +
-			              " instead passed " + to_string(args.size()));
-		}
-		else if(func->ParamList!=args){
-			cout<<args.size()<<endl;
-			string req="("+func->ParamList[0],given="("+args[0];
-			for(int i=1;i<args.size();++i){
-				req+=","+func->ParamList[i];
-				given+=","+args[i];
-			}
-			req+=")";
-			given+=")";
-			printWarningLog(func->getName()+": argument type Mismatch "+" Expected: "+req+" Provied: "+given);
-		} else {
-			SymbolInfo *retVal = getConstVal("", func->getFuncRet());
-			if (retVal->getVarType() == INT_TYPE)retVal->ints[0] = 0;
-			else if (retVal->getVarType() == FLOAT_TYPE)retVal->floats[0] = 0;
+		SymbolInfo *retVal = getConstVal("", func->getFuncRet());
+		if (retVal->getVarType() == INT_TYPE)retVal->ints[0] = 0;
+		else if (retVal->getVarType() == FLOAT_TYPE)retVal->floats[0] = 0;
 
 //			else if(retVal->getVarType() == CHAR_TYPE)retVal->chars[0] = '\0';
-			args.clear();
-			argsFunc.clear();
-			return retVal;
-		}
+		args.clear();
+		argsFunc.clear();
+		return retVal;
 	}
+
 	args.clear();
 	argsFunc.clear();
 	return nullVal();
