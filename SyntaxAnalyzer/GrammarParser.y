@@ -165,7 +165,7 @@ var_declaration: type_specifier declaration_list SEMICOLON
 			   	pushVal(var_declaration,popVal(type_specifier)+popVal(declaration_list)+";");
 					printRuleLog(var_declaration,"type_specifier declaration_list SEMICOLON");
 			}
-			|type_specifier declaration_list error{printErrorLog("; missing");}			
+			/* |type_specifier declaration_list error{printErrorLog("; missing");}			 */
 		 ;
 
 type_specifier: INT
@@ -272,10 +272,16 @@ statement: var_declaration
 				pushVal(statement,"("+$3->getName()+")"+";");
 				printRuleLog(statement,"PRINTLN LPAREN ID RPAREN SEMICOLON");
 			}
-	  | RETURN expression SEMICOLON
+	  | PRINTLN LPAREN ID RPAREN error
+		| RETURN expression SEMICOLON
 			{
 				pushVal(statement,"return"+popVal(expression)+";");
 				printRuleLog(statement,"RETURN expression SEMICOLON");
+			}
+		| RETURN expression error
+			{
+				printErrorLog("; missing");
+				printRuleLog(statement,"RETURN expression error");
 			}
 	  ;
 
@@ -289,7 +295,7 @@ expression_statement: SEMICOLON
 					printRuleLog(expression_statement,"expression SEMICOLON");
 				}
 			| expression error {
-				printErrorLog("SEMICOLON missing");
+				printErrorLog("exp; missing");
 			}
 			;
 

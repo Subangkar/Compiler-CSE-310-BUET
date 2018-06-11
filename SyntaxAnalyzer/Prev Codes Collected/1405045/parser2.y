@@ -404,7 +404,7 @@ statement: var_declaration{logFile << "Line " << lCount << " : statement : var_d
 		semErrors++;
 	}
 	  | RETURN expression SEMICOLON{logFile << "Line " << lCount << " : statement : RETURN expression SEMICOLON\n"<< endl;}
-	  |RETURN expression error
+	  | RETURN expression error
 	{
 			errorFile << "Error at line " << lCount << "; missing" << endl << endl;
 			semErrors++;

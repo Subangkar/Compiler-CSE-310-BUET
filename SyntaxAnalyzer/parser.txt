@@ -50,25 +50,25 @@ At line no: 6 term: unary_expression
 
 At line no: 6 simple_expression: term
 
-At line no: 6 variable: ID
+At line no: 7 variable: ID
 
-At line no: 6 factor: variable
+At line no: 7 factor: variable
 
-At line no: 6 unary_expression: factor
+At line no: 7 unary_expression: factor
 
-At line no: 6 term: unary_expression
+At line no: 7 term: unary_expression
 
-At line no: 6 simple_expression: simple_expression ADDOP term
+At line no: 7 simple_expression: simple_expression ADDOP term
 
-At line no: 6 rel_expression: simple_expression
+At line no: 7 rel_expression: simple_expression
 
-At line no: 6 logic_expression: rel_expression
+At line no: 7 logic_expression: rel_expression
 
-At line no: 6 expression: logic_expression
+At line no: 7 expression: logic_expression
 
-At line no: 6 statement: RETURN expression SEMICOLON
+At line no: 7 statement: RETURN expression error
 
-At line no: 6 statements: statement
+At line no: 7 statements: statement
 
 At line no: 7 compound_statement: LCURL statements RCURL
 
@@ -88,19 +88,17 @@ At line no: 10 unary_expression: factor
 
 At line no: 10 term: unary_expression
 
-At line no: 10 simple_expression: term
+At line no: 11 simple_expression: term
 
-At line no: 10 rel_expression: simple_expression
+At line no: 11 rel_expression: simple_expression
 
-At line no: 10 logic_expression: rel_expression
+At line no: 11 logic_expression: rel_expression
 
-At line no: 10 expression: variable ASSIGNOP logic_expression
+At line no: 11 expression: variable ASSIGNOP logic_expression
 
-At line no: 10 expression_statement: expression SEMICOLON
+At line no: 11 statement: expression_statement
 
-At line no: 10 statement: expression_statement
-
-At line no: 10 statements: statement
+At line no: 11 statements: statement
 
 At line no: 11 variable: ID
 
@@ -228,19 +226,17 @@ At line no: 17 unary_expression: factor
 
 At line no: 17 term: unary_expression
 
-At line no: 17 simple_expression: term
+At line no: 18 simple_expression: term
 
-At line no: 17 rel_expression: simple_expression
+At line no: 18 rel_expression: simple_expression
 
-At line no: 17 logic_expression: rel_expression
+At line no: 18 logic_expression: rel_expression
 
-At line no: 17 expression: variable ASSIGNOP logic_expression
+At line no: 18 expression: variable ASSIGNOP logic_expression
 
-At line no: 17 expression_statement: expression SEMICOLON
+At line no: 18 statement: expression_statement
 
-At line no: 17 statement: expression_statement
-
-At line no: 17 statements: statements statement
+At line no: 18 statements: statements statement
 
 At line no: 18 variable: ID
 

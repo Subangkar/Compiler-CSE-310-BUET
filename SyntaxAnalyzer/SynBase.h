@@ -155,12 +155,18 @@ void printDebug(const string &msg) {
 	cout << ">> " << "line no " << line_count << ": " << msg << endl;
 }
 
+
 void yyerror(const char *s) {
 	//write your code
 //	printErrorLog("Invalid Syntax: "+string(yytext));
 //	printDebug("Syntax Error: "+string(yytext));
-	yyparse();
+//	yyparse();
+	cout << "HERE: " << s <<endl;
+	
 }
+
+
+
 
 SymbolInfo *nullVal() {
 	static SymbolInfo *defVal = nullptr;
