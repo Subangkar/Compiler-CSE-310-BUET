@@ -291,62 +291,53 @@ SymbolInfo *getAssignExpVal(SymbolInfo *lhs, SymbolInfo *rhs) {
 	return lhs;
 }
 
-// need to edit
 SymbolInfo *getLogicOpVal(SymbolInfo *left, SymbolInfo *right, SymbolInfo *op) {
-	SymbolInfo *opVal = new SymbolInfo("", "");//new SymbolInfo(INT_TYPE);// ?
-	opVal->setVarType(INT_TYPE);
-	if (left->getVarType() == CHAR_TYPE || right->getVarType() == CHAR_TYPE) {
-		opVal->ints.push_back(0);
+	if (left->getVarType() == VOID_TYPE || right->getVarType() == VOID_TYPE) {
+		printErrorLog("Operand of void type.");
+		return nullptr;
 	}
 
-	const string &logicop = op->getName();
-	if (logicop == "&&") {
-		if (left->getVarType() == FLOAT_TYPE) {
-			left->floats.push_back(0);
+	SymbolInfo *opVal = new SymbolInfo("", "");
+	opVal->setVarType(INT_TYPE);
+	const string &logicOp = op->getName();
+	int leftIVal = 0, rightIVal = 0;
+	float leftFVal = 0, rightFVal = 0;
+	int &result = opVal->ints[0];
 
-			if (right->getVarType() == FLOAT_TYPE) {
-				right->floats.push_back(0);
-				opVal->ints[0] = (left->floats[0] == 0) && (right->floats[0] == 0);
-			} else if (right->getVarType() == INT_TYPE) {
-				right->ints.push_back(0);
-				opVal->ints[0] = (left->floats[0] == 0) && (right->ints[0] == 0);
-			}
-		} else if (left->getVarType() == INT_TYPE) {
-			left->ints.push_back(0);
-			if (right->getVarType() == FLOAT_TYPE) {
-				right->floats.push_back(0);
-				opVal->ints[0] = (left->ints[0] == 0) && (right->floats[0] == 0);
-			} else if (right->getVarType() == INT_TYPE) {
-				right->ints.push_back(0);
-				opVal->ints[0] = (left->ints[0] == 0) && (right->ints[0] == 0);
-			}
-		}
-	} else if (logicop == "||") {
-		if (left->getVarType() == FLOAT_TYPE) {
-			left->floats.push_back(0);
-			if (left->floats[0] != 0) {
-				opVal->ints[0] = 1;
-			} else if (right->getVarType() == FLOAT_TYPE) {
-				right->floats.push_back(0);
-				if (right->floats[0] != 0) opVal->ints[0] = 1;
-				else opVal->ints[0] = 0;
-			} else if (right->getVarType() == INT_TYPE) {
-				if (right->ints[0] != 0) opVal->ints[0] = 1;
-				else opVal->ints[0] = 0;
-			}
-		} else if (left->getVarType() == INT_TYPE) {
-			left->ints.push_back(0);
-			if (left->ints[0] != 0) opVal->ints[0] = 1;
-			else if (right->getVarType() == FLOAT_TYPE) {
-				right->floats.push_back(0);
-				if (right->floats[0] != 0) opVal->ints[0] = 1;
-				else opVal->ints[0] = 0;
-			} else if (right->getVarType() == INT_TYPE) {
-				right->ints.push_back(0);
-				if (right->ints[0] != 0) opVal->ints[0] = 1;
-				else opVal->ints[0] = 0;
-			}
-		}
+	int8_t cmpMode = 0x00; // 0 -> int F-> float 0F -> int-float
+
+	if (left->getVarType() == INT_TYPE) {
+		leftIVal = left->ints[0];
+		cmpMode &= 0x0F;
+	} else {
+		leftFVal = left->floats[0];
+		cmpMode |= 0xF0;
+	}
+
+	if (right->getVarType() == INT_TYPE) {
+		rightIVal = right->ints[0];
+		cmpMode &= 0xF0;
+	} else {
+		rightFVal = right->floats[0];
+		cmpMode |= 0x0F;
+	}
+
+	if (cmpMode == 0x00) {
+		result = logicOp == "&&" ? leftIVal && rightIVal :
+		         logicOp == "||" ? leftIVal || rightIVal : 0;
+	} else if (cmpMode == 0x0F) {
+		result = logicOp == "&&" ? leftIVal && rightFVal :
+		         logicOp == "||" ? leftIVal || rightFVal : 0;
+	} else if (cmpMode == 0xF0) {
+		result = logicOp == "&&" ? leftFVal && rightIVal :
+		         logicOp == "||" ? leftFVal || rightIVal : 0;
+	} else if (cmpMode == 0xFF) {
+		result = logicOp == "&&" ? leftFVal && rightFVal :
+		         logicOp == "||" ? leftFVal || rightFVal : 0;
+	}
+
+	if (left->getVarType() != right->getVarType()) {
+		printWarningLog("Comparision between two different types.");
 	}
 	printDebug("Logic Exp Val: " + to_string(opVal->ints[0]));
 	return opVal;

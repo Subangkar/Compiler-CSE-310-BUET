@@ -17,9 +17,10 @@ int main()
   d = x+y;
   z=(x==flt);
   d = x && y;
-  z=-99999;
+  z=0;
   int p;
-  p=0;
+  p=9;
+  p && z;
   p || z;
 
 
