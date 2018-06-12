@@ -161,11 +161,11 @@ void yyerror(const char *s) {
 //	printErrorLog("Invalid Syntax: "+string(yytext));
 //	printDebug("Syntax Error: "+string(yytext));
 //	yyparse();
-	cout << "HERE: " << s <<endl;
-	
+//	cout << "HERE: " << s <<endl;
+//	printDebug(s);
+//	printErrorLog(s);
+	printLog(" >> Syntax Error :: ");
 }
-
-
 
 
 SymbolInfo *nullVal() {
@@ -186,50 +186,9 @@ SymbolInfo *insertToTable(SymbolInfo *symbolInfo) {
 }
 
 
-// function ret type not set
-void insertFunc(SymbolInfo *funcVal, SymbolInfo *retVal) {
-	if (table.lookUp(*funcVal) != nullptr) {
-		printErrorLog("Function " + funcVal->getName() + " already declared");
-		return;
-	}
-//	table.printAllScope(logFile);
-//	funcVal->setType(FUNCTION); // not sure with this
-	SymbolInfo *func = insertToTable(funcVal);
-	func->setType("ID");
-	func->setIDType(FUNCTION);
-	func->setFuncRet(retVal->getName());
-	func->setVarType(retVal->getName());
-	func->ParamList = args;
-	args.clear();
-//	table.printAllScope(logFile);
-}
-
-void addFuncDef(SymbolInfo *funcVal, SymbolInfo *retVal) {
-	SymbolInfo *func = table.lookUp(*funcVal);
-//	printDebug(retVal->getName());
-
-	// to prevent f(int x,float,int y){} type defn
-	if (args.size() != IDargs) {
-		printErrorLog("Parameter mismatch for Function " + funcVal->getName());
-	}
-
-	if (func != nullptr) {
-		if (func->isFuncDefined()) {
-			printErrorLog("Function " + funcVal->getName() + " already defined");
-		} else if (func->getFuncRet() != retVal->getVarType()) {
-			printErrorLog("Function " + funcVal->getName() + " :return type doesn't match declaration");
-		} else if (func->ParamList.size() != args.size()) {
-			printErrorLog("Function " + funcVal->getName() + " :Parameter list doesn not match declaration");
-		} else if (func->ParamList != args) {
-			printErrorLog("Function " + funcVal->getName() + " :argument mismatch");
-		}
-	} else {
-		insertFunc(funcVal, retVal);
-		table.lookUp(*funcVal)->setFuncDefined(true);
-	}
-
-	args.clear();
-	IDargs = 0;
+SymbolInfo *getType(string type) {
+	variable_type = std::move(type);
+	return new SymbolInfo(variable_type, variable_type);
 }
 
 SymbolInfo *insertVar(SymbolInfo *idVal) {
@@ -254,14 +213,55 @@ void insertArr(SymbolInfo *idVal, SymbolInfo *size) {
 	arr->setArrSize(static_cast<size_t>(atoi(size->getName().data())));
 	for (int i = 0; i < arr->getArrSize(); i++) {
 		arr->ints.push_back(0);
-//		arr->chars.push_back(0);
 		arr->floats.push_back(0);
 	}
 }
 
-SymbolInfo *getType(string type) {
-	variable_type = std::move(type);
-	return new SymbolInfo(variable_type, variable_type);
+
+void clearFunctionArgs() {
+	args.clear();
+	argsFunc.clear();
+	params.clear();
+	IDargs = 0;
+}
+
+void insertFunc(SymbolInfo *funcVal, SymbolInfo *retType) {
+	if (table.lookUp(*funcVal) != nullptr) {
+		printErrorLog("Function " + funcVal->getName() + " already declared");
+		clearFunctionArgs();
+		return;
+	}
+	SymbolInfo *func = insertToTable(funcVal);
+	func->setType("ID");
+	func->setIDType(FUNCTION);
+	func->setFuncRet(retType->getName());
+	func->setVarType(retType->getName());
+	func->ParamList = args;
+	clearFunctionArgs();
+}
+
+void addFuncDef(SymbolInfo *funcVal, SymbolInfo *retType) {
+	SymbolInfo *func = table.lookUp(*funcVal);
+	// to prevent f(int x,float,int y){} type defn
+	if (args.size() != IDargs) {
+		printErrorLog("Parameter mismatch for Function " + funcVal->getName());
+	} else if (func != nullptr) {
+		if (func->isFuncDefined()) {
+			printErrorLog("Function " + funcVal->getName() + " already defined");
+		} else if (func->getFuncRet() != retType->getName()) {
+			printErrorLog("Function " + funcVal->getName() + " :return type doesn't match declaration");
+		} else if (func->ParamList.size() != args.size()) {
+			printErrorLog("Function " + funcVal->getName() + " :Parameter list doesn not match declaration");
+		} else if (func->ParamList != args) {
+			printErrorLog("Function " + funcVal->getName() + " :argument mismatch");
+		} else {
+			func->setFuncDefined(true);
+		}
+	} else {
+		insertFunc(funcVal, retType);
+		table.lookUp(*funcVal)->setFuncDefined(true);
+	}
+	clearFunctionArgs();
 }
 
 void addTypeArgtoParamList(const string &type) {
@@ -284,8 +284,7 @@ void enterFuncScope() {
 	table.enterScope();
 	printLog("\n >> Entered into ScopeTable #" + to_string(table.getCurrentId()));
 	for (const auto &param : params) table.insert(param);
-	params.clear();
-//	args.clear();
+	clearFunctionArgs();
 }
 
 void exitFuncScope() {
@@ -328,15 +327,13 @@ SymbolInfo *getConstVal(const string &value = "$CONST$", const string &constVarT
 
 
 SymbolInfo *getVariable(SymbolInfo *varVal) {
-	SymbolInfo* var = table.lookUp(varVal->getName());
-	if(var == nullptr){
+	SymbolInfo *var = table.lookUp(varVal->getName());
+	if (var == nullptr) {
 		printErrorLog(varVal->getName() + " doesn't exist");
-	}
-	else if(!var->isVariable()){
-		if(var->isArrayVar()) printErrorLog(varVal->getName() + " is an array must be accessed with an index");
+	} else if (!var->isVariable()) {
+		if (var->isArrayVar()) printErrorLog(varVal->getName() + " is an array must be accessed with an index");
 		else printErrorLog(varVal->getName() + " is not a variable");
-	}
-	else{
+	} else {
 		return var;
 	}
 	return nullVal();
@@ -365,7 +362,7 @@ SymbolInfo *getArrIndexVar(SymbolInfo *arrVal, SymbolInfo *idxVal) {
 
 
 SymbolInfo *getAssignExpVal(SymbolInfo *lhs, SymbolInfo *rhs) {
-	if(lhs->getVarType()==VOID_TYPE || rhs->getVarType()==VOID_TYPE){
+	if (lhs->getVarType() == VOID_TYPE || rhs->getVarType() == VOID_TYPE) {
 		printErrorLog("Assign Operation on void type");
 		return nullVal();
 	}
@@ -374,19 +371,25 @@ SymbolInfo *getAssignExpVal(SymbolInfo *lhs, SymbolInfo *rhs) {
 		lhs->ints.push_back(0);
 
 		if (rhs->getVarType() == INT_TYPE) {
+			if (lhs->getVarType() == FLOAT_TYPE)printWarningLog("Assigning integer value to float");
+
 			if (rhs->isVariable())lhs->setIndexValue(rhs->ints[0]);
 			else lhs->setIndexValue(rhs->ints[rhs->getArrIndex()]);
 		} else {
-			printWarningLog("Assigning float value to integer");
+			if (lhs->getVarType() == INT_TYPE)printWarningLog("Assigning float value to integer");
+
 			if (rhs->isVariable())lhs->setIndexValue((int) rhs->floats[0]);
 			else lhs->setIndexValue((int) rhs->floats[rhs->getArrIndex()]);
 		}
 	} else if (lhs->isVariable()) {
 		if (rhs->getVarType() == INT_TYPE) {
+			if (lhs->getVarType() == FLOAT_TYPE)printWarningLog("Assigning integer value to float");
+
 			if (rhs->isVariable())lhs->setVarValue(rhs->ints[0]);
 			else lhs->setVarValue(rhs->ints[rhs->getArrIndex()]);
 		} else {
-			printWarningLog("Assigning float value to integer");
+			if (lhs->getVarType() == INT_TYPE)printWarningLog("Assigning float value to integer");
+
 			if (rhs->isVariable())lhs->setVarValue(rhs->floats[0]);
 			else lhs->setVarValue(rhs->floats[rhs->getArrIndex()]);
 		}
@@ -698,16 +701,20 @@ SymbolInfo *getAddtnOpVal(SymbolInfo *left, SymbolInfo *right, SymbolInfo *op) {
 			}
 		}
 	}
-	if (opVal->getVarType() == FLOAT_TYPE)
-		printDebug(addop + " Operation Val: " + to_string(opVal->floats[0]));
-	else if (opVal->getVarType() == INT_TYPE)
-		printDebug(addop + " Operation Val: " + to_string(opVal->ints[0]));
+//	if (opVal->getVarType() == FLOAT_TYPE)
+//		printDebug(addop + " Operation Val: " + to_string(opVal->floats[0]));
+//	else if (opVal->getVarType() == INT_TYPE)
+//		printDebug(addop + " Operation Val: " + to_string(opVal->ints[0]));
 
 	return opVal;
-//	return nullVal();
 }
 
 SymbolInfo *getMultpOpVal(SymbolInfo *left, SymbolInfo *right, SymbolInfo *op) {
+	if (left->getVarType() == VOID_TYPE || right->getVarType() == VOID_TYPE) {
+		printErrorLog("Operand of void type.");
+		return nullVal();
+	}
+
 	const string &mulOp = op->getName();
 
 	if (mulOp == "%" && (left->getVarType() == FLOAT_TYPE || right->getVarType() == FLOAT_TYPE)) {
@@ -1104,50 +1111,33 @@ SymbolInfo *getUniAddOpVal(SymbolInfo *varVal, SymbolInfo *op) {
 	return opVal;
 }
 
+
 SymbolInfo *getFuncCallValue(SymbolInfo *funcVal) {
-	SymbolInfo *func = table.lookUp(funcVal->getName());
+	SymbolInfo *func = table.lookUp(funcVal->getName()), *retVal = nullVal();
 	if (func == nullptr) {
 		printErrorLog("Function " + funcVal->getName() + " doesn't exist");
 	} else if (!func->isFunction()) {
 		printErrorLog(funcVal->getName() + " is not a function");
 	} else if (!func->isFuncDefined()) {
 		printErrorLog(funcVal->getName() + " does not have a body");
-	} else if (func->isVoidFunc()) {
-		printErrorLog("Function " + funcVal->getName() + " returns void");
-		return getConstVal("", VOID_TYPE);
-	} else if (func->ParamList.size() != args.size()) {
-		printErrorLog(func->getName() + ": " + to_string(func->ParamList.size()) + " arguments expected" +
-		              " instead passed " + to_string(args.size()));
-	} else if (func->ParamList != args) {
-		printErrorLog(func->getName() + ": argument type Mismatch");
-//			cout<<args.size()<<endl;
-//			string req="("+func->ParamList[0],given="("+args[0];
-//			for(int i=1;i<args.size();++i){
-//				req+=","+func->ParamList[i];
-//				given+=","+args[i];
-//			}
-//			req+=")";
-//			given+=")";
-//			printWarningLog(func->getName()+": argument type Mismatch "+" Expected: "+req+" Provied: "+given);
 	} else {
-		SymbolInfo *retVal = getConstVal("", func->getFuncRet());
-		if (retVal->getVarType() == INT_TYPE)retVal->ints[0] = 0;
-		else if (retVal->getVarType() == FLOAT_TYPE)retVal->floats[0] = 0;
-
-//			else if(retVal->getVarType() == CHAR_TYPE)retVal->chars[0] = '\0';
-		args.clear();
-		argsFunc.clear();
-		return retVal;
+		if (func->ParamList.size() != args.size()) {
+			printErrorLog(func->getName() + ": " + to_string(func->ParamList.size()) + " arguments expected" +
+			              " instead passed " + to_string(args.size()));
+		} else if (func->ParamList != args) {
+			printErrorLog(func->getName() + ": argument type Mismatch");
+		}
+		retVal = getConstVal("", func->getFuncRet());
+//		if (func->isVoidFunc()) printErrorLog("Function " + funcVal->getName() + " returns void");
 	}
-
-	args.clear();
-	argsFunc.clear();
-	return nullVal();
+	clearFunctionArgs();
+	return retVal;
 }
 
-SymbolInfo *getArgValueList() {
 
-}
+//SymbolInfo *getArgValueList() {
+//
+//}
 
 
 #endif //SYNTAXANALYZER_SYNBASE_H

@@ -158,6 +158,7 @@ compound_statement: LCURL {enterFuncScope();} statements RCURL
 
 					exitFuncScope();
 			}
+			/* | LCURL {enterFuncScope();} %prec second_precedence statements error {printErrorLog("} missing at the end of scope");} */
  		  ;
 
 var_declaration: type_specifier declaration_list SEMICOLON
@@ -165,7 +166,7 @@ var_declaration: type_specifier declaration_list SEMICOLON
 			   	pushVal(var_declaration,popVal(type_specifier)+popVal(declaration_list)+";");
 					printRuleLog(var_declaration,"type_specifier declaration_list SEMICOLON");
 			}
-			/* |type_specifier declaration_list error{printErrorLog("; missing");}			 */
+			|type_specifier declaration_list error{printErrorLog("; missing");}
 		 ;
 
 type_specifier: INT
@@ -272,17 +273,15 @@ statement: var_declaration
 				pushVal(statement,"("+$3->getName()+")"+";");
 				printRuleLog(statement,"PRINTLN LPAREN ID RPAREN SEMICOLON");
 			}
-	  | PRINTLN LPAREN ID RPAREN error
 		| RETURN expression SEMICOLON
 			{
 				pushVal(statement,"return"+popVal(expression)+";");
 				printRuleLog(statement,"RETURN expression SEMICOLON");
 			}
-		| RETURN expression error
-			{
-				printErrorLog("; missing");
-				printRuleLog(statement,"RETURN expression error");
-			}
+		| RETURN expression error	{	printErrorLog("; missing before return");}
+		| PRINTLN LPAREN ID RPAREN error
+		| IF LPAREN error RPAREN {printErrorLog("invalid conditional expression");} statement
+		/* | IF LPAREN error RPAREN {printErrorLog("invalid conditional expression");} */
 	  ;
 
 expression_statement: SEMICOLON
@@ -295,7 +294,7 @@ expression_statement: SEMICOLON
 					printRuleLog(expression_statement,"expression SEMICOLON");
 				}
 			| expression error {
-				printErrorLog("exp; missing");
+				printErrorLog("; missing after expression");
 			}
 			;
 
@@ -493,6 +492,8 @@ factor: variable
 			pushVal(factor,popVal(variable)+"--");
 			printRuleLog(factor,"variable DECOP");
 		}
+	| ID LPAREN argument_list error {printErrorLog("right parentheses missing");clearFunctionArgs();}
+	| LPAREN expression error {printErrorLog("right parentheses missing");}
 	;
 
 argument_list: arguments
@@ -523,7 +524,10 @@ arguments: arguments COMMA logic_expression
 						pushVal(arguments,popVal(logic_expression));
 						printRuleLog(argument_list,"logic_expression");
 					}
+				| arguments COMMA error {printErrorLog("arguments list not terminated");}
 	      ;
+
+/* errorElse: statement ELSE statement | statement */
 
 %%
 

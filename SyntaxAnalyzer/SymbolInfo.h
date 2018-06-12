@@ -14,7 +14,7 @@
 
 
 
-#define ARRAY "ARA"
+#define ARRAY "ARR"
 #define VARIABLE "VAR"
 #define FUNCTION "FUNC"
 #define INT_TYPE "INT"
