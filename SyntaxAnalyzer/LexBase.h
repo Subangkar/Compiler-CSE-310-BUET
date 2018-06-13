@@ -20,6 +20,7 @@
 
 
 extern ofstream logFile, errorFile, parserFile;
+extern char *yytext;
 //SymbolTable hashTable(SYMBOL_TABLE_SIZE);
 //FILE *logout, *tokenout;
 int line_count = 1;
@@ -32,24 +33,18 @@ StringUtils::replaceAll(string_literal, "\\\n", ""); // LF
 
 
 
-void printLexError(string msg, std::ofstream &out) {
+void printLexError(const string &msg, std::ofstream &out) {
 //	fprintf(logout, LOG_ERROR_PRINT, line_count, msg.data(),yytext);
 
-	out << "\n<< LEXICAL Error @ Line no " << line_count << ": " << msg.data() << ": <" << yytext << "> >>\n";
+	out << " >> LEXICAL Error @ Line no " << line_count << ": " << msg.data() << ": <" << yytext << "> >>" << endl << endl;
 
 	err_count_lex++;
 
 	line_count += StringUtils::occCount(yytext, '\n');
 }
 
-void printLexError(string msg) {
-//	fprintf(logout, LOG_ERROR_PRINT, line_count, msg.data(),yytext);
-
-	logFile << "\n<< LEXICAL Error @ Line no " << line_count << ": " << msg.data() << ": <" << yytext << "> >>\n";
-
-	err_count_lex++;
-
-	line_count += StringUtils::occCount(yytext, '\n');
+void printLexError(const string& msg) {
+	printLexError(msg,errorFile);
 }
 
 //void printLog(int lineNo, string tokenName, string lexemeName) {
@@ -58,12 +53,12 @@ void printLexError(string msg) {
 
 
 
-void assignSymbol(string name,string type) {
+void assignSymbol(const string& name,const string& type) {
 	yylval.symVal = new SymbolInfo(name,type);
 }
 
-void assignSymbol(string type) {
-	assignSymbol(yytext,type);
+void assignSymbol(const string& type) {
+	assignSymbol(yytext, type);
 }
 
 

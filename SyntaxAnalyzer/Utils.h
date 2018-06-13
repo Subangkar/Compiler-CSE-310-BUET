@@ -43,7 +43,7 @@ public:
 		return parse(string(str));
 	}
 
-	static char parseChar(const string str) {
+	static char parseChar(const string &str) {
 		return static_cast<char>(str.length() > 2 ? '\0' : parse(str)[0]);
 	}
 
@@ -76,7 +76,7 @@ public:
 	}
 
 	static bool replaceAll(string &source, string const &find, string const &replace) {
-		if(source.find(find, 0)==string::npos) return false;
+		if (source.find(find, 0) == string::npos) return false;
 		for (string::size_type i = 0; (i = source.find(find, i)) != string::npos;) {
 			source.replace(i, find.length(), replace);
 			i += replace.length();
@@ -86,14 +86,14 @@ public:
 
 	// not checked
 	static void replaceFirst(string &source, string const &find, string const &replace) {
-		int i = static_cast<int>(source.find(find, 0));
+		auto i = static_cast<int>(source.find(find, 0));
 		if (i != string::npos)
 			source.replace(static_cast<unsigned long>(i), find.length(), replace);
 	}
 
 	// not checked
 	static void replaceLast(string &source, string const &find, string const &replace) {
-		int i = static_cast<int>(source.rfind(find));
+		auto i = static_cast<int>(source.rfind(find));
 		if (i != string::npos)
 			source.replace(static_cast<unsigned long>(i), find.length(), replace);
 	}
@@ -103,7 +103,7 @@ public:
 class CodeParser {
 public:
 
-	static string indent(const string fileName)//Autoindent a file
+	static string indent(const string &fileName)//Autoindent a file
 	{
 
 		int pos = 0, count = 0, j = 0;
@@ -185,43 +185,46 @@ public:
 	static string formatCCode(const string &code) {
 		string formattedCode = code;
 
-		while(StringUtils::replaceAll(formattedCode, " ;", ";"));
+		while (StringUtils::replaceAll(formattedCode, " ;", ";"));
 		StringUtils::replaceAll(formattedCode, ";", ";\n");
 		StringUtils::replaceAll(formattedCode, ";\n\n", ";\n");
 
 
-		while(StringUtils::replaceAll(formattedCode, "( ", "("));
-		while(StringUtils::replaceAll(formattedCode, " (", "("));
-		while(StringUtils::replaceAll(formattedCode, ") ", ")"));
-		while(StringUtils::replaceAll(formattedCode, " )", ")"));
+		while (StringUtils::replaceAll(formattedCode, "( ", "("));
+		while (StringUtils::replaceAll(formattedCode, " (", "("));
+		while (StringUtils::replaceAll(formattedCode, ") ", ")"));
+		while (StringUtils::replaceAll(formattedCode, " )", ")"));
 
-		while(StringUtils::replaceAll(formattedCode, "{ ", "{"));
-		while(StringUtils::replaceAll(formattedCode, " {", "{"));
-		while(StringUtils::replaceAll(formattedCode, "} ", "}"));
-		while(StringUtils::replaceAll(formattedCode, " }", "}"));
+		while (StringUtils::replaceAll(formattedCode, "{ ", "{"));
+		while (StringUtils::replaceAll(formattedCode, " {", "{"));
+		while (StringUtils::replaceAll(formattedCode, "} ", "}"));
+		while (StringUtils::replaceAll(formattedCode, " }", "}"));
 
 
 		StringUtils::replaceAll(formattedCode, "{", "\n{\n");
 
 		StringUtils::replaceAll(formattedCode, "}", "\n}\n");
-		while(StringUtils::replaceAll(formattedCode, "\n\n}", "\n}"));
-		while(StringUtils::replaceAll(formattedCode, "}\n\n", "}\n"));
+		while (StringUtils::replaceAll(formattedCode, "\n\n}", "\n}"));
+		while (StringUtils::replaceAll(formattedCode, "}\n\n", "}\n"));
 
-		while(StringUtils::replaceAll(formattedCode, "  = ", " = "));
-		while(StringUtils::replaceAll(formattedCode, " =  ", " = "));
+		while (StringUtils::replaceAll(formattedCode, "  = ", " = "));
+		while (StringUtils::replaceAll(formattedCode, " =  ", " = "));
 
-		while(StringUtils::replaceAll(formattedCode, "  == ", " == "));
-		while(StringUtils::replaceAll(formattedCode, " ==  ", " == "));
+		while (StringUtils::replaceAll(formattedCode, "  == ", " == "));
+		while (StringUtils::replaceAll(formattedCode, " ==  ", " == "));
 
 
 		StringUtils::replaceAll(formattedCode, "(", " ( ");
 		StringUtils::replaceAll(formattedCode, ")", " ) ");
 
-		while(StringUtils::replaceAll(formattedCode, "\n ", "\n"));
-		while(StringUtils::replaceAll(formattedCode, " \n", "\n"));
-		while(StringUtils::replaceAll(formattedCode, "  ", " "));
+		while (StringUtils::replaceAll(formattedCode, " ++", "++"));
+		while (StringUtils::replaceAll(formattedCode, " --", "--"));
 
-		StringUtils::replaceFirst(formattedCode," ","");
+		while (StringUtils::replaceAll(formattedCode, "\n ", "\n"));
+		while (StringUtils::replaceAll(formattedCode, " \n", "\n"));
+		while (StringUtils::replaceAll(formattedCode, "  ", " "));
+
+		if (formattedCode[0] == ' ') StringUtils::replaceFirst(formattedCode," ","");
 //		return indent(formattedCode);
 		return formattedCode;
 	}

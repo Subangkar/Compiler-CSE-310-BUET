@@ -1,5 +1,6 @@
 int x,y,z; float a;
 
+int x[],d[9],u[2.1];
 void foo();
 
 int var(int a, int b){
@@ -14,19 +15,29 @@ void foo(){
 int main(){
 
 	int a[2],c,i,j ; float d;
-  if(c){
+  if(c;){
 
   }
-  // else{
+  else {}
+  if(3){}
+  int t;
+  else{}
+  if(;){
 
-  // }  
+  }
+  if(!2){
+
+  }
+  else if() {};
+  else
 	a[0]=0;
   a[a[0]]++;
   // a[a[0]]++;
+	2 + 4.5.6;
 	a[1]=5
   a[a[0]]=0;
 	i= a[0]+a[1];
-  c=a[0]+foo(2.5);
+  c=a[0]+foo(2.5.4);
   foo();
   var(a[0],3;
 	j= 2*3+(5%3 < 4 && 8) || 2 ;

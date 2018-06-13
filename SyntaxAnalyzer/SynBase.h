@@ -18,6 +18,8 @@
 using std::stack;
 
 
+#define ERROR_VAL "$ERROR$" //popVal(error)//
+
 #define SYMBOL_TABLE_SIZE 73
 
 
@@ -33,9 +35,13 @@ size_t warnings = 0;
 vector<SymbolInfo> params;
 string variable_type;
 
+bool errorRule = false;
+
 
 extern FILE *yyin;
 extern int line_count;
+
+extern int err_count_lex;
 
 extern const char *yytext;
 
@@ -75,32 +81,35 @@ enum NONTERMINAL_TYPE {
 	unary_expression,
 	factor,
 	argument_list,
-	arguments
+	arguments,
+	error
 };
 
 class NonTerminalBuffer {
 private:
-	stack<string> terminalBuf[NONTERMINAL_TYPE::arguments + 1];
+	stack<string> nonTerminalBuf[NONTERMINAL_TYPE::error + 1];
+	NONTERMINAL_TYPE lastNonTerminal = NONTERMINAL_TYPE::error;
 public:
 	string getValue(NONTERMINAL_TYPE nonterminal) {
-		if (nonterminal < start || nonterminal > arguments || terminalBuf[nonterminal].empty()) return string("");
-		return terminalBuf[nonterminal].top();
+		if (nonterminal < start || nonterminal > lastNonTerminal || nonTerminalBuf[nonterminal].empty())
+			return string("");
+		return nonTerminalBuf[nonterminal].top();
 	}
 
 	string extractValue(NONTERMINAL_TYPE nonterminal) {
-		if (nonterminal < start || nonterminal > arguments) return string("");
+		if (nonterminal < start || nonterminal > lastNonTerminal) return string("");
 
-		if (terminalBuf[nonterminal].empty()) return "";
+		if (nonTerminalBuf[nonterminal].empty()) return "";
 
-		string str = terminalBuf[nonterminal].top();
-		terminalBuf[nonterminal].pop();
+		string str = nonTerminalBuf[nonterminal].top();
+		nonTerminalBuf[nonterminal].pop();
 		return str;
 	}
 
 	void pushValue(NONTERMINAL_TYPE nonterminal, const string &val) {
-		if (nonterminal < start || nonterminal > arguments) return;
+		if (nonterminal < start || nonterminal > lastNonTerminal) return;
 
-		terminalBuf[nonterminal].push(val);
+		nonTerminalBuf[nonterminal].push(val);
 	}
 };
 
@@ -115,14 +124,14 @@ void pushVal(NONTERMINAL_TYPE nonterminal, const string &val) {
 
 string popVal(NONTERMINAL_TYPE nonterminal) {
 	string val = nonTerminalBuffer.extractValue(nonterminal);
-	val = (isalnum(val[0]) ? " " : "") + val + (isalnum(val[val.size()]) ? " " : "");
+	val = (isalnum(val[0]) ? " " : "") + val + (isalnum(val[val.length() - 1]) ? " " : "");
 	return val + ((val[val.length() - 1] == ' ') ? "" : " ");
 }
 
 
 void printRule(const string &rule) {
 	logFile << "At line no: " << line_count << " " << rule << endl << endl;
-	parserFile << "At line no: " << line_count << " " << rule << endl << endl;
+	if (!errorRule) parserFile << "At line no: " << line_count << " " << rule << endl << endl;
 }
 
 // after pushing value
@@ -146,6 +155,14 @@ void printErrorLog(const string &msg) {
 	++semErrors;
 }
 
+void printErrorRuleLog(const string &msg, NONTERMINAL_TYPE nonterminal, const string &rule) {
+	if (!msg.empty()) printErrorLog(msg);
+	errorRule = true;
+	printRuleLog(nonterminal, rule);
+	errorRule = false;
+	popVal(error);
+}
+
 void printWarningLog(const string &msg) {
 	errorFile << " >> Warning at line " << line_count << ": " << msg << endl << endl;
 	warnings++;
@@ -157,14 +174,16 @@ void printDebug(const string &msg) {
 
 
 void yyerror(const char *s) {
-	//write your code
-//	printErrorLog("Invalid Syntax: "+string(yytext));
-//	printDebug("Syntax Error: "+string(yytext));
-//	yyparse();
-//	cout << "HERE: " << s <<endl;
 //	printDebug(s);
 //	printErrorLog(s);
-	printLog(" >> Syntax Error :: ");
+	// if(!YYRECOVERING()){}
+	printDebug(string(s) + ": " + yytext);
+//	yyclearin;
+//	string s2 = ;
+//	printDebug(s2);
+	pushVal(error, popVal(error) + yytext);
+	errorRule = true;
+//	printDebug(nonTerminalBuffer.getValue(error));
 }
 
 
@@ -1133,11 +1152,6 @@ SymbolInfo *getFuncCallValue(SymbolInfo *funcVal) {
 	clearFunctionArgs();
 	return retVal;
 }
-
-
-//SymbolInfo *getArgValueList() {
-//
-//}
 
 
 #endif //SYNTAXANALYZER_SYNBASE_H

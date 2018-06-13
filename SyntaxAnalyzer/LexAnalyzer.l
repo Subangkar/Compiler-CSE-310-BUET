@@ -100,11 +100,11 @@ STAR_COMMENT {UNFINISHED_STAR_COMMENT}[\*]*{STAR_COMMENT_END}
 {CHARACTER} 			{addToken_const_char(); return CONST_CHAR;}
 {STRING}				  {addToken_string(); return STRING;}
 
-{TOO_DECPOINT}			   {printLexError("Too many decimal point");}
-{ILL_NUM}				       {printLexError("Ill formed number");}
-{UNFINISHED_CHARACTER} {printLexError("Unfinished character");}
-{EMPTY_CHARACTER}		   {printLexError("Empty character");}
-{MULTI_CHARACTER}		   {printLexError("Multi character constant ");}
+{TOO_DECPOINT}			   {printLexError("Too many decimal point");assignSymbol(yytext,"CONST_FLOAT");return CONST_FLOAT;}
+{ILL_NUM}				       {printLexError("Ill formed number");assignSymbol("0","CONST_FLOAT");return CONST_FLOAT;}
+{UNFINISHED_CHARACTER} {printLexError("Unfinished character");assignSymbol("\0","CONST_CHAR");return CONST_CHAR;}
+{EMPTY_CHARACTER}		   {printLexError("Empty character");assignSymbol("\0","CONST_CHAR");return CONST_CHAR;}
+{MULTI_CHARACTER}		   {printLexError("Multi character constant ");assignSymbol("\0","CONST_CHAR");return CONST_CHAR;}
 {UNFINISHED_STRING}		 {printLexError("Unfinished string");}
 
 

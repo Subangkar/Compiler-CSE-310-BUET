@@ -90,14 +90,12 @@ func_declaration: type_specifier ID LPAREN parameter_list RPAREN SEMICOLON
 				pushVal(func_declaration,popVal(type_specifier)+$2->getName()+"("+")"+";");
 				printRuleLog(func_declaration,"type_specifier ID LPAREN RPAREN SEMICOLON");
 			}
-		|type_specifier ID LPAREN parameter_list RPAREN error
-			{
-				printErrorLog("; missing");
-			}
-		|type_specifier ID LPAREN RPAREN error
-			{
-				printErrorLog("; missing");
-			}
+		|type_specifier ID LPAREN parameter_list RPAREN error {
+			pushVal(func_declaration,popVal(type_specifier)+$2->getName()+"("+popVal(parameter_list)+")"+"");
+			printErrorRuleLog("; missing",func_declaration,"type_specifier ID LPAREN parameter_list RPAREN error");}
+		|type_specifier ID LPAREN RPAREN error{
+			pushVal(func_declaration,popVal(type_specifier)+$2->getName()+"("")"+"");
+			printErrorRuleLog("; missing",func_declaration,"type_specifier ID LPAREN RPAREN error");}
 		;
 
 func_definition: type_specifier ID LPAREN parameter_list RPAREN{addFuncDef($2,$1);} compound_statement
@@ -158,15 +156,17 @@ compound_statement: LCURL {enterFuncScope();} statements RCURL
 
 					exitFuncScope();
 			}
-			/* | LCURL {enterFuncScope();} %prec second_precedence statements error {printErrorLog("} missing at the end of scope");} */
+			/* | LCURL statements error {printErrorLog("} missing at the end of scope");} */
  		  ;
 
 var_declaration: type_specifier declaration_list SEMICOLON
  			{
-			   	pushVal(var_declaration,popVal(type_specifier)+popVal(declaration_list)+";");
+			   	pushVal(var_declaration,popVal(type_specifier)+" "+popVal(declaration_list)+";");
 					printRuleLog(var_declaration,"type_specifier declaration_list SEMICOLON");
 			}
-			|type_specifier declaration_list error{printErrorLog("; missing");}
+			|type_specifier declaration_list error{
+				pushVal(var_declaration,popVal(type_specifier)+" "+popVal(declaration_list)+"");
+				printErrorRuleLog("; missing",var_declaration,"type_specifier declaration_list error");}
 		 ;
 
 type_specifier: INT
@@ -219,6 +219,14 @@ declaration_list: declaration_list COMMA ID
 
 				pushVal(declaration_list,$1->getName()+"["+$3->getName()+"]");
 				printRuleLog(declaration_list,"ID LTHIRD CONST_INT RTHIRD");
+			}
+			| ID LTHIRD error RTHIRD{
+				pushVal(declaration_list,$1->getName()+"["+ERROR_VAL+"]");
+				printErrorRuleLog("Array size must be provided with constant integer",declaration_list,"ID LTHIRD error RTHIRD");
+			}
+			| declaration_list COMMA ID LTHIRD error RTHIRD	{
+				pushVal(declaration_list,popVal(declaration_list)+","+$3->getName()+"["+ERROR_VAL+"]");
+				printErrorRuleLog("Array size must be provided with constant integer",declaration_list,"declaration_list COMMA ID LTHIRD error RTHIRD");
 			}
  		  ;
 
@@ -273,16 +281,31 @@ statement: var_declaration
 				pushVal(statement,"("+$3->getName()+")"+";");
 				printRuleLog(statement,"PRINTLN LPAREN ID RPAREN SEMICOLON");
 			}
-		| RETURN expression SEMICOLON
-			{
+		| RETURN expression SEMICOLON			{
 				pushVal(statement,"return"+popVal(expression)+";");
 				printRuleLog(statement,"RETURN expression SEMICOLON");
 			}
-		| RETURN expression error	{	printErrorLog("; missing before return");}
+		| RETURN expression error		{
+			pushVal(statement,"return"+popVal(expression)+"");
+			printErrorRuleLog("; missing before return",statement,"RETURN expression error");
+		}
 		| PRINTLN LPAREN ID RPAREN error
-		| IF LPAREN error RPAREN {printErrorLog("invalid conditional expression");} statement
-		/* | IF LPAREN error RPAREN {printErrorLog("invalid conditional expression");} */
+		| error ELSE {
+			printErrorLog("else without if");} statement{
+			pushVal(statement,string(ERROR_VAL)+" else"+popVal(statement));
+			printErrorRuleLog("",statement,"error ELSE statement");
+		}
+		| IF invalid_condition statement %prec second_precedence{
+			pushVal(statement,(string("if")+"("+ERROR_VAL+")"+popVal(statement)));
+			printErrorRuleLog("",statement,"IF LPAREN error RPAREN statement");
+		}
+		| IF invalid_condition statement ELSE statement{
+			pushVal(statement,("else"+popVal(statement)));
+			printErrorRuleLog("",statement,"IF LPAREN error RPAREN statement ELSE statement");
+		}
+		/* | IF LPAREN expression RPAREN statement ELSE LPAREN expression RPAREN statement %prec third_precedence */
 	  ;
+invalid_condition: LPAREN error RPAREN {printErrorLog("invalid conditional expression");};
 
 expression_statement: SEMICOLON
 				{
@@ -294,7 +317,8 @@ expression_statement: SEMICOLON
 					printRuleLog(expression_statement,"expression SEMICOLON");
 				}
 			| expression error {
-				printErrorLog("; missing after expression");
+				pushVal(expression_statement,popVal(expression));
+				printErrorRuleLog("; missing after expression",expression_statement,"expression error");
 			}
 			;
 
@@ -475,7 +499,7 @@ factor: variable
 		{
 			$$ = getConstVal($1,FLOAT_TYPE);
 
-			pushVal(factor,$1->getName());
+			pushVal(factor,$1->getName());//
 			printRuleLog(factor,"CONST_FLOAT");
 		}
 	| variable INCOP
@@ -492,8 +516,12 @@ factor: variable
 			pushVal(factor,popVal(variable)+"--");
 			printRuleLog(factor,"variable DECOP");
 		}
-	| ID LPAREN argument_list error {printErrorLog("right parentheses missing");clearFunctionArgs();}
-	| LPAREN expression error {printErrorLog("right parentheses missing");}
+	| ID LPAREN argument_list error {
+		pushVal(factor,$1->getName()+"("+popVal(argument_list)+"");
+		printErrorRuleLog("right parentheses missing",factor,"ID LPAREN argument_list error");clearFunctionArgs();}
+	| LPAREN expression error {
+		pushVal(factor,"("+popVal(expression)+"");
+		printErrorRuleLog("right parentheses missing",factor,"LPAREN expression error");}
 	;
 
 argument_list: arguments
@@ -514,7 +542,7 @@ arguments: arguments COMMA logic_expression
 						args.push_back($3->getVarType());
 
 						pushVal(arguments,popVal(arguments)+","+popVal(logic_expression));
-						printRuleLog(argument_list,"arguments COMMA logic_expression");
+						printRuleLog(arguments,"arguments COMMA logic_expression");
 					}
 	      | logic_expression
 					{
@@ -522,12 +550,13 @@ arguments: arguments COMMA logic_expression
 						args.push_back($1->getVarType());
 
 						pushVal(arguments,popVal(logic_expression));
-						printRuleLog(argument_list,"logic_expression");
+						printRuleLog(arguments,"logic_expression");
 					}
-				| arguments COMMA error {printErrorLog("arguments list not terminated");}
+				| arguments COMMA error {
+					pushVal(arguments,popVal(arguments)+","+ERROR_VAL);
+					printErrorRuleLog("arguments list not terminated",arguments,"arguments COMMA error");
+				}
 	      ;
-
-/* errorElse: statement ELSE statement | statement */
 
 %%
 
@@ -546,7 +575,8 @@ int main(int argc,char *argv[])
 
 	yyparse();
 	logFile << "Total Lines : " << line_count << std::endl << std::endl;
-	errorFile << "Total Errors : " << semErrors << std::endl;
+	errorFile << "Total Syntax/Semantic Errors : " << semErrors << std::endl;
+	errorFile << "Total Lexical Errors : " << err_count_lex << std::endl;
 	errorFile << "Total Warning : " << warnings << std::endl;
 
 	table.printAllScope(logFile);

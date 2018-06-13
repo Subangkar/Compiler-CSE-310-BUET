@@ -103,20 +103,22 @@ string indent(string fileName)//Autoindent a file
 SymbolTable st;
 int main() {
 
-	string code = "int main(){int x ,y ,z ;y =8 ;int d ;d =x +y ; z =(x ==y ) ; } ";
-	StringUtils::replaceAll(code,";",";\n");
-	StringUtils::replaceAll(code,";\n\n",";\n");
-	StringUtils::replaceAll(code,"\n ","\n");
-	StringUtils::replaceAll(code,"{","\n{\n");
-	StringUtils::replaceAll(code,"}","\n}");
-	StringUtils::replaceAll(code,"\n\n}","\n}");
+//	string code = "int main(){int x ,y ,z ;y =8 ;int d ;d =x +y ; z =(x ==y ) ; } ";
+//	StringUtils::replaceAll(code,";",";\n");
+//	StringUtils::replaceAll(code,";\n\n",";\n");
+//	StringUtils::replaceAll(code,"\n ","\n");
+//	StringUtils::replaceAll(code,"{","\n{\n");
 //	StringUtils::replaceAll(code,"}","\n}");
-	cout << indent(code)<<endl;
+//	StringUtils::replaceAll(code,"\n\n}","\n}");
+////	StringUtils::replaceAll(code,"}","\n}");
+//	cout << indent(code)<<endl;
+//
+//	st.insert(SymbolInfo("oot","FUNC"));
+//	st.insert(SymbolInfo("oot","FUNC"));
+//
+//	st.printAllScope();
 
-	st.insert(SymbolInfo("oot","FUNC"));
-	st.insert(SymbolInfo("oot","FUNC"));
-
-	st.printAllScope();
+	cout << atof("2.5E.4")<<endl;
 
 	return 0;
 }
