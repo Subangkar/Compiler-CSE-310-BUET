@@ -252,7 +252,7 @@ void insertFunc(SymbolInfo *funcVal, SymbolInfo *retType) {
 	func->setFuncRet(retType->getName());
 	func->setVarType(retType->getName());
 	func->ParamList = args;
-	clearFunctionArgs();
+//	clearFunctionArgs();
 }
 
 void addFuncDef(SymbolInfo *funcVal, SymbolInfo *retType) {
@@ -276,16 +276,7 @@ void addFuncDef(SymbolInfo *funcVal, SymbolInfo *retType) {
 		insertFunc(funcVal, retType);
 		func = table.lookUp(*funcVal);
 		func->setFuncDefined(true);
-
-		for (auto i :params)
-			insertVar(&i);
 	}
-	clearFunctionArgs();
-}
-
-void insertParamsIntoScope()
-{
-
 }
 
 void addTypeArgtoParamList(const string &type) {
