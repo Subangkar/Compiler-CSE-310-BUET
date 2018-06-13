@@ -230,6 +230,22 @@ At line no: 23 statements: statements statement
 
 At line no: 24 statements: statements statement
 
+At line no: 25 variable: ID
+
+At line no: 25 factor: variable
+
+At line no: 25 unary_expression: factor
+
+At line no: 25 term: unary_expression
+
+At line no: 25 simple_expression: term
+
+At line no: 25 rel_expression: simple_expression
+
+At line no: 25 logic_expression: rel_expression
+
+At line no: 25 expression: logic_expression
+
 At line no: 28 statements: statements statement
 
 At line no: 28 factor: CONST_INT

@@ -317,7 +317,7 @@ expression_statement: SEMICOLON
 					printRuleLog(expression_statement,"expression SEMICOLON");
 				}
 			| expression error {
-				pushVal(expression_statement,popVal(expression));
+				pushVal(expression_statement,popVal(expression)+ERROR_VAL);
 				printErrorRuleLog("; missing after expression",expression_statement,"expression error");
 			}
 			;
@@ -518,7 +518,7 @@ factor: variable
 		}
 	| ID LPAREN argument_list error {
 		pushVal(factor,$1->getName()+"("+popVal(argument_list)+"");
-		printErrorRuleLog("right parentheses missing",factor,"ID LPAREN argument_list error");clearFunctionArgs();}
+		printErrorRuleLog("right parentheses missing",factor,"ID LPAREN argument_list error"+ERROR_VAL);clearFunctionArgs();}
 	| LPAREN expression error {
 		pushVal(factor,"("+popVal(expression)+"");
 		printErrorRuleLog("right parentheses missing",factor,"LPAREN expression error");}

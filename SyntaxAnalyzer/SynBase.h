@@ -18,7 +18,7 @@
 using std::stack;
 
 
-#define ERROR_VAL "$ERROR$" //popVal(error)//
+#define ERROR_VAL popVal(error)//"$ERROR$" //
 
 #define SYMBOL_TABLE_SIZE 73
 
@@ -36,6 +36,7 @@ vector<SymbolInfo> params;
 string variable_type;
 
 bool errorRule = false;
+string lookAheadBuf;
 
 
 extern FILE *yyin;
@@ -43,7 +44,7 @@ extern int line_count;
 
 extern int err_count_lex;
 
-extern const char *yytext;
+extern char *yytext;
 
 int yyparse();
 
@@ -161,6 +162,7 @@ void printErrorRuleLog(const string &msg, NONTERMINAL_TYPE nonterminal, const st
 	printRuleLog(nonterminal, rule);
 	errorRule = false;
 	popVal(error);
+	lookAheadBuf.clear();
 }
 
 void printWarningLog(const string &msg) {
@@ -174,16 +176,10 @@ void printDebug(const string &msg) {
 
 
 void yyerror(const char *s) {
-//	printDebug(s);
-//	printErrorLog(s);
-	// if(!YYRECOVERING()){}
-	printDebug(string(s) + ": " + yytext);
-//	yyclearin;
-//	string s2 = ;
-//	printDebug(s2);
-	pushVal(error, popVal(error) + yytext);
+	printDebug(string(s) + " < " + yytext+ ":=>:" + lookAheadBuf + " >");
+	pushVal(error, ERROR_VAL + lookAheadBuf);
 	errorRule = true;
-//	printDebug(nonTerminalBuffer.getValue(error));
+	lookAheadBuf = yytext;
 }
 
 

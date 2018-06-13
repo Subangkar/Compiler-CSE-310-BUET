@@ -1,6 +1,6 @@
 int x,y,z; float a;
 
-int x[],d[9],u[2.1];
+int x[2+3],d[9],u[2.1];
 void foo();
 
 int var(int a, int b){
@@ -22,7 +22,7 @@ int main(){
   if(3){}
   int t;
   else{}
-  if(;){
+  if(c;){
 
   }
   if(!2){
