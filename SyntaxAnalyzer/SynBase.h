@@ -201,8 +201,8 @@ SymbolInfo *insertToTable(SymbolInfo *symbolInfo) {
 }
 
 
-SymbolInfo *getType(string type) {
-	variable_type = std::move(type);
+SymbolInfo *getType(const string& type) {
+	variable_type = type;
 	return new SymbolInfo(variable_type, variable_type);
 }
 
@@ -274,9 +274,18 @@ void addFuncDef(SymbolInfo *funcVal, SymbolInfo *retType) {
 		}
 	} else {
 		insertFunc(funcVal, retType);
-		table.lookUp(*funcVal)->setFuncDefined(true);
+		func = table.lookUp(*funcVal);
+		func->setFuncDefined(true);
+
+		for (auto i :params)
+			insertVar(&i);
 	}
 	clearFunctionArgs();
+}
+
+void insertParamsIntoScope()
+{
+
 }
 
 void addTypeArgtoParamList(const string &type) {
