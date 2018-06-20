@@ -79,6 +79,7 @@ unit: var_declaration
 func_declaration: type_specifier ID LPAREN parameter_list RPAREN SEMICOLON
 			{
 				insertFunc($2,$1);
+				clearFunctionArgs();
 
 				pushVal(func_declaration,popVal(type_specifier)+$2->getName()+"("+popVal(parameter_list)+")"+";");
 				printRuleLog(func_declaration,"type_specifier ID LPAREN parameter_list RPAREN SEMICOLON");
@@ -91,6 +92,8 @@ func_declaration: type_specifier ID LPAREN parameter_list RPAREN SEMICOLON
 				printRuleLog(func_declaration,"type_specifier ID LPAREN RPAREN SEMICOLON");
 			}
 		|type_specifier ID LPAREN parameter_list RPAREN error {
+			clearFunctionArgs();
+
 			pushVal(func_declaration,popVal(type_specifier)+$2->getName()+"("+popVal(parameter_list)+")"+"");
 			printErrorRuleLog("; missing",func_declaration,"type_specifier ID LPAREN parameter_list RPAREN error");}
 		|type_specifier ID LPAREN RPAREN error{
@@ -282,6 +285,8 @@ statement: var_declaration
 				printRuleLog(statement,"PRINTLN LPAREN ID RPAREN SEMICOLON");
 			}
 		| RETURN expression SEMICOLON			{
+				checkReturnType($2);
+				
 				pushVal(statement,"return"+popVal(expression)+";");
 				printRuleLog(statement,"RETURN expression SEMICOLON");
 			}

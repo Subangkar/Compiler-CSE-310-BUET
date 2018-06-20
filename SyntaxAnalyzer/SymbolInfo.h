@@ -93,9 +93,9 @@ public:
 	}
 
 	void setVarType(const string &VarType) {
-		SymbolInfo::varType = VarType;
+		this->varType = VarType;
 		if (VarType == INT_TYPE) intData.push_back(0);
-		else if (VarType == "FLOAT") floatData.push_back(0);
+		else if (VarType == FLOAT_TYPE) floatData.push_back(0);
 	}
 
 	const string &getFuncRetType() const {

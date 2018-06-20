@@ -37,6 +37,7 @@ int IDargs = 0;
 vector<string> argsType;
 vector<SymbolInfo> parameters;
 vector<SymbolInfo> argsFunc;
+SymbolInfo *currentFunc = nullptr;
 
 string variable_type;
 
@@ -281,6 +282,8 @@ void addFuncDef(SymbolInfo *funcVal, SymbolInfo *retType) {
 		insertFunc(funcVal, retType);
 		func = table.lookUp(*funcVal);
 		func->setFuncDefined(true);
+
+		currentFunc = func;
 	}
 }
 
@@ -296,8 +299,15 @@ void addIDenArgtoParamList(SymbolInfo *idVal) {
 	idVal->setVarType(variable_type);//changed from rhs->getVarType()
 	SymbolInfo *id = new SymbolInfo(idVal->getName(), idVal->getType());
 	id->setIDType(VARIABLE);
+	id->setVarType(variable_type);
 
 	parameters.push_back(*id);
+}
+
+void checkReturnType(SymbolInfo *exp) {
+	if (currentFunc != nullptr && currentFunc->getFuncRetType() != exp->getVarType()) {
+		printErrorLog(currentFunc->getName() + ": return type does not match with return expression type");
+	}
 }
 
 void enterFuncScope() {
@@ -308,6 +318,8 @@ void enterFuncScope() {
 }
 
 void exitFuncScope() {
+	currentFunc = nullptr;
+
 	table.printAllScope(logFile);
 	printLog("\n >> ScopeTable #" + to_string(table.getCurrentId()) + " removed");
 	table.exitScope();
@@ -550,7 +562,6 @@ SymbolInfo *getAddtnOpVal(SymbolInfo *left, SymbolInfo *right, SymbolInfo *op) {
 	} else {
 		getConstVal(opVal, INT_TYPE);
 	}
-
 	if (addop == "+") {
 		if (left->isVariable()) {
 			if (right->isVariable()) {
@@ -617,16 +628,20 @@ SymbolInfo *getAddtnOpVal(SymbolInfo *left, SymbolInfo *right, SymbolInfo *op) {
 				if (left->getVarType() == FLOAT_TYPE) {
 
 					if (right->getVarType() == INT_TYPE) {
-						opVal->floatData[0] = left->floatData[left->getArrIndex()] + right->intData[right->getArrIndex()];
+						opVal->floatData[0] =
+								left->floatData[left->getArrIndex()] + right->intData[right->getArrIndex()];
 					} else {
-						opVal->floatData[0] = left->floatData[left->getArrIndex()] + right->floatData[right->getArrIndex()];
+						opVal->floatData[0] =
+								left->floatData[left->getArrIndex()] + right->floatData[right->getArrIndex()];
 					}
 				} else if (right->getVarType() == FLOAT_TYPE) {
 
 					if (left->getVarType() == INT_TYPE) {
-						opVal->floatData[0] = left->intData[left->getArrIndex()] + right->floatData[right->getArrIndex()];
+						opVal->floatData[0] =
+								left->intData[left->getArrIndex()] + right->floatData[right->getArrIndex()];
 					} else {
-						opVal->floatData[0] = left->floatData[left->getArrIndex()] + right->floatData[right->getArrIndex()];
+						opVal->floatData[0] =
+								left->floatData[left->getArrIndex()] + right->floatData[right->getArrIndex()];
 					}
 				} else if (right->getVarType() == INT_TYPE && left->getVarType() == INT_TYPE) {
 					opVal->setVarType(INT_TYPE);
@@ -699,16 +714,20 @@ SymbolInfo *getAddtnOpVal(SymbolInfo *left, SymbolInfo *right, SymbolInfo *op) {
 				if (left->getVarType() == FLOAT_TYPE) {
 
 					if (right->getVarType() == INT_TYPE) {
-						opVal->floatData[0] = left->floatData[left->getArrIndex()] - right->intData[right->getArrIndex()];
+						opVal->floatData[0] =
+								left->floatData[left->getArrIndex()] - right->intData[right->getArrIndex()];
 					} else {
-						opVal->floatData[0] = left->floatData[left->getArrIndex()] - right->floatData[right->getArrIndex()];
+						opVal->floatData[0] =
+								left->floatData[left->getArrIndex()] - right->floatData[right->getArrIndex()];
 					}
 				} else if (right->getVarType() == FLOAT_TYPE) {
 
 					if (left->getVarType() == INT_TYPE) {
-						opVal->floatData[0] = left->intData[left->getArrIndex()] - right->floatData[right->getArrIndex()];
+						opVal->floatData[0] =
+								left->intData[left->getArrIndex()] - right->floatData[right->getArrIndex()];
 					} else {
-						opVal->floatData[0] = left->floatData[left->getArrIndex()] - right->floatData[right->getArrIndex()];
+						opVal->floatData[0] =
+								left->floatData[left->getArrIndex()] - right->floatData[right->getArrIndex()];
 					}
 				} else if (right->getVarType() == INT_TYPE && left->getVarType() == INT_TYPE) {
 					opVal->setVarType(INT_TYPE);
@@ -828,17 +847,21 @@ SymbolInfo *getMultpOpVal(SymbolInfo *left, SymbolInfo *right, SymbolInfo *op) {
 				if (left->getVarType() == FLOAT_TYPE) {
 
 					if (right->getVarType() == INT_TYPE) {
-						opVal->floatData[0] = left->floatData[left->getArrIndex()] * right->intData[right->getArrIndex()];
+						opVal->floatData[0] =
+								left->floatData[left->getArrIndex()] * right->intData[right->getArrIndex()];
 					} else {
-						opVal->floatData[0] = left->floatData[left->getArrIndex()] * right->floatData[right->getArrIndex()];
+						opVal->floatData[0] =
+								left->floatData[left->getArrIndex()] * right->floatData[right->getArrIndex()];
 					}
 
 				} else if (right->getVarType() == FLOAT_TYPE) {
 
 					if (left->getVarType() == INT_TYPE) {
-						opVal->floatData[0] = left->intData[left->getArrIndex()] * right->floatData[right->getArrIndex()];
+						opVal->floatData[0] =
+								left->intData[left->getArrIndex()] * right->floatData[right->getArrIndex()];
 					} else {
-						opVal->floatData[0] = left->floatData[left->getArrIndex()] * right->floatData[right->getArrIndex()];
+						opVal->floatData[0] =
+								left->floatData[left->getArrIndex()] * right->floatData[right->getArrIndex()];
 					}
 
 				} else if (right->getVarType() == INT_TYPE && left->getVarType() == INT_TYPE) {
@@ -867,13 +890,15 @@ SymbolInfo *getMultpOpVal(SymbolInfo *left, SymbolInfo *right, SymbolInfo *op) {
 					}
 				} else if (left->isArrayVar()) {
 					if (right->isVariable()) {
-						if (right->intData[0] != 0)opVal->floatData[0] = left->floatData[left->getArrIndex()] / right->intData[0];
+						if (right->intData[0] != 0)
+							opVal->floatData[0] = left->floatData[left->getArrIndex()] / right->intData[0];
 						else {
 							opVal->floatData[0] = INFINITY_FLOAT;
 						}
 					} else if (right->isArrayVar()) {
 						if (right->intData[right->getArrIndex()] != 0) {
-							opVal->floatData[0] = left->floatData[left->getArrIndex()] / right->intData[right->getArrIndex()];
+							opVal->floatData[0] =
+									left->floatData[left->getArrIndex()] / right->intData[right->getArrIndex()];
 						} else {
 							opVal->floatData[0] = INFINITY_FLOAT;
 						}
@@ -902,7 +927,8 @@ SymbolInfo *getMultpOpVal(SymbolInfo *left, SymbolInfo *right, SymbolInfo *op) {
 						}
 					} else if (right->isArrayVar()) {
 						if (right->floatData[right->getArrIndex()] != 0) {
-							opVal->floatData[0] = left->floatData[left->getArrIndex()] / right->floatData[right->getArrIndex()];
+							opVal->floatData[0] =
+									left->floatData[left->getArrIndex()] / right->floatData[right->getArrIndex()];
 						} else {
 							opVal->floatData[0] = INFINITY_FLOAT;
 						}
@@ -928,13 +954,15 @@ SymbolInfo *getMultpOpVal(SymbolInfo *left, SymbolInfo *right, SymbolInfo *op) {
 					}
 				} else if (left->isArrayVar()) {
 					if (right->isVariable()) {
-						if (right->floatData[0] != 0)opVal->floatData[0] = left->intData[left->getArrIndex()] / right->floatData[0];
+						if (right->floatData[0] != 0)
+							opVal->floatData[0] = left->intData[left->getArrIndex()] / right->floatData[0];
 						else {
 							opVal->floatData[0] = INFINITY_FLOAT;
 						}
 					} else if (right->isArrayVar()) {
 						if (right->floatData[right->getArrIndex()] != 0) {
-							opVal->floatData[0] = left->intData[left->getArrIndex()] / right->floatData[right->getArrIndex()];
+							opVal->floatData[0] =
+									left->intData[left->getArrIndex()] / right->floatData[right->getArrIndex()];
 						} else {
 							opVal->floatData[0] = INFINITY_FLOAT;
 						}
@@ -963,7 +991,8 @@ SymbolInfo *getMultpOpVal(SymbolInfo *left, SymbolInfo *right, SymbolInfo *op) {
 						}
 					} else if (right->isArrayVar()) {
 						if (right->floatData[right->getArrIndex()] != 0) {
-							opVal->floatData[0] = left->floatData[left->getArrIndex()] / right->floatData[right->getArrIndex()];
+							opVal->floatData[0] =
+									left->floatData[left->getArrIndex()] / right->floatData[right->getArrIndex()];
 						} else {
 							opVal->floatData[0] = INFINITY_FLOAT;
 						}
@@ -988,7 +1017,8 @@ SymbolInfo *getMultpOpVal(SymbolInfo *left, SymbolInfo *right, SymbolInfo *op) {
 				}
 			} else if (left->isArrayVar()) {
 				if (right->isVariable()) {
-					if (right->intData[0] != 0)opVal->intData[0] = left->intData[left->getArrIndex()] / right->intData[0];
+					if (right->intData[0] != 0)
+						opVal->intData[0] = left->intData[left->getArrIndex()] / right->intData[0];
 					else {
 						opVal->intData[0] = INFINITY_INT;
 					}
@@ -1085,7 +1115,8 @@ SymbolInfo *getUniAddOpVal(SymbolInfo *varVal, SymbolInfo *op) {
 			opVal->floatData[0] = uniOp == "+" ? (varVal->floatData[0]) : -(varVal->floatData[0]);
 		} else if (varVal->isArrayVar()) {
 			opVal->floatData[0] =
-					uniOp == "+" ? (varVal->floatData[varVal->getArrIndex()]) : -(varVal->floatData[varVal->getArrIndex()]);
+					uniOp == "+" ? (varVal->floatData[varVal->getArrIndex()])
+					             : -(varVal->floatData[varVal->getArrIndex()]);
 		}
 	} else if (varVal->getVarType() == INT_TYPE) {
 		if (varVal->isVariable()) {

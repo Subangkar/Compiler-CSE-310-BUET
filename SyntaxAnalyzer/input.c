@@ -1,5 +1,5 @@
-int func(int a){
-	return a;
+float func(int a){
+	return a*0;
 }
 
 int main(){

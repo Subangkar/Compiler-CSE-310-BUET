@@ -22,15 +22,15 @@ float foo2(int a,int b){
 int nondec(int a);
 
 int main(){
-
+	int x;
 	int a[2],b,c; float d;
 	a=5; 				//Error at line: 27. Trying to access array like normal variable!
 	b[2]=3; 			//Error at line: 28. b not an Array
 	c=sort(2,3); 		//Error at line: 29. Undeclared function sort Error at line: 29. Type mismatched
 	d=a[2]; 			//Error at line: 30. Type mismatched
 	a[2.5]=9; 			//Error at line: 31. Not-Integer Array Index used
-	// b=4.5%3; 			//Error at ine: 32. Both operands on modulus should be Integer ** Error at line: 32. Type mismatched
-	// b=2%3.5; 			//Error at ine: 33. Both operands on modulus should be Integer
+	b=4.5%3; 			//Error at ine: 32. Both operands on modulus should be Integer ** Error at line: 32. Type mismatched
+	b=2%3.5; 			//Error at ine: 33. Both operands on modulus should be Integer
 	
 	if(2<3){
 		d=x + y%4; 		//Error at line: 36. Type mismatched

@@ -1,6 +1,6 @@
 gio trash log.txt
 gio trash errors.txt
-gio trash rules.txt
+gio trash parser.txt
 gio trash y.tab.h
 gio trash y.tab.c
 gio trash y.o
