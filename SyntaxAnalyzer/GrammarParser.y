@@ -539,7 +539,7 @@ argument_list: arguments
 arguments: arguments COMMA logic_expression
 					{
 						argsFunc.push_back(*$3);
-						args.push_back($3->getVarType());
+						argsType.push_back($3->getVarType());
 
 						pushVal(arguments,popVal(arguments)+","+popVal(logic_expression));
 						printRuleLog(arguments,"arguments COMMA logic_expression");
@@ -547,7 +547,7 @@ arguments: arguments COMMA logic_expression
 	      | logic_expression
 					{
 						argsFunc.push_back(*$1);
-						args.push_back($1->getVarType());
+						argsType.push_back($1->getVarType());
 
 						pushVal(arguments,popVal(logic_expression));
 						printRuleLog(arguments,"logic_expression");
@@ -575,7 +575,7 @@ int main(int argc,char *argv[])
 
 	yyparse();
 	logFile << "Total Lines : " << line_count << std::endl << std::endl;
-	errorFile << "Total Syntax/Semantic Errors : " << semErrors << std::endl;
+	errorFile << "Total Syntax/Semantic Errors : " << syntaxErrors << std::endl;
 	errorFile << "Total Lexical Errors : " << err_count_lex << std::endl;
 	errorFile << "Total Warning : " << warnings << std::endl;
 

@@ -26,13 +26,15 @@ using std::stack;
 std::ofstream logFile, errorFile, parserFile;
 SymbolTable table(SYMBOL_TABLE_SIZE);
 
-int IDargs = 0;
-vector<string> args;
-vector<SymbolInfo> argsFunc;
 bool funcDef = false;
-size_t semErrors = 0;
+size_t syntaxErrors = 0;
 size_t warnings = 0;
-vector<SymbolInfo> params;
+
+int IDargs = 0;
+vector<string> argsType;
+vector<SymbolInfo> parameters;
+vector<SymbolInfo> argsFunc;
+
 string variable_type;
 
 bool errorRule = false;
@@ -153,7 +155,7 @@ void printRuleLog(NONTERMINAL_TYPE nonterminal, const string &rule) {
 
 void printErrorLog(const string &msg) {
 	errorFile << " >> Error at line " << line_count << ": " << msg << endl << endl;
-	++semErrors;
+	++syntaxErrors;
 }
 
 void printErrorRuleLog(const string &msg, NONTERMINAL_TYPE nonterminal, const string &rule) {
@@ -176,7 +178,7 @@ void printDebug(const string &msg) {
 
 
 void yyerror(const char *s) {
-	printDebug(string(s) + " < " + yytext+ ":=>:" + lookAheadBuf + " >");
+	printDebug(string(s) + " < " + yytext + ":=>:" + lookAheadBuf + " >");
 	pushVal(error, ERROR_VAL + lookAheadBuf);
 	errorRule = true;
 	lookAheadBuf = yytext;
@@ -201,7 +203,7 @@ SymbolInfo *insertToTable(SymbolInfo *symbolInfo) {
 }
 
 
-SymbolInfo *getType(const string& type) {
+SymbolInfo *getType(const string &type) {
 	variable_type = type;
 	return new SymbolInfo(variable_type, variable_type);
 }
@@ -234,9 +236,9 @@ void insertArr(SymbolInfo *idVal, SymbolInfo *size) {
 
 
 void clearFunctionArgs() {
-	args.clear();
+	argsType.clear();
 	argsFunc.clear();
-	params.clear();
+	parameters.clear();
 	IDargs = 0;
 }
 
@@ -251,23 +253,23 @@ void insertFunc(SymbolInfo *funcVal, SymbolInfo *retType) {
 	func->setIDType(FUNCTION);
 	func->setFuncRet(retType->getName());
 	func->setVarType(retType->getName());
-	func->ParamList = args;
+	func->ParamList = argsType;
 //	clearFunctionArgs();
 }
 
 void addFuncDef(SymbolInfo *funcVal, SymbolInfo *retType) {
 	SymbolInfo *func = table.lookUp(*funcVal);
 	// to prevent f(int x,float,int y){} type defn
-	if (args.size() != IDargs) {
+	if (argsType.size() != IDargs) {
 		printErrorLog("Parameter mismatch for Function " + funcVal->getName());
 	} else if (func != nullptr) {
 		if (func->isFuncDefined()) {
 			printErrorLog("Function " + funcVal->getName() + " already defined");
 		} else if (func->getFuncRet() != retType->getName()) {
 			printErrorLog("Function " + funcVal->getName() + " :return type doesn't match declaration");
-		} else if (func->ParamList.size() != args.size()) {
+		} else if (func->ParamList.size() != argsType.size()) {
 			printErrorLog("Function " + funcVal->getName() + " :Parameter list doesn not match declaration");
-		} else if (func->ParamList != args) {
+		} else if (func->ParamList != argsType) {
 			printErrorLog("Function " + funcVal->getName() + " :argument mismatch");
 		} else {
 			func->setFuncDefined(true);
@@ -280,7 +282,7 @@ void addFuncDef(SymbolInfo *funcVal, SymbolInfo *retType) {
 }
 
 void addTypeArgtoParamList(const string &type) {
-	args.push_back(type);//changed from rhs->getVarType()
+	argsType.push_back(type);//changed from rhs->getVarType()
 }
 
 void addIDenArgtoParamList(SymbolInfo *idVal) {
@@ -292,13 +294,13 @@ void addIDenArgtoParamList(SymbolInfo *idVal) {
 	SymbolInfo *id = new SymbolInfo(idVal->getName(), idVal->getType());
 	id->setIDType(VARIABLE);
 
-	params.push_back(*id);
+	parameters.push_back(*id);
 }
 
 void enterFuncScope() {
 	table.enterScope();
 	printLog("\n >> Entered into ScopeTable #" + to_string(table.getCurrentId()));
-	for (const auto &param : params) table.insert(param);
+	for (const auto &param : parameters) table.insert(param);
 	clearFunctionArgs();
 }
 
@@ -362,12 +364,8 @@ SymbolInfo *getArrIndexVar(SymbolInfo *arrVal, SymbolInfo *idxVal) {
 	} else {
 		if (!arr->isArrayVar()) {
 			printErrorLog(arrVal->getName() + " is not an array");
-		} else if (idxVal->getVarType() == FLOAT_TYPE) {
+		} else if (idxVal->getVarType() != INT_TYPE) {
 			printErrorLog(arrVal->getName() + " array index must be an integer");
-		} else if (idxVal->ints[0] >= arr->getArrSize()) {
-			printErrorLog(
-					arrVal->getName() + " array index out of bounds index=" + to_string(idxVal->ints[0]) + " size=" +
-					to_string(arr->getArrSize()));
 		} else {
 			arr->setArrIndex(static_cast<size_t>(idxVal->ints[0]));
 		}
@@ -745,7 +743,6 @@ SymbolInfo *getMultpOpVal(SymbolInfo *left, SymbolInfo *right, SymbolInfo *op) {
 
 	if (mulOp == "%") {
 
-//		opVal->setIDType("VAR");// ????
 		if (left->getVarType() == INT_TYPE && right->getVarType() == INT_TYPE) {
 			if (left->isVariable()) {
 				if (right->isVariable())opVal->ints[0] = (left->ints[0]) % (right->ints[0]);
@@ -859,14 +856,12 @@ SymbolInfo *getMultpOpVal(SymbolInfo *left, SymbolInfo *right, SymbolInfo *op) {
 						if (right->ints[0] != 0)opVal->floats[0] = left->floats[0] / right->ints[0];
 						else {
 							opVal->floats[0] = numeric_limits<float>::infinity();
-							printErrorLog("Divide by zero");
 						}
 					} else if (right->isArrayVar()) {
 						if (right->ints[right->getArrIndex()] != 0)
 							opVal->floats[0] = left->floats[0] / right->ints[right->getArrIndex()];
 						else {
 							opVal->floats[0] = numeric_limits<float>::infinity();
-							printErrorLog("Divide by zero");
 						}
 					}
 				} else if (left->isArrayVar()) {
@@ -874,14 +869,12 @@ SymbolInfo *getMultpOpVal(SymbolInfo *left, SymbolInfo *right, SymbolInfo *op) {
 						if (right->ints[0] != 0)opVal->floats[0] = left->floats[left->getArrIndex()] / right->ints[0];
 						else {
 							opVal->floats[0] = numeric_limits<float>::infinity();
-							printErrorLog("Divide by zero");
 						}
 					} else if (right->isArrayVar()) {
 						if (right->ints[right->getArrIndex()] != 0) {
 							opVal->floats[0] = left->floats[left->getArrIndex()] / right->ints[right->getArrIndex()];
 						} else {
 							opVal->floats[0] = numeric_limits<float>::infinity();
-							printErrorLog("Divide by zero");
 						}
 					}
 				}
@@ -891,14 +884,12 @@ SymbolInfo *getMultpOpVal(SymbolInfo *left, SymbolInfo *right, SymbolInfo *op) {
 						if (right->floats[0] != 0)opVal->floats[0] = left->floats[0] / right->floats[0];
 						else {
 							opVal->floats[0] = numeric_limits<float>::infinity();
-							printErrorLog("Divide by zero");
 						}
 					} else if (right->isArrayVar()) {
 						if (right->floats[right->getArrIndex()] != 0)
 							opVal->floats[0] = left->floats[0] / right->floats[right->getArrIndex()];
 						else {
 							opVal->floats[0] = numeric_limits<float>::infinity();
-							printErrorLog("Divide by zero");
 						}
 					}
 				} else if (left->isArrayVar()) {
@@ -907,14 +898,12 @@ SymbolInfo *getMultpOpVal(SymbolInfo *left, SymbolInfo *right, SymbolInfo *op) {
 							opVal->floats[0] = left->floats[left->getArrIndex()] / right->floats[0];
 						else {
 							opVal->floats[0] = numeric_limits<float>::infinity();
-							printErrorLog("Divide by zero");
 						}
 					} else if (right->isArrayVar()) {
 						if (right->floats[right->getArrIndex()] != 0) {
 							opVal->floats[0] = left->floats[left->getArrIndex()] / right->floats[right->getArrIndex()];
 						} else {
 							opVal->floats[0] = numeric_limits<float>::infinity();
-							printErrorLog("Divide by zero");
 						}
 					}
 				}
@@ -928,14 +917,12 @@ SymbolInfo *getMultpOpVal(SymbolInfo *left, SymbolInfo *right, SymbolInfo *op) {
 						if (right->floats[0] != 0)opVal->floats[0] = left->ints[0] / right->floats[0];
 						else {
 							opVal->floats[0] = numeric_limits<float>::infinity();
-							printErrorLog("Divide by zero");
 						}
 					} else if (right->isArrayVar()) {
 						if (right->floats[right->getArrIndex()] != 0)
 							opVal->floats[0] = left->ints[0] / right->floats[right->getArrIndex()];
 						else {
 							opVal->floats[0] = numeric_limits<float>::infinity();
-							printErrorLog("Divide by zero");
 						}
 					}
 				} else if (left->isArrayVar()) {
@@ -943,14 +930,12 @@ SymbolInfo *getMultpOpVal(SymbolInfo *left, SymbolInfo *right, SymbolInfo *op) {
 						if (right->floats[0] != 0)opVal->floats[0] = left->ints[left->getArrIndex()] / right->floats[0];
 						else {
 							opVal->floats[0] = numeric_limits<float>::infinity();
-							printErrorLog("Divide by zero");
 						}
 					} else if (right->isArrayVar()) {
 						if (right->floats[right->getArrIndex()] != 0) {
 							opVal->floats[0] = left->ints[left->getArrIndex()] / right->floats[right->getArrIndex()];
 						} else {
 							opVal->floats[0] = numeric_limits<float>::infinity();
-							printErrorLog("Divide by zero");
 						}
 					}
 				}
@@ -960,14 +945,12 @@ SymbolInfo *getMultpOpVal(SymbolInfo *left, SymbolInfo *right, SymbolInfo *op) {
 						if (right->floats[0] != 0)opVal->floats[0] = left->floats[0] / right->floats[0];
 						else {
 							opVal->floats[0] = numeric_limits<float>::infinity();
-							printErrorLog("Divide by zero");
 						}
 					} else if (right->isArrayVar()) {
 						if (right->floats[right->getArrIndex()] != 0)
 							opVal->floats[0] = left->floats[0] / right->floats[right->getArrIndex()];
 						else {
 							opVal->floats[0] = numeric_limits<float>::infinity();
-							printErrorLog("Divide by zero");
 						}
 					}
 				} else if (left->isArrayVar()) {
@@ -976,14 +959,12 @@ SymbolInfo *getMultpOpVal(SymbolInfo *left, SymbolInfo *right, SymbolInfo *op) {
 							opVal->floats[0] = left->floats[left->getArrIndex()] / right->floats[0];
 						else {
 							opVal->floats[0] = numeric_limits<float>::infinity();
-							printErrorLog("Divide by zero");
 						}
 					} else if (right->isArrayVar()) {
 						if (right->floats[right->getArrIndex()] != 0) {
 							opVal->floats[0] = left->floats[left->getArrIndex()] / right->floats[right->getArrIndex()];
 						} else {
 							opVal->floats[0] = numeric_limits<float>::infinity();
-							printErrorLog("Divide by zero");
 						}
 					}
 				}
@@ -996,14 +977,12 @@ SymbolInfo *getMultpOpVal(SymbolInfo *left, SymbolInfo *right, SymbolInfo *op) {
 					if (right->ints[0] != 0)opVal->ints[0] = left->ints[0] / right->ints[0];
 					else {
 						opVal->ints[0] = numeric_limits<int>::max();
-						printErrorLog("Divide by zero");
 					}
 				} else if (right->isArrayVar()) {
 					if (right->ints[right->getArrIndex()] != 0)
 						opVal->ints[0] = left->ints[0] / right->ints[right->getArrIndex()];
 					else {
 						opVal->ints[0] = numeric_limits<int>::max();
-						printErrorLog("Divide by zero");
 					}
 				}
 			} else if (left->isArrayVar()) {
@@ -1011,14 +990,12 @@ SymbolInfo *getMultpOpVal(SymbolInfo *left, SymbolInfo *right, SymbolInfo *op) {
 					if (right->ints[0] != 0)opVal->ints[0] = left->ints[left->getArrIndex()] / right->ints[0];
 					else {
 						opVal->ints[0] = numeric_limits<int>::max();
-						printErrorLog("Divide by zero");
 					}
 				} else if (right->isArrayVar()) {
 					if (right->ints[right->getArrIndex()] != 0) {
 						opVal->ints[0] = left->ints[left->getArrIndex()] / right->ints[right->getArrIndex()];
 					} else {
 						opVal->floats[0] = numeric_limits<int>::max();
-						printErrorLog("Divide by zero");
 					}
 				}
 			}
@@ -1136,10 +1113,10 @@ SymbolInfo *getFuncCallValue(SymbolInfo *funcVal) {
 	} else if (!func->isFuncDefined()) {
 		printErrorLog(funcVal->getName() + " does not have a body");
 	} else {
-		if (func->ParamList.size() != args.size()) {
+		if (func->ParamList.size() != argsType.size()) {
 			printErrorLog(func->getName() + ": " + to_string(func->ParamList.size()) + " arguments expected" +
-			              " instead passed " + to_string(args.size()));
-		} else if (func->ParamList != args) {
+			              " instead passed " + to_string(argsType.size()));
+		} else if (func->ParamList != argsType) {
 			printErrorLog(func->getName() + ": argument type Mismatch");
 		}
 		retVal = getConstVal("", func->getFuncRet());
