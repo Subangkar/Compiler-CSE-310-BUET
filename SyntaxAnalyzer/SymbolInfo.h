@@ -28,22 +28,22 @@ class SymbolInfo {
 	string name;
 	string type;
 
-	string IDType;// FUNC, VAR, ARA
-	string VarType; // INT, FLOAT, VOID
+	string idType;// FUNCTION, VARIABLE, ARRAY
+	string varType; // INT_TYPE, FLOAT_TYPE, VOID_TYPE
 
-	string FuncRet;// INT, FLOAT, VOID
-	bool FuncDefined = false;
+	string funcRetType;// INT_TYPE, FLOAT_TYPE, VOID_TYPE
+	bool funcDefined = false;
 
-	size_t ArrSize;
-	size_t ArrIndex;
+	size_t arrSize;
+	size_t arrIndex;
 
 public:
 
-	vector<string> ParamList;    //INT, FLOAT, STRING, CHAR
+	vector<string> paramList;    //INT, FLOAT, STRING, CHAR
 
-	vector<int> ints;
-	vector<float> floats;
-//	vector<char> chars;
+	vector<int> intData;
+	vector<float> floatData;
+//	vector<char> charData;
 
 
 	explicit operator string() const {
@@ -66,7 +66,7 @@ public:
 
 //	explicit SymbolInfo(string name, string type = "");
 
-	explicit SymbolInfo(const string name, const string type = "") : name(name), type(type) { ArrIndex = 0; }
+	explicit SymbolInfo(const string name, const string type = "") : name(name), type(type) { arrIndex = 0; }
 
 	void setName(const string &name) {
 		this->name = name;
@@ -81,98 +81,98 @@ public:
 	}
 
 	const string &getIDType() const {
-		return IDType;
+		return idType;
 	}
 
 	void setIDType(const string &IDType) {
-		SymbolInfo::IDType = IDType;
+		SymbolInfo::idType = IDType;
 	}
 
 	const string &getVarType() const {
-		return VarType;
+		return varType;
 	}
 
 	void setVarType(const string &VarType) {
-		SymbolInfo::VarType = VarType;
-		if (VarType == INT_TYPE) ints.push_back(0);
-		else if (VarType == "FLOAT") floats.push_back(0);
+		SymbolInfo::varType = VarType;
+		if (VarType == INT_TYPE) intData.push_back(0);
+		else if (VarType == "FLOAT") floatData.push_back(0);
 	}
 
-	const string &getFuncRet() const {
-		return FuncRet;
+	const string &getFuncRetType() const {
+		return funcRetType;
 	}
 
-	void setFuncRet(const string &FuncRet) {
-		this->FuncRet = FuncRet;
+	void setFuncRetType(const string &FuncRet) {
+		this->funcRetType = FuncRet;
 		setVarType(FuncRet);
 	}
 
 	size_t getArrSize() const {
-		return ArrSize;
+		return arrSize;
 	}
 
 	void setArrSize(size_t ArrSize) {
 		if (!isArrayVar())
 			return;
-		this->ArrSize = ArrSize;
+		this->arrSize = ArrSize;
 	}
 
 	size_t getArrIndex() const {
-		return isArrayVar() ? ArrIndex : 0;
+		return isArrayVar() ? arrIndex : 0;
 	}
 
 	void setArrIndex(size_t ArrIndex) {
-		if (VarType != ARRAY)
+		if (varType != ARRAY)
 			return;
-		this->ArrIndex = ArrIndex;
+		this->arrIndex = ArrIndex;
 	}
 
 	bool isFuncDefined() const {
-		return FuncDefined;
+		return funcDefined;
 	}
 
 	void setFuncDefined(bool FuncDefined) {
-		SymbolInfo::FuncDefined = FuncDefined;
+		SymbolInfo::funcDefined = FuncDefined;
 	}
 
 	int setIndexValue(int val) {
-		while (ints.size() <= getArrIndex()) ints.push_back(0);
-		return ints[getArrIndex()] = val;
+		while (intData.size() <= getArrIndex()) intData.push_back(0);
+		return intData[getArrIndex()] = val;
 	}
 
 	float setIndexValue(float val) {
-		while (floats.size() <= getArrIndex()) floats.push_back(0);
-		return floats[getArrIndex()] = val;
+		while (floatData.size() <= getArrIndex()) floatData.push_back(0);
+		return floatData[getArrIndex()] = val;
 	}
 
 	int setVarValue(int val) {
-		if (ints.empty()) ints.push_back(val);
-		else ints[0] = val;
-		return ints[0];
+		if (intData.empty()) intData.push_back(val);
+		else intData[0] = val;
+		return intData[0];
 	}
 
 	float setVarValue(float val) {
-		if (floats.empty()) floats.push_back(val);
-		else floats[0] = val;
-		return floats[0];
+		if (floatData.empty()) floatData.push_back(val);
+		else floatData[0] = val;
+		return floatData[0];
 	}
 
 	SymbolInfo(const SymbolInfo &symbolInfo) {
 		this->name = symbolInfo.name;
 		this->type = symbolInfo.type;
-		this->ArrSize = symbolInfo.ArrSize;
-		this->ArrIndex = symbolInfo.ArrIndex;
+		this->arrSize = symbolInfo.arrSize;
+		this->arrIndex = symbolInfo.arrIndex;
 
-		this->VarType = symbolInfo.VarType;
-		this->IDType = symbolInfo.IDType;
+		this->varType = symbolInfo.varType;
+		this->idType = symbolInfo.idType;
 
-		this->FuncDefined = symbolInfo.FuncDefined;
-		this->FuncRet = symbolInfo.FuncRet;
+		this->funcDefined = symbolInfo.funcDefined;
+		this->funcRetType = symbolInfo.funcRetType;
 
-		this->ints = symbolInfo.ints;
-		this->floats = symbolInfo.floats;
+		this->intData = symbolInfo.intData;
+		this->floatData = symbolInfo.floatData;
 
-		this->ParamList = symbolInfo.ParamList;
+		this->paramList = symbolInfo.paramList;
 	}
 
 	SymbolInfo &operator=(const SymbolInfo &symbolInfo)= default;
@@ -209,13 +209,13 @@ public:
 	}
 
 
-	bool isFunction() const { return IDType == FUNCTION; }//type == "ID" &&
+	bool isFunction() const { return idType == FUNCTION; }//type == "ID" &&
 
-	bool isArrayVar() const { return IDType == ARRAY; }//type == "ID" &&
+	bool isArrayVar() const { return idType == ARRAY; }//type == "ID" &&
 
-	bool isVariable() const { return IDType == VARIABLE; } //type == "ID" &&
+	bool isVariable() const { return idType == VARIABLE; } //type == "ID" &&
 
-	bool isVoidFunc() const { return isFunction() && getFuncRet() == VOID_TYPE; }
+	bool isVoidFunc() const { return isFunction() && getFuncRetType() == VOID_TYPE; }
 
 
 private:

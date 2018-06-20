@@ -1,0 +1,48 @@
+
+Error at line : 7. Return type doesn't match
+
+Error at line : 9. hello Declared multiple times
+
+Error at line: 14. Undeclared variable b
+
+Error at line: 14. Type mismatched
+
+Error at line : 16. Return type doesn't match
+
+Error at line : 20. Return type doesn't match
+
+Error at line: 27. Trying to access array like normal variable!
+
+Error at line: 28. b not an Array
+
+Error at line: 29. Undeclared function sort
+
+Error at line: 29. Type mismatched
+
+Error at line: 30. Type mismatched
+
+Error at line: 31. Not-Integer Array Index used
+
+Error at ine: 32. Both operands on modulus should be Integer
+
+Error at line: 32. Type mismatched
+
+Error at ine: 33. Both operands on modulus should be Integer
+
+Error at line: 36. Type mismatched
+
+Error at line: 39. Can't call Void function for assignment or expression
+
+Error at line: 40. Can't call Void function for assignment or expression
+
+Error at line 41, Parameter number doesn't match!
+
+Error at line: 41. Type mismatched
+
+Error at line 42. Parameter type doesn't match
+
+Error at line: 42. Type mismatched
+
+Error at line :43. Function nondec not defined
+
+total errors: 23

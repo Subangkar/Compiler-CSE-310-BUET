@@ -340,9 +340,6 @@ variable: ID
 
 expression: logic_expression
 				{
-					$$ = $1;
-					$$->ints.push_back(0);
-					$$->floats.push_back(0);
 
 					pushVal(expression,popVal(logic_expression));
 					printRuleLog(expression,"logic_expression");
@@ -358,10 +355,6 @@ expression: logic_expression
 
 logic_expression: rel_expression
 				{
-					$$ = $1;
-					$$->ints.push_back(0);
-					$$->floats.push_back(0);
-
 					pushVal(logic_expression,popVal(rel_expression));
 					printRuleLog(logic_expression,"rel_expression");
 				}
@@ -378,10 +371,6 @@ logic_expression: rel_expression
 
 rel_expression: simple_expression
 			{
-				$$ = $1;
-				$$->ints.push_back(0);
-				$$->floats.push_back(0);
-
 				pushVal(rel_expression,popVal(simple_expression));
 				printRuleLog(rel_expression,"simple_expression");
 			}
@@ -398,10 +387,6 @@ rel_expression: simple_expression
 
 simple_expression: term
 				{
-					$$ = $1;
-					$$->ints.push_back(0);
-					$$->floats.push_back(0);
-
 					pushVal(simple_expression,popVal(term));
 					printRuleLog(simple_expression,"term");
 				}
@@ -409,7 +394,7 @@ simple_expression: term
 				{
 					/* if(getAddtnOpVal($1,$3,$2)!=nullptr) */
 					$$ = getAddtnOpVal($1,$3,$2);
-					/* printDebug(string("term Val: ") + "float: " + to_string($3->floats[0])+ "int: " + to_string($3->ints[0])); */
+					/* printDebug(string("term Val: ") + "float: " + to_string($3->floatData[0])+ "int: " + to_string($3->intData[0])); */
 
 					pushVal(simple_expression,popVal(simple_expression)+$2->getName()+popVal(term));
 					printRuleLog(simple_expression,"simple_expression ADDOP term");
@@ -418,16 +403,12 @@ simple_expression: term
 
 term:	unary_expression
 				{
-					$$ = $1;
-					$$->ints.push_back(0);
-					$$->floats.push_back(0);
-
 					pushVal(term,popVal(unary_expression));
 					printRuleLog(term,"unary_expression");
 				}
      | term MULOP unary_expression
 		 		{
-					/* printDebug($1->getName()+"Term Val : "+to_string($1->getVarType()=="INT" ? $1->ints[0]:$1->floats[0])); */
+					/* printDebug($1->getName()+"Term Val : "+to_string($1->getVarType()=="INT" ? $1->intData[0]:$1->floatData[0])); */
 					SymbolInfo* t = getMultpOpVal($1,$3,$2);
 					if(t!=nullptr)
 					$$ = t;
@@ -453,12 +434,7 @@ unary_expression: ADDOP unary_expression
 				}
 		 | factor
 		 		{
-					/* printDebug($1->getName()+"Fact Val : "+to_string($1->getVarType()=="INT" ? $1->ints[0]:$1->floats[0])); */
-					// Not sure why
-					/* $$ = $1;
-					$$->ints.push_back(0);
-					$$->floats.push_back(0); */
-
+					/* printDebug($1->getName()+"Fact Val : "+to_string($1->getVarType()=="INT" ? $1->intData[0]:$1->floatData[0])); */
 					/* printDebug($1->getName()+"Fact Type : "+$1->getVarType()); */
 
 					pushVal(unary_expression,popVal(factor));
@@ -490,7 +466,7 @@ factor: variable
 	| CONST_INT
 		{
 			$$ = getConstVal($1,INT_TYPE);
-			/* printDebug($1->getName()+"CONST_INT Val : "+to_string($1->ints[0])); */
+			/* printDebug($1->getName()+"CONST_INT Val : "+to_string($1->intData[0])); */
 
 			pushVal(factor,$1->getName());
 			printRuleLog(factor,"CONST_INT");
