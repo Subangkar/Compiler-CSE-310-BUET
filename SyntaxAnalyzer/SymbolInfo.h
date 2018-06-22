@@ -139,12 +139,12 @@ public:
 
 	int setIndexValue(int val) {
 		while (intData.size() <= getArrIndex()) intData.push_back(0);
-		return intData[getArrIndex()] = val;
+		return intValue() = val;
 	}
 
 	float setIndexValue(float val) {
 		while (floatData.size() <= getArrIndex()) floatData.push_back(0);
-		return floatData[getArrIndex()] = val;
+		return fltValue() = val;
 	}
 
 	int setVarValue(int val) {
