@@ -37,6 +37,8 @@ class SymbolInfo {
 	size_t arrSize;
 	size_t arrIndex;
 
+	int defInt=0;
+	float defFlt=0.0;
 public:
 
 	vector<string> paramList;    //INT, FLOAT, STRING, CHAR
@@ -218,6 +220,27 @@ public:
 	bool isVoidFunc() const { return isFunction() && getFuncRetType() == VOID_TYPE; }
 
 
+	int &intValue() {
+		if (idType == VARIABLE && varType == INT_TYPE) {
+			if (!intData.size()) intData.push_back(0);
+			return intData[0];
+		} else if (idType == ARRAY && varType == INT_TYPE) {
+			return intData[getArrIndex()];
+		}
+		cout << "Not Variable/Array/Int Type" << endl;
+		return defInt;
+	}
+
+	float &fltValue() {
+		if (idType == VARIABLE && varType == FLOAT_TYPE) {
+			if (!floatData.size()) floatData.push_back(0);
+			return floatData[0];
+		} else if (idType == ARRAY && varType == FLOAT_TYPE) {
+			return floatData[getArrIndex()];
+		}
+		cout << "Not Variable/Array/Flt Type" << endl;
+		return defFlt;
+	}
 private:
 
 	int64_p reverseDigits(int64_p n) const {

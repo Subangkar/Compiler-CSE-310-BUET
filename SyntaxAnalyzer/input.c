@@ -19,6 +19,9 @@ int main(){
 	a=4;
 	func(a);
 	b=8;
+  5%7;
+  i=2;
+  i++;
 	return 0;
 }
 
