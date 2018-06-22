@@ -6,7 +6,7 @@
 
 %}
 %union{
-SymbolInfo* symVal;
+SymbolInfo* symbolValue;
 }
 
 /* %token COMMENT IF ELSE FOR WHILE DO BREAK CONTINUE INT FLOAT CHAR DOUBLE VOID RETURN SWITCH CASE DEFAULT */
@@ -18,20 +18,20 @@ SymbolInfo* symVal;
 %token PRINTLN
 %token STRING
 
-%token <symVal>ID
-%token <symVal>CONST_INT
-%token <symVal>CONST_FLOAT
-%token <symVal>CONST_CHAR
-%token <symVal>ADDOP
-%token <symVal>MULOP
-%token <symVal>LOGICOP
-%token <symVal>RELOP
+%token <symbolValue>ID
+%token <symbolValue>CONST_INT
+%token <symbolValue>CONST_FLOAT
+%token <symbolValue>CONST_CHAR
+%token <symbolValue>ADDOP
+%token <symbolValue>MULOP
+%token <symbolValue>LOGICOP
+%token <symbolValue>RELOP
 
-%token <symVal>BITOP
+%token <symbolValue>BITOP
 
-%type <symVal>type_specifier expression logic_expression rel_expression simple_expression term unary_expression factor variable
+%type <symbolValue>type_specifier expression logic_expression rel_expression simple_expression term unary_expression factor variable
 
-%nonassoc second_precedence
+%nonassoc second_prec
 %nonassoc ELSE
 %error-verbose
 
@@ -123,7 +123,7 @@ parameter_list: parameter_list COMMA type_specifier ID
 			}
 		| parameter_list COMMA type_specifier
 			{
-					addTypeArgtoParamList(variable_type);
+					addTypeArgtoParamList(variableType);
 
 					pushVal(parameter_list,popVal(parameter_list)+","+popVal(type_specifier));
 					printRuleLog(statements,"parameter_list COMMA type_specifier");
@@ -137,12 +137,20 @@ parameter_list: parameter_list COMMA type_specifier ID
 			}
 		| type_specifier
 			{
-					addTypeArgtoParamList(variable_type);
+					addTypeArgtoParamList(variableType);
 
 		   		pushVal(parameter_list,popVal(type_specifier));
 					printRuleLog(parameter_list,"type_specifier");
 			}
- 		;
+		| parameter_list COMMA error ID {
+				pushVal(parameter_list,popVal(parameter_list)+","+ERROR_VAL+$4->getName());
+				printErrorRuleLog("type specifier missing in parameters",statement,"parameter_list COMMA error ID");
+			}
+		| error ID{
+		   	pushVal(parameter_list,ERROR_VAL+$2->getName());
+				printRuleLog(parameter_list,"error ID");
+			}
+		;
 
 
 compound_statement: LCURL {enterFuncScope();} statements RCURL
@@ -264,7 +272,8 @@ statement: var_declaration
 				pushVal(statement,(string("for")+"("+popVal(expression_statement)+popVal(expression_statement)+popVal(expression)+")"+popVal(statement)));
 				printRuleLog(statement,"FOR LPAREN expression_statement expression_statement expression RPAREN statement");
 			}
-	  | IF LPAREN expression RPAREN statement %prec second_precedence
+	  | IF LPAREN expression RPAREN statement %prec second_prec
+
 			{
 				pushVal(statement,(string("if")+"("+popVal(expression)+")"+popVal(statement)));
 				printRuleLog(statement,"IF LPAREN expression RPAREN statement");
@@ -286,7 +295,7 @@ statement: var_declaration
 			}
 		| RETURN expression SEMICOLON			{
 				checkReturnType($2);
-				
+
 				pushVal(statement,"return"+popVal(expression)+";");
 				printRuleLog(statement,"RETURN expression SEMICOLON");
 			}
@@ -300,7 +309,8 @@ statement: var_declaration
 			pushVal(statement,string(ERROR_VAL)+" else"+popVal(statement));
 			printErrorRuleLog("",statement,"error ELSE statement");
 		}
-		| IF invalid_condition statement %prec second_precedence{
+		| IF invalid_condition statement %prec second_prec
+	{
 			pushVal(statement,(string("if")+"("+ERROR_VAL+")"+popVal(statement)));
 			printErrorRuleLog("",statement,"IF LPAREN error RPAREN statement");
 		}

@@ -53,6 +53,10 @@ public:
 			i = toupper(i, loc);
 		return str;
 	}
+
+	static int toInteger(const string& str){
+		return atoi(str.data());
+	}
 };
 
 

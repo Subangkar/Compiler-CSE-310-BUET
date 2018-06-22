@@ -2,6 +2,15 @@ float func(int a){
 	return a*0;
 }
 
+void func2(void){
+  int x;
+  return -1;
+}
+
+int X(int a,float x,void y){
+  return y;
+}
+
 int main(){
 	int a[2],c,i,j ; float c;
 	a[2.5]=1;

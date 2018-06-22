@@ -13,7 +13,6 @@
 
 
 #include "DataStructure.h" // SymbolInfo Defined Here
-//#include "SymTable.h"
 #include "y.tab.h" // SymbolInfo Used Here
 #include "Utils.h"
 #include <locale>
@@ -54,7 +53,7 @@ void printLexError(const string& msg) {
 
 
 void assignSymbol(const string& name,const string& type) {
-	yylval.symVal = new SymbolInfo(name,type);
+	yylval.symbolValue = new SymbolInfo(name,type);
 }
 
 void assignSymbol(const string& type) {

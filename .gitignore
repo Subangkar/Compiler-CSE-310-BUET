@@ -148,3 +148,5 @@ SyntaxAnalyzer/errors\.txt
 SyntaxAnalyzer/log\.txt
 
 SyntaxAnalyzer/rules\.txt
+
+SyntaxAnalyzer/parser\.txt

@@ -29,27 +29,25 @@ using std::stack;
 std::ofstream logFile, errorFile, parserFile;
 SymbolTable table(SYMBOL_TABLE_SIZE);
 
-bool funcDef = false;
 size_t syntaxErrors = 0;
 size_t warnings = 0;
 
-int IDargs = 0;
+size_t IDargsNo = 0;
 vector<string> argsType;
 vector<SymbolInfo> parameters;
 vector<SymbolInfo> argsFunc;
 SymbolInfo *currentFunc = nullptr;
 
-string variable_type;
+string variableType;
 
 bool errorRule = false;
 string lookAheadBuf;
 
 
-extern FILE *yyin;
 extern int line_count;
-
 extern int err_count_lex;
 
+extern FILE *yyin;
 extern char *yytext;
 
 int yyparse();
@@ -208,19 +206,19 @@ SymbolInfo *insertToTable(SymbolInfo *symbolInfo) {
 
 
 SymbolInfo *getType(const string &type) {
-	variable_type = type;
-	return new SymbolInfo(variable_type, variable_type);
+	variableType = type;
+	return new SymbolInfo(variableType, variableType);
 }
 
 SymbolInfo *insertVar(SymbolInfo *idVal) {
-	if (variable_type == VOID_TYPE) {
+	if (variableType == VOID_TYPE) {
 		printErrorLog("variable type can't be void");
 	} else {
 		if (table.lookUp(idVal->getName(), true) != nullptr) {
 			printErrorLog("Symbol " + idVal->getName() + " already declared in this scope");
 		} else {
 			SymbolInfo *var = insertToTable(idVal);
-			var->setVarType(variable_type);
+			var->setVarType(variableType);
 			var->setIDType(VARIABLE);
 			return var;
 		}
@@ -231,7 +229,7 @@ SymbolInfo *insertVar(SymbolInfo *idVal) {
 void insertArr(SymbolInfo *idVal, SymbolInfo *size) {
 	SymbolInfo *arr = insertVar(idVal);
 	arr->setIDType(ARRAY);
-	arr->setArrSize(static_cast<size_t>(atoi(size->getName().data())));
+	arr->setArrSize(static_cast<size_t>(StringParser::toInteger(size->getName().data())));
 	for (int i = 0; i < arr->getArrSize(); i++) {
 		arr->intData.push_back(0);
 		arr->floatData.push_back(0);
@@ -243,7 +241,7 @@ void clearFunctionArgs() {
 	argsType.clear();
 	argsFunc.clear();
 	parameters.clear();
-	IDargs = 0;
+	IDargsNo = 0;
 }
 
 void insertFunc(SymbolInfo *funcVal, SymbolInfo *retType) {
@@ -258,14 +256,18 @@ void insertFunc(SymbolInfo *funcVal, SymbolInfo *retType) {
 	func->setFuncRetType(retType->getName());
 	func->setVarType(retType->getName());
 	func->paramList = argsType;
+
+	if (IDargsNo && find(argsType.begin(), argsType.end(), VOID_TYPE) != argsType.end()) {
+		printErrorLog("Function " + funcVal->getName() + ": prototype can't be void");
+	}
 //	clearFunctionArgs();
 }
 
 void addFuncDef(SymbolInfo *funcVal, SymbolInfo *retType) {
 	SymbolInfo *func = table.lookUp(*funcVal);
-	// to prevent f(int x,float,int y){} type defn
-	if (argsType.size() != IDargs) {
-		printErrorLog("Parameter mismatch for Function " + funcVal->getName());
+	// to prevent f(int x,float,int y){} type defn but f(void){} allowed
+	if (!(argsType.size() == 1 && argsType[0] == VOID_TYPE) && argsType.size() != IDargsNo) {
+		printErrorLog("Unnamed prototype Parameter not allowed in Definition of Function " + funcVal->getName());
 	} else if (func != nullptr) {
 		if (func->isFuncDefined()) {
 			printErrorLog("Function " + funcVal->getName() + " already defined");
@@ -292,21 +294,21 @@ void addTypeArgtoParamList(const string &type) {
 }
 
 void addIDenArgtoParamList(SymbolInfo *idVal) {
-	addTypeArgtoParamList(variable_type);
+	addTypeArgtoParamList(variableType);
 
-	IDargs++;
+	IDargsNo++;
 	idVal->setIDType(VARIABLE);
-	idVal->setVarType(variable_type);//changed from rhs->getVarType()
+	idVal->setVarType(variableType);//changed from rhs->getVarType()
 	SymbolInfo *id = new SymbolInfo(idVal->getName(), idVal->getType());
 	id->setIDType(VARIABLE);
-	id->setVarType(variable_type);
+	id->setVarType(variableType);
 
 	parameters.push_back(*id);
 }
 
 void checkReturnType(SymbolInfo *exp) {
 	if (currentFunc != nullptr && currentFunc->getFuncRetType() != exp->getVarType()) {
-		printErrorLog(currentFunc->getName() + ": return type does not match with return expression type");
+		printErrorLog(currentFunc->getName() + ": function return type does not match with return expression type");
 	}
 }
 
@@ -335,7 +337,7 @@ SymbolInfo *getConstVal(SymbolInfo *constVal, const string &constVarType) {
 		constVal->floatData[0] = static_cast<float>(atof(constVal->getName().data()));
 	} else if (constVarType == INT_TYPE) {
 		constVal->intData.push_back(0);
-		constVal->intData[0] = atoi(constVal->getName().data());
+		constVal->intData[0] = StringParser::toInteger(constVal->getName().data());
 	}
 	return constVal;
 }
@@ -352,7 +354,7 @@ SymbolInfo *getConstVal(const string &value = "$CONST$", const string &constVarT
 	} else if (constVarType == INT_TYPE) {
 		constVal->setType("CONST_INT");
 		constVal->intData.push_back(0);
-		constVal->intData[0] = atoi(constVal->getName().data());
+		constVal->intData[0] = StringParser::toInteger(constVal->getName().data());
 	}
 	return constVal;
 }
@@ -1127,10 +1129,10 @@ SymbolInfo *getUniAddOpVal(SymbolInfo *varVal, SymbolInfo *op) {
 		}
 	}
 
-	if (opVal->getVarType() == FLOAT_TYPE)
-		printDebug(uniOp + " Unary Operation Val: " + to_string(opVal->floatData[0]));
-	else if (opVal->getVarType() == INT_TYPE)
-		printDebug(uniOp + " Unary Operation Val: " + to_string(opVal->intData[0]));
+//	if (opVal->getVarType() == FLOAT_TYPE)
+//		printDebug(uniOp + " Unary Operation Val: " + to_string(opVal->floatData[0]));
+//	else if (opVal->getVarType() == INT_TYPE)
+//		printDebug(uniOp + " Unary Operation Val: " + to_string(opVal->intData[0]));
 
 	return opVal;
 }
