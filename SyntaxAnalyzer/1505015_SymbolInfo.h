@@ -6,7 +6,7 @@
 #define SYNTAXANALYZER_SYMBOLNFO_H
 
 #include <ostream>
-#include "DSBasic.h"
+#include "1505015_DSBasic.h"
 //
 // Created by SubangkarKr on 07-Apr-18.
 //

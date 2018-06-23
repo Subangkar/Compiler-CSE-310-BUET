@@ -1,7 +1,7 @@
 %{
 #ifndef SYMTABLE
 #define SYMTABLE
-#include "SynBase.h"
+#include "1505015_SynBase.h"
 #endif // SYMTABLE
 
 %}

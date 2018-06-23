@@ -2,7 +2,7 @@
 
 %{
 
-#include "LexBase.h"
+#include "1505015_LexBase.h"
 
 #define ADDOP_TOKEN "ADDOP"
 #define MULOP_TOKEN "MULOP"

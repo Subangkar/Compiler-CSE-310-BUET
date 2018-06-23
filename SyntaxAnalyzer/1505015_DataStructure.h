@@ -9,8 +9,8 @@
 #define DATA_STRUCTURE_H
 
 
-#include "DSBasic.h"
-#include "SymbolInfo.h"
+#include "1505015_DSBasic.h"
+#include "1505015_SymbolInfo.h"
 
 #ifndef SYMBOLTABLE_SCOPETABLE_H
 #define SYMBOLTABLE_SCOPETABLE_H

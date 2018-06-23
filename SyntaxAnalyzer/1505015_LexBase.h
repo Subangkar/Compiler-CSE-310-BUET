@@ -12,9 +12,9 @@
 
 
 
-#include "DataStructure.h" // SymbolInfo Defined Here
+#include "1505015_DataStructure.h" // SymbolInfo Defined Here
 #include "y.tab.h" // SymbolInfo Used Here
-#include "Utils.h"
+#include "1505015_Utils.h"
 #include <locale>
 
 

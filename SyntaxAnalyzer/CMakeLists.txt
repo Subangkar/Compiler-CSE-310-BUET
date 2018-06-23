@@ -3,4 +3,4 @@ project(SyntaxAnalyzer)
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_executable(SyntaxAnalyzer main.cpp DataStructure.h LexBase.h Utils.h SynBase.h DSBasic.h SymbolInfo.h GrammarParser.y LexAnalyzer.l)
+add_executable(SyntaxAnalyzer 1505015_DataStructure.h 1505015_LexBase.h 1505015_Utils.h 1505015_SynBase.h 1505015_DSBasic.h 1505015_SymbolInfo.h 1505015_GrammarParser.y 1505015_LexAnalyzer.l)
