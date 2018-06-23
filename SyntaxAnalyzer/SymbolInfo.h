@@ -227,7 +227,7 @@ public:
 		} else if (idType == ARRAY && varType == INT_TYPE) {
 			return intData[getArrIndex()];
 		}
-		cout << "Not Variable/Array/Int Type" << endl;
+//		cout << "Not Variable/Array/Int Type" << endl;
 		return defInt;
 	}
 
@@ -238,7 +238,7 @@ public:
 		} else if (idType == ARRAY && varType == FLOAT_TYPE) {
 			return floatData[getArrIndex()];
 		}
-		cout << "Not Variable/Array/Flt Type" << endl;
+//		cout << "Not Variable/Array/Flt Type" << endl;
 		return defFlt;
 	}
 private:

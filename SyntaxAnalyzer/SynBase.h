@@ -403,25 +403,25 @@ SymbolInfo *getAssignExpVal(SymbolInfo *lhs, SymbolInfo *rhs) {
 		if (rhs->getVarType() == INT_TYPE) {
 			if (lhs->getVarType() == FLOAT_TYPE)printWarningLog("Assigning integer value to float");
 
-			if (rhs->isVariable())lhs->setIndexValue(rhs->intValue());
-			else lhs->setIndexValue(rhs->intValue());
+//			if (rhs->isVariable())lhs->setIndexValue(rhs->intValue());
+//			else lhs->setIndexValue(rhs->intValue());
 		} else {
 			if (lhs->getVarType() == INT_TYPE)printWarningLog("Assigning float value to integer");
 
-			if (rhs->isVariable())lhs->setIndexValue((int) rhs->fltValue());
-			else lhs->setIndexValue((int) rhs->fltValue());
+//			if (rhs->isVariable())lhs->setIndexValue((int) rhs->fltValue());
+//			else lhs->setIndexValue((int) rhs->fltValue());
 		}
 	} else if (lhs->isVariable()) {
 		if (rhs->getVarType() == INT_TYPE) {
 			if (lhs->getVarType() == FLOAT_TYPE)printWarningLog("Assigning integer value to float");
 
-			if (rhs->isVariable())lhs->setVarValue(rhs->intValue());
-			else lhs->setVarValue(rhs->intValue());
+//			if (rhs->isVariable())lhs->setVarValue(rhs->intValue());
+//			else lhs->setVarValue(rhs->intValue());
 		} else {
-			if (lhs->getVarType() == INT_TYPE)printWarningLog("Assigning float value to integer");
+//			if (lhs->getVarType() == INT_TYPE)printWarningLog("Assigning float value to integer");
 
-			if (rhs->isVariable())lhs->setVarValue(rhs->fltValue());
-			else lhs->setVarValue(rhs->fltValue());
+//			if (rhs->isVariable())lhs->setVarValue(rhs->fltValue());
+//			else lhs->setVarValue(rhs->fltValue());
 		}
 	}
 	return lhs;
@@ -560,183 +560,9 @@ SymbolInfo *getAddtnOpVal(SymbolInfo *left, SymbolInfo *right, SymbolInfo *op) {
 	const string &addop = op->getName();
 	SymbolInfo *opVal = new SymbolInfo("", "");
 	if (left->getVarType() == FLOAT_TYPE || right->getVarType() == FLOAT_TYPE) {
-		getConstVal(opVal, FLOAT_TYPE);
+		opVal = getConstVal(opVal, FLOAT_TYPE);
 	} else {
-		getConstVal(opVal, INT_TYPE);
-	}
-	if (addop == "+") {
-		if (left->isVariable()) {
-			if (right->isVariable()) {
-				if (left->getVarType() == FLOAT_TYPE) {
-
-					if (right->getVarType() == INT_TYPE) {
-						opVal->fltValue() = left->fltValue() + right->intValue();
-					} else {
-						opVal->fltValue() = left->fltValue() + right->fltValue();
-					}
-				} else if (right->getVarType() == FLOAT_TYPE) {
-
-					if (left->getVarType() == INT_TYPE) {
-						opVal->fltValue() = left->intValue() + right->fltValue();
-					} else {
-						opVal->fltValue() = left->fltValue() + right->fltValue();
-					}
-				} else if (right->getVarType() == INT_TYPE && left->getVarType() == INT_TYPE) {
-					opVal->setVarType(INT_TYPE);
-					opVal->setVarType(INT_TYPE);
-					opVal->intValue() = left->intValue() + right->intValue();
-				}
-			} else if (right->isArrayVar()) {
-				if (left->getVarType() == FLOAT_TYPE) {
-
-					if (right->getVarType() == INT_TYPE) {
-						opVal->fltValue() = left->fltValue() + right->intValue();
-					} else {
-						opVal->fltValue() = left->fltValue() + right->fltValue();
-					}
-				} else if (right->getVarType() == FLOAT_TYPE) {
-
-					if (left->getVarType() == INT_TYPE) {
-						opVal->fltValue() = left->intValue() + right->fltValue();
-					} else {
-						opVal->fltValue() = left->fltValue() + right->fltValue();
-					}
-				} else if (right->getVarType() == INT_TYPE && left->getVarType() == INT_TYPE) {
-					opVal->setVarType(INT_TYPE);
-					opVal->intValue() = left->intValue() + right->intValue();
-				}
-			}
-		} else if (left->isArrayVar()) {
-			if (right->isVariable()) {
-				if (left->getVarType() == FLOAT_TYPE) {
-
-					if (right->getVarType() == INT_TYPE) {
-						opVal->fltValue() = left->fltValue() + right->intValue();
-					} else {
-						opVal->fltValue() = left->fltValue() + right->fltValue();
-					}
-				} else if (right->getVarType() == FLOAT_TYPE) {
-
-					if (left->getVarType() == INT_TYPE) {
-						opVal->fltValue() = left->intValue() + right->fltValue();
-					} else {
-						opVal->fltValue() = left->fltValue() + right->fltValue();
-					}
-				} else if (right->getVarType() == INT_TYPE && left->getVarType() == INT_TYPE) {
-					opVal->setVarType(INT_TYPE);
-					opVal->intValue() = left->intValue() + right->intValue();
-				}
-			} else if (right->isArrayVar()) {
-				if (left->getVarType() == FLOAT_TYPE) {
-
-					if (right->getVarType() == INT_TYPE) {
-						opVal->fltValue() =
-								left->fltValue() + right->intValue();
-					} else {
-						opVal->fltValue() =
-								left->fltValue() + right->fltValue();
-					}
-				} else if (right->getVarType() == FLOAT_TYPE) {
-
-					if (left->getVarType() == INT_TYPE) {
-						opVal->fltValue() =
-								left->intValue() + right->fltValue();
-					} else {
-						opVal->fltValue() =
-								left->fltValue() + right->fltValue();
-					}
-				} else if (right->getVarType() == INT_TYPE && left->getVarType() == INT_TYPE) {
-					opVal->setVarType(INT_TYPE);
-					opVal->intValue() = left->intValue() + right->intValue();
-				}
-			}
-		}
-	} else if (addop == "-") {
-		if (left->isVariable()) {
-			if (right->isVariable()) {
-				if (left->getVarType() == FLOAT_TYPE) {
-
-					if (right->getVarType() == INT_TYPE) {
-						opVal->fltValue() = left->fltValue() - right->intValue();
-					} else {
-						opVal->fltValue() = left->fltValue() - right->fltValue();
-					}
-				} else if (right->getVarType() == FLOAT_TYPE) {
-
-					if (left->getVarType() == INT_TYPE) {
-						opVal->fltValue() = left->intValue() - right->fltValue();
-					} else {
-						opVal->fltValue() = left->fltValue() - right->fltValue();
-					}
-				} else if (right->getVarType() == INT_TYPE && left->getVarType() == INT_TYPE) {
-					opVal->setVarType(INT_TYPE);
-					opVal->intValue() = left->intValue() - right->intValue();
-				}
-			} else if (right->isArrayVar()) {
-				if (left->getVarType() == FLOAT_TYPE) {
-
-					if (right->getVarType() == INT_TYPE) {
-						opVal->fltValue() = left->fltValue() - right->intValue();
-					} else {
-						opVal->fltValue() = left->fltValue() - right->fltValue();
-					}
-				} else if (right->getVarType() == FLOAT_TYPE) {
-
-					if (left->getVarType() == INT_TYPE) {
-						opVal->fltValue() = left->intValue() - right->fltValue();
-					} else {
-						opVal->fltValue() = left->fltValue() - right->fltValue();
-					}
-				} else if (right->getVarType() == INT_TYPE && left->getVarType() == INT_TYPE) {
-					opVal->setVarType(INT_TYPE);
-					opVal->intValue() = left->intValue() - right->intValue();
-				}
-			}
-		} else if (left->isArrayVar()) {
-			if (right->isVariable()) {
-				if (left->getVarType() == FLOAT_TYPE) {
-
-					if (right->getVarType() == INT_TYPE) {
-						opVal->fltValue() = left->fltValue() - right->intValue();
-					} else {
-						opVal->fltValue() = left->fltValue() - right->fltValue();
-					}
-				} else if (right->getVarType() == FLOAT_TYPE) {
-
-					if (left->getVarType() == INT_TYPE) {
-						opVal->fltValue() = left->intValue() - right->fltValue();
-					} else {
-						opVal->fltValue() = left->fltValue() - right->fltValue();
-					}
-				} else if (right->getVarType() == INT_TYPE && left->getVarType() == INT_TYPE) {
-					opVal->setVarType(INT_TYPE);
-					opVal->intValue() = left->intValue() - right->intValue();
-				}
-			} else if (right->isArrayVar()) {
-				if (left->getVarType() == FLOAT_TYPE) {
-
-					if (right->getVarType() == INT_TYPE) {
-						opVal->fltValue() =
-								left->fltValue() - right->intValue();
-					} else {
-						opVal->fltValue() =
-								left->fltValue() - right->fltValue();
-					}
-				} else if (right->getVarType() == FLOAT_TYPE) {
-
-					if (left->getVarType() == INT_TYPE) {
-						opVal->fltValue() =
-								left->intValue() - right->fltValue();
-					} else {
-						opVal->fltValue() =
-								left->fltValue() - right->fltValue();
-					}
-				} else if (right->getVarType() == INT_TYPE && left->getVarType() == INT_TYPE) {
-					opVal->setVarType(INT_TYPE);
-					opVal->intValue() = left->intValue() - right->intValue();
-				}
-			}
-		}
+		opVal = getConstVal(opVal, INT_TYPE);
 	}
 //	if (opVal->getVarType() == FLOAT_TYPE)
 //		printDebug(addop + " Operation Val: " + to_string(opVal->fltValue()));
@@ -765,267 +591,6 @@ SymbolInfo *getMultpOpVal(SymbolInfo *left, SymbolInfo *right, SymbolInfo *op) {
 		opVal = getConstVal(opVal, INT_TYPE);
 	}
 
-	if (mulOp == "%") {
-		if (left->getVarType() == INT_TYPE && right->getVarType() == INT_TYPE && right->intValue())
-			opVal->intValue() = left->intValue() % right->intValue();
-	} else if (mulOp == "*") {
-		if (left->isVariable()) {
-			if (right->isVariable()) {
-				if (left->getVarType() == FLOAT_TYPE) {
-
-					if (right->getVarType() == INT_TYPE) {
-						opVal->fltValue() = left->fltValue() * right->intValue();
-					} else {
-						opVal->fltValue() = left->fltValue() * right->fltValue();
-					}
-
-				} else if (right->getVarType() == FLOAT_TYPE) {
-
-					if (left->getVarType() == INT_TYPE) {
-						opVal->fltValue() = left->intValue() * right->fltValue();
-					} else {
-						opVal->fltValue() = left->fltValue() * right->fltValue();
-					}
-
-				} else if (right->getVarType() == INT_TYPE && left->getVarType() == INT_TYPE) {
-
-					opVal->intValue() = left->intValue() * right->intValue();
-
-				}
-			} else if (right->isArrayVar()) {
-				if (left->getVarType() == FLOAT_TYPE) {
-
-					if (right->getVarType() == INT_TYPE) {
-						opVal->fltValue() = left->fltValue() * right->intValue();
-					} else {
-						opVal->fltValue() = left->fltValue() * right->fltValue();
-					}
-
-				} else if (right->getVarType() == FLOAT_TYPE) {
-
-					if (left->getVarType() == INT_TYPE) {
-						opVal->fltValue() = left->intValue() * right->fltValue();
-					} else {
-						opVal->fltValue() = left->fltValue() * right->fltValue();
-					}
-
-				} else if (right->getVarType() == INT_TYPE && left->getVarType() == INT_TYPE) {
-					opVal->intValue() = left->intValue() * right->intValue();
-				}
-			}
-		} else if (left->isArrayVar()) {
-			if (right->isVariable()) {
-				if (left->getVarType() == FLOAT_TYPE) {
-
-					if (right->getVarType() == INT_TYPE) {
-						opVal->fltValue() = left->fltValue() * right->intValue();
-					} else {
-						opVal->fltValue() = left->fltValue() * right->fltValue();
-					}
-
-				} else if (right->getVarType() == FLOAT_TYPE) {
-
-					if (left->getVarType() == INT_TYPE) {
-						opVal->fltValue() = left->intValue() * right->fltValue();
-					} else {
-						opVal->fltValue() = left->fltValue() * right->fltValue();
-					}
-
-				} else if (right->getVarType() == INT_TYPE && left->getVarType() == INT_TYPE) {
-
-					opVal->intValue() = left->intValue() * right->intValue();
-
-				}
-			} else if (right->isArrayVar()) {
-				if (left->getVarType() == FLOAT_TYPE) {
-
-					if (right->getVarType() == INT_TYPE) {
-						opVal->fltValue() =
-								left->fltValue() * right->intValue();
-					} else {
-						opVal->fltValue() =
-								left->fltValue() * right->fltValue();
-					}
-
-				} else if (right->getVarType() == FLOAT_TYPE) {
-
-					if (left->getVarType() == INT_TYPE) {
-						opVal->fltValue() =
-								left->intValue() * right->fltValue();
-					} else {
-						opVal->fltValue() =
-								left->fltValue() * right->fltValue();
-					}
-
-				} else if (right->getVarType() == INT_TYPE && left->getVarType() == INT_TYPE) {
-
-					opVal->intValue() = left->intValue() * right->intValue();
-
-				}
-			}
-		}
-	} else if (mulOp == "/") {
-		if (left->getVarType() == FLOAT_TYPE) {
-
-			if (right->getVarType() == INT_TYPE) {
-				if (left->isVariable()) {
-					if (right->isVariable()) {
-						if (right->intValue() != 0)opVal->fltValue() = left->fltValue() / right->intValue();
-						else {
-							opVal->fltValue() = INFINITY_FLOAT;
-						}
-					} else if (right->isArrayVar()) {
-						if (right->intValue() != 0)
-							opVal->fltValue() = left->fltValue() / right->intValue();
-						else {
-							opVal->fltValue() = INFINITY_FLOAT;
-						}
-					}
-				} else if (left->isArrayVar()) {
-					if (right->isVariable()) {
-						if (right->intValue() != 0)
-							opVal->fltValue() = left->fltValue() / right->intValue();
-						else {
-							opVal->fltValue() = INFINITY_FLOAT;
-						}
-					} else if (right->isArrayVar()) {
-						if (right->intValue() != 0) {
-							opVal->fltValue() =
-									left->fltValue() / right->intValue();
-						} else {
-							opVal->fltValue() = INFINITY_FLOAT;
-						}
-					}
-				}
-			} else if (right->getVarType() == FLOAT_TYPE) {
-				if (left->isVariable()) {
-					if (right->isVariable()) {
-						if (right->fltValue() != 0)opVal->fltValue() = left->fltValue() / right->fltValue();
-						else {
-							opVal->fltValue() = INFINITY_FLOAT;
-						}
-					} else if (right->isArrayVar()) {
-						if (right->fltValue() != 0)
-							opVal->fltValue() = left->fltValue() / right->fltValue();
-						else {
-							opVal->fltValue() = INFINITY_FLOAT;
-						}
-					}
-				} else if (left->isArrayVar()) {
-					if (right->isVariable()) {
-						if (right->fltValue() != 0)
-							opVal->fltValue() = left->fltValue() / right->fltValue();
-						else {
-							opVal->fltValue() = INFINITY_FLOAT;
-						}
-					} else if (right->isArrayVar()) {
-						if (right->fltValue() != 0) {
-							opVal->fltValue() =
-									left->fltValue() / right->fltValue();
-						} else {
-							opVal->fltValue() = INFINITY_FLOAT;
-						}
-					}
-				}
-			}
-
-		} else if (right->getVarType() == FLOAT_TYPE) {
-
-			if (left->getVarType() == INT_TYPE) {
-				if (left->isVariable()) {
-					if (right->isVariable()) {
-						if (right->fltValue() != 0)opVal->fltValue() = left->intValue() / right->fltValue();
-						else {
-							opVal->fltValue() = INFINITY_FLOAT;
-						}
-					} else if (right->isArrayVar()) {
-						if (right->fltValue() != 0)
-							opVal->fltValue() = left->intValue() / right->fltValue();
-						else {
-							opVal->fltValue() = INFINITY_FLOAT;
-						}
-					}
-				} else if (left->isArrayVar()) {
-					if (right->isVariable()) {
-						if (right->fltValue() != 0)
-							opVal->fltValue() = left->intValue() / right->fltValue();
-						else {
-							opVal->fltValue() = INFINITY_FLOAT;
-						}
-					} else if (right->isArrayVar()) {
-						if (right->fltValue() != 0) {
-							opVal->fltValue() =
-									left->intValue() / right->fltValue();
-						} else {
-							opVal->fltValue() = INFINITY_FLOAT;
-						}
-					}
-				}
-			} else if (left->getVarType() == FLOAT_TYPE) {
-				if (left->isVariable()) {
-					if (right->isVariable()) {
-						if (right->fltValue() != 0)opVal->fltValue() = left->fltValue() / right->fltValue();
-						else {
-							opVal->fltValue() = INFINITY_FLOAT;
-						}
-					} else if (right->isArrayVar()) {
-						if (right->fltValue() != 0)
-							opVal->fltValue() = left->fltValue() / right->fltValue();
-						else {
-							opVal->fltValue() = INFINITY_FLOAT;
-						}
-					}
-				} else if (left->isArrayVar()) {
-					if (right->isVariable()) {
-						if (right->fltValue() != 0)
-							opVal->fltValue() = left->fltValue() / right->fltValue();
-						else {
-							opVal->fltValue() = INFINITY_FLOAT;
-						}
-					} else if (right->isArrayVar()) {
-						if (right->fltValue() != 0) {
-							opVal->fltValue() =
-									left->fltValue() / right->fltValue();
-						} else {
-							opVal->fltValue() = INFINITY_FLOAT;
-						}
-					}
-				}
-			}
-
-		} else if (right->getVarType() == INT_TYPE && left->getVarType() == INT_TYPE) {
-
-			if (left->isVariable()) {
-				if (right->isVariable()) {
-					if (right->intValue() != 0)opVal->intValue() = left->intValue() / right->intValue();
-					else {
-						opVal->intValue() = INFINITY_INT;
-					}
-				} else if (right->isArrayVar()) {
-					if (right->intValue() != 0)
-						opVal->intValue() = left->intValue() / right->intValue();
-					else {
-						opVal->intValue() = INFINITY_INT;
-					}
-				}
-			} else if (left->isArrayVar()) {
-				if (right->isVariable()) {
-					if (right->intValue() != 0)
-						opVal->intValue() = left->intValue() / right->intValue();
-					else {
-						opVal->intValue() = INFINITY_INT;
-					}
-				} else if (right->isArrayVar()) {
-					if (right->intValue() != 0) {
-						opVal->intValue() = left->intValue() / right->intValue();
-					} else {
-						opVal->fltValue() = INFINITY_INT;
-					}
-				}
-			}
-
-		}
-	}
 
 //	if (opVal->getVarType() == FLOAT_TYPE)
 //		printDebug(mulOp + " Operation Val: " + to_string(opVal->fltValue()));
@@ -1039,38 +604,38 @@ SymbolInfo *getMultpOpVal(SymbolInfo *left, SymbolInfo *right, SymbolInfo *op) {
 SymbolInfo *getIncOpVal(SymbolInfo *varVal) {
 	SymbolInfo *opVal = new SymbolInfo("", "");
 	opVal = getConstVal(opVal, varVal->getVarType());
-	if (varVal->isArrayVar()) {
-		if (varVal->getVarType() == INT_TYPE) {
-			opVal->intValue() = ++varVal->intValue();
-		} else if (varVal->getVarType() == FLOAT_TYPE) {
-			opVal->fltValue() = ++varVal->fltValue();
-		}
-	} else if (varVal->isVariable()) {
-		if (varVal->getVarType() == INT_TYPE) {
-			opVal->intValue() = ++varVal->intValue();
-		} else if (varVal->getVarType() == FLOAT_TYPE) {
-			opVal->fltValue() = ++varVal->fltValue();
-		}
-	}
+//	if (varVal->isArrayVar()) {
+//		if (varVal->getVarType() == INT_TYPE) {
+//			opVal->intValue() = ++varVal->intValue();
+//		} else if (varVal->getVarType() == FLOAT_TYPE) {
+//			opVal->fltValue() = ++varVal->fltValue();
+//		}
+//	} else if (varVal->isVariable()) {
+//		if (varVal->getVarType() == INT_TYPE) {
+//			opVal->intValue() = ++varVal->intValue();
+//		} else if (varVal->getVarType() == FLOAT_TYPE) {
+//			opVal->fltValue() = ++varVal->fltValue();
+//		}
+//	}
 	return opVal;
 }
 
 SymbolInfo *getDecOpVal(SymbolInfo *varVal) {
 	SymbolInfo *opVal = new SymbolInfo("", "");
 	opVal = getConstVal(opVal, varVal->getVarType());
-	if (varVal->isArrayVar()) {
-		if (varVal->getVarType() == INT_TYPE) {
-			opVal->intValue() = --varVal->intValue();
-		} else if (varVal->getVarType() == FLOAT_TYPE) {
-			opVal->fltValue() = --varVal->fltValue();
-		}
-	} else if (varVal->isVariable()) {
-		if (varVal->getVarType() == INT_TYPE) {
-			opVal->intValue() = --varVal->intValue();
-		} else if (varVal->getVarType() == FLOAT_TYPE) {
-			opVal->fltValue() = --varVal->fltValue();
-		}
-	}
+//	if (varVal->isArrayVar()) {
+//		if (varVal->getVarType() == INT_TYPE) {
+//			opVal->intValue() = --varVal->intValue();
+//		} else if (varVal->getVarType() == FLOAT_TYPE) {
+//			opVal->fltValue() = --varVal->fltValue();
+//		}
+//	} else if (varVal->isVariable()) {
+//		if (varVal->getVarType() == INT_TYPE) {
+//			opVal->intValue() = --varVal->intValue();
+//		} else if (varVal->getVarType() == FLOAT_TYPE) {
+//			opVal->fltValue() = --varVal->fltValue();
+//		}
+//	}
 	return opVal;
 }
 
@@ -1081,16 +646,16 @@ SymbolInfo *getNotOpVal(SymbolInfo *factor) {
 	}
 	SymbolInfo *opVal = new SymbolInfo("", "");
 	opVal = getConstVal(opVal, INT_TYPE);
-	int value = 0;
-	if (factor->getVarType() == INT_TYPE) {
-		if (factor->isVariable()) value = factor->intValue();
-		else if (factor->isArrayVar())value = factor->intValue();
-	} else if (factor->getVarType() == FLOAT_TYPE) {
-		if (factor->isVariable()) value = (int) factor->fltValue();
-		else if (factor->isArrayVar()) value = (int) factor->fltValue();
-	}
-
-	opVal->intValue() = !value;
+//	int value = 0;
+//	if (factor->getVarType() == INT_TYPE) {
+//		if (factor->isVariable()) value = factor->intValue();
+//		else if (factor->isArrayVar())value = factor->intValue();
+//	} else if (factor->getVarType() == FLOAT_TYPE) {
+//		if (factor->isVariable()) value = (int) factor->fltValue();
+//		else if (factor->isArrayVar()) value = (int) factor->fltValue();
+//	}
+//
+//	opVal->intValue() = !value;
 //	printDebug("NOT Exp Val: " + to_string(opVal->intValue()));
 	return opVal;
 }
@@ -1102,23 +667,23 @@ SymbolInfo *getUniAddOpVal(SymbolInfo *varVal, SymbolInfo *op) {
 	}
 	SymbolInfo *opVal = new SymbolInfo("", "");
 	opVal = getConstVal(opVal, varVal->getVarType());
-	const string &uniOp = op->getName();
-	if (varVal->getVarType() == FLOAT_TYPE) {
-		if (varVal->isVariable()) {
-			opVal->fltValue() = uniOp == "+" ? (varVal->fltValue()) : -(varVal->fltValue());
-		} else if (varVal->isArrayVar()) {
-			opVal->fltValue() =
-					uniOp == "+" ? (varVal->fltValue())
-					             : -(varVal->fltValue());
-		}
-	} else if (varVal->getVarType() == INT_TYPE) {
-		if (varVal->isVariable()) {
-			opVal->intValue() = uniOp == "+" ? (varVal->intValue()) : -(varVal->intValue());
-		} else if (varVal->isArrayVar()) {
-			opVal->intValue() =
-					uniOp == "+" ? (varVal->intValue()) : -(varVal->intValue());
-		}
-	}
+//	const string &uniOp = op->getName();
+//	if (varVal->getVarType() == FLOAT_TYPE) {
+//		if (varVal->isVariable()) {
+//			opVal->fltValue() = uniOp == "+" ? (varVal->fltValue()) : -(varVal->fltValue());
+//		} else if (varVal->isArrayVar()) {
+//			opVal->fltValue() =
+//					uniOp == "+" ? (varVal->fltValue())
+//					             : -(varVal->fltValue());
+//		}
+//	} else if (varVal->getVarType() == INT_TYPE) {
+//		if (varVal->isVariable()) {
+//			opVal->intValue() = uniOp == "+" ? (varVal->intValue()) : -(varVal->intValue());
+//		} else if (varVal->isArrayVar()) {
+//			opVal->intValue() =
+//					uniOp == "+" ? (varVal->intValue()) : -(varVal->intValue());
+//		}
+//	}
 
 //	if (opVal->getVarType() == FLOAT_TYPE)
 //		printDebug(uniOp + " Unary Operation Val: " + to_string(opVal->fltValue()));
