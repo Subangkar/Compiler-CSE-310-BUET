@@ -6,4 +6,4 @@
 
 3-> Syntax Analyzer Implemented
 
-4->
+4-> Intermediate Representation Generator is being developed
