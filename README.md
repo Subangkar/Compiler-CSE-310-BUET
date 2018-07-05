@@ -4,4 +4,6 @@
 
 2-> Lexical Analyzer Implemented
 
-3-> Syntax Analyzer is being developed
+3-> Syntax Analyzer Implemented
+
+4->
