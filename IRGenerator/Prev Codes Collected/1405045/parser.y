@@ -30,7 +30,7 @@ int maxTemp = 0;
 string variable_type;
 SymbolTable table(13);
 int IDargs = 0;
-vector<string> args; 
+vector<string> args;
 extern int lCount;
 int semErrors;
 vector<SymbolInfo> params;
@@ -80,17 +80,17 @@ char *newPTemp()
 
 %}
 
-%error-verbose`
+%error-verbose
 
 %union{
 SymbolInfo* symVal;
 }
 
 %token COMMENT IF ELSE FOR WHILE DO BREAK CONTINUE INT FLOAT CHAR DOUBLE VOID RETURN SWITCH CASE DEFAULT INCOP DECOP ASSIGNOP LPAREN RPAREN LCURL RCURL LTHIRD RTHIRD SEMICOLON COMMA STRING NOT PRINTLN
-%token <symVal>ID 
-%token <symVal>CONST_INT 
-%token <symVal>CONST_FLOAT 
-%token <symVal>CONST_CHAR 
+%token <symVal>ID
+%token <symVal>CONST_INT
+%token <symVal>CONST_FLOAT
+%token <symVal>CONST_CHAR
 %token <symVal>ADDOP
 %token <symVal>MULOP
 %token <symVal>LOGICOP
@@ -119,14 +119,14 @@ start : program
 			fout.open("code.asm");
 			fout << ".model small\n.stack 100h\n\n.data\n" ;
 			for(int i = 0; i<variables.size() ; i++){
-				fout << variables[i] << " dw ?\n";			
+				fout << variables[i] << " dw ?\n";
 			}
 
 			for(int i = 0 ; i< arrays.size() ; i++){
 				fout << arrays[i] << " dw " << arraySizes[i] << " dup(?)\n";
 			}
 
-			fout << "\n.code \n"; 
+			fout << "\n.code \n";
 			fout << $1->code;
 			logFile << "Line " << lCount << " : start : program\n"<< endl;
 		}
@@ -138,34 +138,34 @@ program : program unit
 		logFile << "Line " << lCount << " : program : program unit\n"<< endl;
 		$$ = $1;
 		$$->code += $2->code;
-	} 
-	| 
+	}
+	|
 	unit
 	{
 		logFile << "Line " << lCount << " : program : unit\n"<< endl;
 		$$ = $1;
 	}
 	;
-	
+
 unit : var_declaration
 	{
 		logFile << "Line " << lCount << " : unit : var_declaration\n"<< endl;
 		$$ = $1;
 	}
-     	| 
+     	|
      	func_declaration
      	{
 			logFile << "Line " << lCount << " : unit : func_declaration\n"<< endl;
 			$$ = $1;
      	}
-     	| 
+     	|
      	func_definition
      	{
 			logFile << "Line " << lCount << " : unit : func_definition\n"<< endl;
 			$$ = $1;
      	}
      	;
-     
+
 func_declaration : type_specifier ID LPAREN parameter_list RPAREN SEMICOLON
 			{
 				logFile << "Line " << lCount << " : func_declaration : 	type_specifier ID LPAREN parameter_list RPAREN SEMICOLON\n" ;
@@ -179,10 +179,10 @@ func_declaration : type_specifier ID LPAREN parameter_list RPAREN SEMICOLON
 					temp2->setIDType("FUNC");
 					temp2->setFuncRet($1->getVarType());
 					for(int i = 0; i<args.size(); i++){
-						temp2->ParamList.push_back(args[i]);					
+						temp2->ParamList.push_back(args[i]);
 					}
 					args.clear();
-				} 
+				}
 			}
 		 	|type_specifier ID LPAREN parameter_list RPAREN error
 			{
@@ -190,16 +190,16 @@ func_declaration : type_specifier ID LPAREN parameter_list RPAREN SEMICOLON
 				semErrors++;
 			}
 		 	;
-		 
-func_definition : type_specifier ID LPAREN parameter_list RPAREN 
+
+func_definition : type_specifier ID LPAREN parameter_list RPAREN
 				{
-				
+
 				SymbolInfo *temp = table.lookUp($2->getName(), "FUNC");
 				if(args.size() != IDargs){
 					errorFile << "Error at line " << lCount << " Parameter mismatch for Function "<< $2->getName() << endl << endl;
 					args.clear(); IDargs = 0;
 					semErrors++;
-				}												
+				}
 				if(temp != NULL){
 					//logFile << "Function " << $2->getName() <<" already declared" << endl;
 					if(temp->isFuncDefined()== true){
@@ -211,21 +211,21 @@ func_definition : type_specifier ID LPAREN parameter_list RPAREN
 					else if(temp->getFuncRet() != $1->getVarType()){
 						errorFile << "Error at line " << lCount << "Function "<< $2->getName() <<" :return type doesn't match declaration" << endl << endl;
 						semErrors++;
-						args.clear();IDargs = 0; 
-					} 
+						args.clear();IDargs = 0;
+					}
 					else if(temp->ParamList.size() != args.size()){
 						errorFile << "Error at line " << lCount << "Function "<< $2->getName() <<" :Parameter list doesn not match declaration" << endl << endl;
 						args.clear();IDargs = 0;
-						semErrors++;					
+						semErrors++;
 					}
 					else{
 						for(int i = 0; i<temp->ParamList.size(); i++){
 							if(temp->ParamList[i] != args[i]){
 								errorFile << "Error at line " << lCount << "Function "<< $2->getName()<< " :argument mismatch" << endl << endl;
 								args.clear();IDargs = 0;
-								semErrors++;	
+								semErrors++;
 							}
-						}				
+						}
 					}
 				}
 				else{
@@ -235,19 +235,19 @@ func_definition : type_specifier ID LPAREN parameter_list RPAREN
 					temp->setFuncRet($1->getVarType());
 					//
 					for(int i = 0; i<args.size(); i++){
-						temp->ParamList.push_back(args[i]);					
+						temp->ParamList.push_back(args[i]);
 					}
 					temp->setFuncDefined();
 				}
-				
-				
-	
+
+
+
 				}
 			compound_statement
 			{
 				logFile << "Line " << lCount << " : func_definition : type_specifier ID LPAREN parameter_list RPAREN compound_statement\n" ;
 				logFile << $2->getName() << endl << endl;
-				SymbolInfo * func = new SymbolInfo();				
+				SymbolInfo * func = new SymbolInfo();
 				$$ = func;
 				$$->code += $2->getName() + " PROC NEAR\n\n";
 				$$->code += $7->code;
@@ -260,16 +260,16 @@ func_definition : type_specifier ID LPAREN parameter_list RPAREN
 				if($2->getName()!="main"){
 					$$->code+="\tret ";
 				}
-		
+
 				int p=args.size()*2;
 				if(p){
-					string Result;       
+					string Result;
 
-					ostringstream convert;  
-	
-					convert << p;    
+					ostringstream convert;
 
-					Result = convert.str(); 
+					convert << p;
+
+					Result = convert.str();
 					$$->code+=Result+"\n";
 				}
 				$$->code+="\n";
@@ -282,7 +282,7 @@ func_definition : type_specifier ID LPAREN parameter_list RPAREN
 				return_label = "";
 			}
  		 	;
- 		 
+
 parameter_list  : parameter_list COMMA type_specifier ID
 				{
 					logFile << "Line " << lCount << " : parameter_list  : parameter_list COMMA type_specifier ID\n" ;
@@ -293,15 +293,15 @@ parameter_list  : parameter_list COMMA type_specifier ID
 					$4->setVarType(variable_type);//changed from $3->getVarType()
 					SymbolInfo* temp = new SymbolInfo($4->getName(), $4->getType());
 					temp->setIDType("VAR");
-					
+
 					params.push_back(*temp);
-				
+
 				}
 		| parameter_list COMMA type_specifier
 		{
 			logFile << "Line " << lCount << " : parameter_list  : parameter_list COMMA type_specifier\n"<< endl;
 			args.push_back($3->getVarType());
-		}	 
+		}
  		| type_specifier ID
 		{
 			logFile << "Line " << lCount << " : parameter_list  : type_specifier ID\n" ;
@@ -311,7 +311,7 @@ parameter_list  : parameter_list COMMA type_specifier ID
 			$2->setIDType("VAR");
 			$2->setVarType(variable_type);//$1->getVarType()
 			params.push_back(*$2);
-				
+
 
 		}
  		| type_specifier
@@ -324,11 +324,11 @@ parameter_list  : parameter_list COMMA type_specifier ID
 
 compound_statement	: LCURL
 					{
-						table.enterScope(); 
+						table.enterScope();
 						for(int i = 0; i<params.size(); i++) table.Insert(params[i]);
-						params.clear();					
+						params.clear();
 					}statements RCURL
-					{	
+					{
 						table.exitScope();
 						$$=$3;
 						logFile << "Line " << lCount << " : compound_statement : LCURL statements RCURL\n"<< endl;
@@ -348,18 +348,18 @@ var_declaration : type_specifier declaration_list SEMICOLON
 				{
 						errorFile << "Error at line " << lCount << " ; missing" << endl << endl;
 						semErrors++;
-				} 		 		
+				}
 				;
- 		 
+
 type_specifier	: INT
 				{
-					logFile << "Line " << lCount << " : type_specifier	: INT\n"<< endl; 
+					logFile << "Line " << lCount << " : type_specifier	: INT\n"<< endl;
 					SymbolInfo* s= new SymbolInfo("INT");
 					variable_type = "INT" ;
 					$$ = s;
 				}
  				| FLOAT
-				{	
+				{
 					logFile << "Line " << lCount << " : type_specifier	: FLOAT\n"<< endl;
 					SymbolInfo* s= new SymbolInfo("FLOAT");
 					variable_type = "FLOAT" ;
@@ -373,7 +373,7 @@ type_specifier	: INT
 					$$ = s;
 				}
  				;
- 		
+
 declaration_list : 	declaration_list COMMA ID
 					{
 						logFile << "Line " << lCount << " : declaration_list : 	declaration_list COMMA ID\n" ;
@@ -385,8 +385,8 @@ declaration_list : 	declaration_list COMMA ID
 						else{
 							SymbolInfo* temp = table.lookUp($3->getName(), "VAR");
 							if(temp != NULL){
-							errorFile << "Error at line " << lCount << ": Variable "<< $3->getName() <<" already declared" << endl << endl;	
-								semErrors++;	
+							errorFile << "Error at line " << lCount << ": Variable "<< $3->getName() <<" already declared" << endl << endl;
+								semErrors++;
 							}
 							else{
 								//SymbolInfo* temp2 = table.InsertandGet($3->getName(), $3->getType());
@@ -414,7 +414,7 @@ declaration_list : 	declaration_list COMMA ID
 							SymbolInfo* temp = table.lookUp($3->getName(), "ARA");
 							if(temp!= NULL){
 							errorFile << "Error at line " << lCount << " : Array "<< $3->getName()<< " already declared" << endl << endl;
-								semErrors++;			
+								semErrors++;
 							}
 							else{
 								SymbolInfo* temp2 = new SymbolInfo($3->getName(), $3->getType());
@@ -422,24 +422,24 @@ declaration_list : 	declaration_list COMMA ID
 								temp2->setIDType("ARA");
 								int araSize = atoi(($5->getName()).c_str());
 								temp2->setAraSize(araSize);
-								if(variable_type == "INT"){								
+								if(variable_type == "INT"){
 									for(int i = temp2->ints.size(); i<araSize; i++){
 										temp2->ints.push_back(0);
-									}							
+									}
 								}
-								else if(variable_type == "FLOAT"){								
+								else if(variable_type == "FLOAT"){
 									for(int i = temp2->floats.size(); i<araSize; i++){
 										temp2->floats.push_back(0);
-									}							
+									}
 								}
-								else if(variable_type == "CHAR"){								
+								else if(variable_type == "CHAR"){
 									for(int i = temp2->chars.size(); i<araSize; i++){
 										temp2->chars.push_back('\0');
-									}							
+									}
 								}
-								table.Insert(*temp2);	
-								//data.push_back(*temp2);		
-								//cout << temp2->getName() << endl;			
+								table.Insert(*temp2);
+								//data.push_back(*temp2);
+								//cout << temp2->getName() << endl;
 								//table.printAll(logFile);
 							}
 						}
@@ -456,8 +456,8 @@ declaration_list : 	declaration_list COMMA ID
 						else{
 							SymbolInfo* temp = table.lookUp($1->getName(), "ARA");
 							if(temp!= NULL){
-							errorFile << "Error at line " << lCount << ": Variable "<< $1->getName() <<" already declared" << endl << endl;	
-								semErrors++;		
+							errorFile << "Error at line " << lCount << ": Variable "<< $1->getName() <<" already declared" << endl << endl;
+								semErrors++;
 							}
 							else{
 								SymbolInfo* temp2 = new SymbolInfo($1->getName(), $1->getType());
@@ -466,7 +466,7 @@ declaration_list : 	declaration_list COMMA ID
 								table.Insert(*temp2);
 								//data.push_back(*temp2);
 								//cout << temp2->getName() << endl;
-								//table.printAll(logFile);		
+								//table.printAll(logFile);
 							}
 						}
 					}
@@ -482,7 +482,7 @@ declaration_list : 	declaration_list COMMA ID
 						else{
 							SymbolInfo* temp = table.lookUp($1->getName(), "ARA");
 							if(temp!= NULL){
-								errorFile << "Error at line " << lCount << ": Array "<< $1->getName() <<" already declared" << endl << endl;	
+								errorFile << "Error at line " << lCount << ": Array "<< $1->getName() <<" already declared" << endl << endl;
 								semErrors++;
 							}
 							else{
@@ -494,10 +494,10 @@ declaration_list : 	declaration_list COMMA ID
 								table.Insert(*temp2);
 								//data.push_back(*temp2);
 								//cout << temp2->getName() << endl;
-								//table.printAll(logFile);			
+								//table.printAll(logFile);
 							}
 						}
-					}						
+					}
 					;
 
 
@@ -526,7 +526,7 @@ statement 	: 	var_declaration
 					logFile << "Line " << lCount << " : statement : compound_statement\n"<< endl;
 					$$=$1;
 				}
-			|	FOR LPAREN expression_statement expression_statement expression RPAREN statement 				{			
+			|	FOR LPAREN expression_statement expression_statement expression RPAREN statement 				{
 				logFile << "Line " << lCount << " : statement : FOR LPAREN expression_statement expression_statement expression RPAREN statement\n"<< endl;
 					/*
 						$3's code at first, which is already done by assigning $$=$3
@@ -550,19 +550,19 @@ statement 	: 	var_declaration
 					$$->code+=$5->code;
 					$$->code+="\tjmp "+string(label1)+"\n";
 					$$->code+=string(label2)+":\n";
-		
+
 				}
 			|	IF LPAREN expression RPAREN statement %prec THEN {
 					logFile << "Line " << lCount << " : statement : IF LPAREN expression RPAREN statement\n"<< endl;
 					$$=$3;
-					
+
 					char *label=newLabel();
 					$$->code+="\tmov ax, "+$3->getName()+"\n";
 					$$->code+="\tcmp ax, 0\n";
 					$$->code+="\tje "+string(label)+"\n";
 					$$->code+=$5->code;
 					$$->code+=string(label)+":\n";
-					
+
 					$$->setName("if");//not necessary
 				}
 			|	IF LPAREN expression RPAREN statement ELSE statement {
@@ -585,7 +585,7 @@ statement 	: 	var_declaration
 					$$ = new SymbolInfo();
 					char * label = newLabel();
 					char * exit = newLabel();
-					$$->code = string(label) + ":\n"; 
+					$$->code = string(label) + ":\n";
 					$$->code+=$3->code;
 					$$->code+="\tmov ax , "+$3->getName()+"\n";
 					$$->code+="\tcmp ax , 0\n";
@@ -593,7 +593,7 @@ statement 	: 	var_declaration
 					$$->code+=$5->code;
 					$$->code+="\tjmp "+string(label)+"\n";
 					$$->code+=string(exit)+":\n";
-			
+
 				}
 			|	PRINTLN LPAREN ID RPAREN SEMICOLON {
 					// write code for printing an ID. You may assume that ID is an integer variable.
@@ -612,7 +612,7 @@ statement 	: 	var_declaration
 					$$=$2;
 					$$->code+="\tmov dx,"+$2->getName()+"\n";
 					$$->code+="\tjmp   "+string(return_label)+"\n";
-		
+
 					logFile << "Line " << lCount << " : statement : RETURN expression SEMICOLON\n"<< endl;
 				}
 			| RETURN expression error
@@ -621,32 +621,32 @@ statement 	: 	var_declaration
 				semErrors++;
 			}
 			;
-		
+
 expression_statement	: SEMICOLON	{
 							logFile << "Line " << lCount << " : expression_statement : SEMICOLON\n"<< endl;
 							$$=new SymbolInfo(";","SEMICOLON");
 							$$->code="";
 							tempCount = 0;
-						}			
+						}
 					| expression SEMICOLON {
 							logFile << "Line " << lCount << " : expression_statement : expression SEMICOLON\n"<< endl;
 							$$=$1;
 							tempCount = 0;
-						}		
+						}
 					| expression error
 						{
 							errorFile << "Error at line " << lCount << " ; missing" << endl << endl;
 							semErrors++;
-						} 		 		
+						}
 						;
-						
+
 variable	: ID {
 				logFile << "Line " << lCount << " : variable : ID\n" ;
 				logFile << $1->getName() << endl << endl;
 				SymbolInfo* temp = table.lookUp($1->getName(),"VAR");
 				if(temp == NULL){
 					//logFile << "Variable " << $1->getName() << " doesn't exist" << endl;
-					errorFile << "Error at line " << lCount << " : " << $1->getName() << " doesn't exist" <<  endl << endl;					
+					errorFile << "Error at line " << lCount << " : " << $1->getName() << " doesn't exist" <<  endl << endl;
 					semErrors++;
 				}
 				else{
@@ -656,17 +656,17 @@ variable	: ID {
 					variables.push_back($$->getName()+to_string(table.scopeNum));
 					$$->setType("notarray");
 				}
-		}		
+		}
 		| ID LTHIRD expression RTHIRD {
 				logFile << "Line " << lCount << " : variable : ID LTHIRD expression RTHIRD\n" ;
 				logFile << $1->getName() << endl << endl;
 				SymbolInfo* temp = table.lookUp($1->getName(),"ARA");
 				if(temp == NULL){
-				errorFile << "Error at line " << lCount << " : " <<$1->getName() << " doesn't exist" <<  endl << endl;					
-					semErrors++;				
+				errorFile << "Error at line " << lCount << " : " <<$1->getName() << " doesn't exist" <<  endl << endl;
+					semErrors++;
 				}
 				else{
-					
+
 					$$= new SymbolInfo($1);
 					$$->setType("array");
 					$$->setName($$->getName()+to_string(table.scopeNum));
@@ -675,36 +675,36 @@ variable	: ID {
 					$$->code=$3->code ;
 					$$->code += "\tmov bx, " +$3->getName() +"\n";
 					$$->code += "\tadd bx, bx\n";
-					
+
 					delete $3;
 			}
-		}	
+		}
 		;
-			
+
 expression : logic_expression {
 			$$= $1;
 			logFile << "Line " << lCount << " : expression : logic_expression\n"<< endl;
-		}	
+		}
 		| variable ASSIGNOP logic_expression {
 				logFile << "Line " << lCount << " : expression : variable ASSIGNOP logic_expression\n"<< endl;
 				$$=$1;
 				$$->code=$3->code+$1->code;
 				$$->code+="\tmov ax, "+$3->getName()+"\n";
-				if($$->getType()=="notarray"){ 
+				if($$->getType()=="notarray"){
 					$$->code+= "\tmov "+$1->getName()+", ax\n";
 				}
-				
+
 				else{
 					$$->code+= "\tmov  "+$1->getName()+"[bx], ax\n";
 				}
 				delete $3;
-			}	
+			}
 		;
-			
+
 logic_expression : rel_expression {
 					logFile << "Line " << lCount << " : logic_expression : rel_expression\n"<< endl;
-					$$= $1;		
-				}	
+					$$= $1;
+				}
 		| rel_expression LOGICOP rel_expression {
 					logFile << "Line " << lCount << " : logic_expression : rel_expression LOGICOP rel_expression\n"<< endl;
 					$$=$1;
@@ -713,7 +713,7 @@ logic_expression : rel_expression {
 					char * label2 = newLabel();
 					char * temp = newPTemp();
 					if($2->getName()=="&&"){
-						/* 
+						/*
 						Check whether both operands value is 1. If both are one set value of a temporary variable to 1
 						otherwise 0
 						*/
@@ -729,7 +729,7 @@ logic_expression : rel_expression {
 						$$->code += "\tmov " + string(temp) + ", 0\n";
 						$$->code += string(label2) + ":\n";
 						$$->setName(temp);
-						
+
 					}
 					else if($2->getName()=="||"){
 						$$->code += "\tmov ax , " + $1->getName() +"\n";
@@ -744,16 +744,16 @@ logic_expression : rel_expression {
 						$$->code += "\tmov " + string(temp) + ", 1\n";
 						$$->code += string(label2) + ":\n";
 						$$->setName(temp);
-						
+
 					}
 					delete $3;
-				}	
+				}
 			;
-			
+
 rel_expression	: simple_expression {
 				logFile << "Line " << lCount << " : rel_expression : simple_expression\n"<< endl;
 				$$= $1;
-			}	
+			}
 		| simple_expression RELOP simple_expression {
 				logFile << "Line " << lCount << " : rel_expression : simple_expression RELOP simple_expression\n"<< endl;
 				$$=$1;
@@ -781,7 +781,7 @@ rel_expression	: simple_expression {
 				else if($2->getName()=="!="){
 					$$->code+="\tjne " + string(label1)+"\n";
 				}
-				
+
 				$$->code+="\tmov "+string(temp) +", 0\n";
 				$$->code+="\tjmp "+string(label2) +"\n";
 				$$->code+=string(label1)+":\n";
@@ -789,9 +789,9 @@ rel_expression	: simple_expression {
 				$$->code+=string(label2)+":\n";
 				$$->setName(temp);
 				delete $3;
-			}	
+			}
 		;
-				
+
 simple_expression : term {
 				logFile << "Line " << lCount << " : simple_expression : term\n"<< endl;
 				$$= $1;
@@ -800,9 +800,9 @@ simple_expression : term {
 				logFile << "Line " << lCount << " : simple_expression : simple_expression ADDOP term\n"<< endl;
 				$$=$1;
 				$$->code+=$3->code;
-				
-				// move one of the operands to a register, perform addition or subtraction with the other operand and move the result in a temporary variable  
-				
+
+				// move one of the operands to a register, perform addition or subtraction with the other operand and move the result in a temporary variable
+
 				if($2->getName()=="+"){
 					char* temp = newTemp();
 					$$->code += "\tmov ax, " + $1->getName() + "\n";
@@ -821,13 +821,13 @@ simple_expression : term {
 				cout << endl;
 			}
 				;
-				
-term :	unary_expression 
+
+term :	unary_expression
 		{
-			logFile << "Line " << lCount << " : term : unary_expression\n"<< endl;						
+			logFile << "Line " << lCount << " : term : unary_expression\n"<< endl;
 			$$= $1;
 		}
-	 	|term MULOP unary_expression 
+	 	|term MULOP unary_expression
 		{
 			logFile << "Line " << lCount << " : term : term MULOP unary_expression\n"<< endl;
 			$$=$1;
@@ -850,7 +850,7 @@ term :	unary_expression
 				$$->code += "\txor dx , dx\n";
 				$$->code += "\tdiv bx\n";
 				$$->code += "\tmov " + string(temp) + " , dx\n";
-				
+
 			}
 			$$->setName(temp);
 			cout << endl << $$->code << endl;
@@ -858,10 +858,10 @@ term :	unary_expression
 		}
 	 	;
 
-unary_expression 	:	ADDOP unary_expression  
+unary_expression 	:	ADDOP unary_expression
 					{
 						logFile << "Line " << lCount << " : unary_expression : ADDOP unary_expression\n"<< endl;
-						
+
 						if($1->getName() == "+"){
 							$$=$2;
 						}
@@ -874,7 +874,7 @@ unary_expression 	:	ADDOP unary_expression
 						}
 							// Perform NEG operation if the symbol of ADDOP is '-'
 					}
-					|	NOT unary_expression 
+					|	NOT unary_expression
 					{
 						logFile << "Line " << lCount << " : unary_expression : NOT unary_expression\n"<< endl;
 						$$=$2;
@@ -883,21 +883,21 @@ unary_expression 	:	ADDOP unary_expression
 						$$->code+="\tnot ax\n";
 						$$->code+="\tmov "+string(temp)+", ax";
 					}
-					|	factor 
+					|	factor
 					{
 						logFile << "Line " << lCount << " : unary_expression : factor\n"<< endl;
 						$$=$1;
 					}
 					;
-	
+
 factor	: variable {
 			SymbolInfo * newVar = new SymbolInfo(*$1);
-			
+
 			logFile << "Line " << lCount << " : factor : variable\n"<< endl;
 			if($$->getType()=="notarray"){
-				
+
 			}
-			
+
 			else{
 				char *temp= newTemp();
 				$$->code+="\tmov ax, " + $1->getName() + "[bx]\n";
@@ -915,24 +915,24 @@ factor	: variable {
 				errorFile << "Error at line " << lCount <<" : Function " <<$1->getName() <<" doesn't exist"<<endl << endl;
 			}
 	}
-	| LPAREN expression RPAREN 
+	| LPAREN expression RPAREN
 	{
 		logFile << "Line " << lCount << " : factor : LPAREN expression RPAREN\n"<< endl;
 		$$= $2;
 	}
-	| CONST_INT 
+	| CONST_INT
 	{
 		logFile << "Line " << lCount << " : factor : CONST_INT\n" ;
 		logFile << $1->getName() << endl << endl;
 		$$= $1;
 	}
-	| CONST_FLOAT 
+	| CONST_FLOAT
 	{
 		logFile << "Line " << lCount << " : factor : CONST_FLOAT\n" ;
 		logFile << $1->getName() << endl << endl;
 		$$= $1;
 	}
-	| variable INCOP 
+	| variable INCOP
 	{
 		logFile << "Line " << lCount << " : factor : variable INCOP\n"<< endl;
 		$$=$1;
@@ -940,13 +940,13 @@ factor	: variable {
 		$$->code += "\tadd ax , 1\n";
 		$$->code += "\tmov " + $$->getName() + " , ax\n";
 		// perform incop depending on whether the varaible is an array or not
-		
+
 	}
 	| variable DECOP
 	{
 		logFile << "Line " << lCount << " : factor : variable DECOP\n"<< endl;
 		$$ = $1;
-		
+
 		$$->code += "\tmov ax , " + $$->getName()+ "\n";
 		$$->code += "\tsub ax , 1\n";
 		$$->code += "\tmov " + $$->getName() + " , ax\n";
@@ -960,7 +960,7 @@ argument_list	: arguments
 				|{}
 				;
 
-arguments	:arguments COMMA logic_expression 
+arguments	:arguments COMMA logic_expression
 			{
 				logFile << "Line " << lCount << " : arguments : arguments COMMA logic_expression\n"<< endl;
 			}
@@ -969,7 +969,7 @@ arguments	:arguments COMMA logic_expression
 				logFile << "Line " << lCount << " : arguments : logic_expression\n"<< endl;
 			}
 			;
-		
+
 %%
 
 
@@ -982,25 +982,25 @@ int main(int argc, char * argv[]){
 		printf("Please provide input file name and try again\n");
 		return 0;
 	}
-	
+
 	FILE *fin=fopen(argv[1],"r");
 	if(fin==NULL){
 		printf("Cannot open specified file\n");
 		return 0;
 	}
-	
+
 	logFile.open("1405045_log.txt");
 	errorFile.open("1405045_errors.txt");
 
 	yyin= fin;
 	yyparse();
-	
+
 	printf("\nTotal Lines: %d\n",--lCount);
 	printf("\nTotal Errors: %d\n",errCount);
 
 	logFile.close();
 	errorFile.close();
-	
+
 	printf("\n");
 	return 0;
 }

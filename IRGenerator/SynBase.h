@@ -4,15 +4,7 @@
 
 #ifndef SYNTAXANALYZER_SYNBASE_H
 #define SYNTAXANALYZER_SYNBASE_H
-
-
-#include <iostream>
-#include "DataStructure.h"
-#include "Utils.h"
-#include <stack>
-#include <sstream>
-#include <utility>
-#include <cstdlib>
+#include "AsmBase.h"
 
 
 using std::stack;
@@ -23,11 +15,9 @@ using std::stack;
 #define INFINITY_INT  numeric_limits<int>::max();
 #define INFINITY_FLOAT numeric_limits<float>::infinity()
 
-#define SYMBOL_TABLE_SIZE 73
 
 
 std::ofstream logFile, errorFile, parserFile;
-SymbolTable table(SYMBOL_TABLE_SIZE);
 
 size_t syntaxErrors = 0;
 size_t warnings = 0;
@@ -200,6 +190,7 @@ SymbolInfo *nullVal() {
 }
 
 SymbolInfo *insertToTable(SymbolInfo *symbolInfo) {
+	symbolInfo->setScopeID(table.getCurrentId());
 	table.insert(*symbolInfo);
 	return table.lookUp(symbolInfo->getName());
 }
@@ -220,6 +211,7 @@ SymbolInfo *insertVar(SymbolInfo *idVal) {
 			SymbolInfo *var = insertToTable(idVal);
 			var->setVarType(variableType);
 			var->setIDType(VARIABLE);
+			printDebug(var->getName() +"@ scope "+var->getScopeID());
 			return var;
 		}
 	}

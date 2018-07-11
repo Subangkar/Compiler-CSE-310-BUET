@@ -8,3 +8,8 @@ gio trash y.output
 gio trash parser.out
 gio trash l.o
 gio trash lex.yy.c
+
+
+
+
+gio trash code.asm

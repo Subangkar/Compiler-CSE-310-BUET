@@ -1,0 +1,82 @@
+Line 1 : type_specifier	: INT
+
+Line 1 : declaration_list :	ID
+y
+
+Line 1 : var_declaration : type_specifier declaration_list SEMICOLON
+
+Line 1 : unit : var_declaration
+
+Line 1 : program : unit
+
+Line 3 : type_specifier	: INT
+
+Line 5 : type_specifier	: INT
+
+Line 5 : declaration_list :	ID
+x
+
+Line 5 : var_declaration : type_specifier declaration_list SEMICOLON
+
+Line 5 : statement : var_declaration
+
+Line 5 : statements : statement
+
+Line 6 : variable : ID
+x
+
+Line 6 : factor : CONST_INT
+57
+
+Line 6 : unary_expression : factor
+
+Line 6 : term : unary_expression
+
+Line 6 : simple_expression : term
+
+Line 6 : rel_expression : simple_expression
+
+Line 6 : logic_expression : rel_expression
+
+Line 6 : expression : variable ASSIGNOP logic_expression
+
+Line 6 : expression_statement : expression SEMICOLON
+
+Line 6 : statement : expression_statement
+
+Line 6 : statements : statements statement
+
+Line 7 : statement : PRINTLN LPAREN ID RPAREN SEMICOLON
+
+Line 7 : statements : statements statement
+
+Line 8 : factor : CONST_INT
+0
+
+Line 8 : unary_expression : factor
+
+Line 8 : term : unary_expression
+
+Line 8 : simple_expression : term
+
+Line 8 : rel_expression : simple_expression
+
+Line 8 : logic_expression : rel_expression
+
+Line 8 : expression : logic_expression
+
+Line 8 : statement : RETURN expression SEMICOLON
+
+Line 8 : statements : statements statement
+
+Line 9 : compound_statement : LCURL statements RCURL
+
+Line 9 : func_definition : type_specifier ID LPAREN parameter_list RPAREN compound_statement
+main
+
+Line 9 : unit : func_definition
+
+Line 9 : program : program unit
+
+Line 10 : start : program
+

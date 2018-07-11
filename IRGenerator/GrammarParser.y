@@ -9,10 +9,7 @@
 SymbolInfo* symbolValue;
 }
 
-/* %token COMMENT IF ELSE FOR WHILE DO BREAK CONTINUE INT FLOAT CHAR DOUBLE VOID RETURN SWITCH CASE DEFAULT */
-/* %token INCOP DECOP ASSIGNOP LPAREN RPAREN LCURL RCURL LTHIRD RTHIRD SEMICOLON COMMA STRING NOT PRINTLN */
 %token IF FOR DO INT FLOAT VOID SWITCH DEFAULT ELSE WHILE BREAK CHAR DOUBLE RETURN CASE CONTINUE
-/* %token ADDOP INCOP MULOP RELOP LOGICOP BITOP ASSIGNOP NOT */
 %token INCOP DECOP ASSIGNOP NOT
 %token LPAREN RPAREN LCURL RCURL LTHIRD RTHIRD COMMA SEMICOLON
 %token PRINTLN
@@ -42,6 +39,8 @@ SymbolInfo* symbolValue;
 
 start: program
 		{
+				writeASM();
+
 				pushVal(start,popVal(program));
 				printRuleLog(start,"program");
 		}
@@ -290,6 +289,12 @@ statement: var_declaration
 			}
 	  | PRINTLN LPAREN ID RPAREN SEMICOLON
 			{
+				addCode(PROC_START("main"));
+				addCode("MOV AX,"+getASM_VAR_NAME($3->getName()));
+				addCode("CALL OUTDEC");
+				addCode(PROC_END("main"));
+				addCode(getOUTDEC_PROC());
+
 				pushVal(statement,"("+$3->getName()+")"+";");
 				printRuleLog(statement,"PRINTLN LPAREN ID RPAREN SEMICOLON");
 			}
@@ -563,6 +568,8 @@ int main(int argc,char *argv[])
 	logFile.open("log.txt");
 	errorFile.open("errors.txt");
 	parserFile.open("parser.txt");
+
+	asmFile.open("code.asm");
 
 	yyparse();
 	logFile << "Total Lines : " << line_count << std::endl << std::endl;

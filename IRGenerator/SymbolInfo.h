@@ -39,6 +39,8 @@ class SymbolInfo {
 
 	int defInt=0;
 	float defFlt=0.0;
+
+	int scopeID=-1;
 public:
 
 	vector<string> paramList;    //INT, FLOAT, STRING, CHAR
@@ -109,6 +111,14 @@ public:
 		setVarType(FuncRet);
 	}
 
+	string getScopeID() const {
+		return to_string(scopeID);
+	}
+
+	void setScopeID(int scopeID) {
+		this->scopeID = scopeID;
+	}
+
 	size_t getArrSize() const {
 		return arrSize;
 	}
@@ -175,6 +185,8 @@ public:
 		this->floatData = symbolInfo.floatData;
 
 		this->paramList = symbolInfo.paramList;
+
+		this->scopeID = symbolInfo.scopeID;
 	}
 
 	SymbolInfo &operator=(const SymbolInfo &symbolInfo)= default;

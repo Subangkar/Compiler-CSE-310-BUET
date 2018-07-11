@@ -126,7 +126,7 @@ STAR_COMMENT {UNFINISHED_STAR_COMMENT}[\*]*{STAR_COMMENT_END}
 "case" 			{return CASE;}
 "continue"	{return CONTINUE;}
 
-
+"println"   {return PRINTLN;}
 
 
 

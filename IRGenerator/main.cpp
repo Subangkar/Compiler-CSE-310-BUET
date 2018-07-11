@@ -3,6 +3,7 @@
 #include "DataStructure.h"
 #include "DataStructure.h"
 #include "Utils.h"
+#include "AsmBase.h"
 
 
 string indent(string fileName)//Autoindent a file
@@ -102,7 +103,7 @@ string indent(string fileName)//Autoindent a file
 
 SymbolTable st;
 int main() {
-
+//	string outdec_proc = getOUTDEC_PROC();
 //	string code = "int main(){int x ,y ,z ;y =8 ;int d ;d =x +y ; z =(x ==y ) ; } ";
 //	StringUtils::replaceAll(code,";",";\n");
 //	StringUtils::replaceAll(code,";\n\n",";\n");
@@ -118,7 +119,9 @@ int main() {
 //
 //	st.printAllScope();
 
-	cout << atof("2.5E.4")<<endl;
+//	cout << atof("2.5E.4")<<endl
+
+//	cout << outdec_proc << endl;
 
 	return 0;
 }
