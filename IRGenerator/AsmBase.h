@@ -184,7 +184,7 @@ string assignToMemory(const string &dest, const string &destOffsetVar, const str
 	return code;
 }
 
-string copyFromCurSI(const string &dest, const string &src){
+string copyFromCurSI(const string &dest, const string &src) {
 	string code;
 	code += "MOV DX," + ASM_VAR_NAME(src) + "[SI]" + NEWLINE_ASM;
 	code += "MOV " + ASM_VAR_NAME(dest) + ", DX" + NEWLINE_ASM;
@@ -205,12 +205,20 @@ string incMemoryValue(const string &mem, const string &offsetVar, const string &
 	return code;
 }
 
-string notMemoryValue(const string &dest,const string &mem) {
+string notMemoryValue(const string &dest, const string &mem) {
 	return assignToMemory(dest, mem) + "NOT " + dest + NEWLINE_ASM;
 }
 
-string notMemoryValue(const string &dest,const string &mem, const string &offsetVar) {
+string notMemoryValue(const string &dest, const string &mem, const string &offsetVar) {
 	return assignToMemory(dest, 0, mem, offsetVar) + "NOT " + dest + NEWLINE_ASM;
+}
+
+string minusMemoryValue(const string &dest, const string &mem) {
+	return assignToMemory(dest, mem) + "NEG " + dest + NEWLINE_ASM;//+ "INC " + dest + NEWLINE_ASM;
+}
+
+string minusMemoryValue(const string &dest, const string &mem, const string &offsetVar) {
+	return assignToMemory(dest, 0, mem, offsetVar) + "NEG " + dest + NEWLINE_ASM;
 }
 
 #endif //IRGENERATOR_ASMBASE_H

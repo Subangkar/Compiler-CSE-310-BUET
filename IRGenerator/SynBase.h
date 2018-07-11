@@ -401,14 +401,14 @@ SymbolInfo *getAssignExpVal(SymbolInfo *lhs, SymbolInfo *rhs) {
 
 	if (lhs->isArrayVar()) {
 		if (rhs->isArrayVar())
-			lhs->code = rhs->code + assignToMemory(lhs->getName(), lhs->getArrIndexVarName(), rhs->getName(),rhs->getArrIndexVarName());
+			lhs->code = rhs->code + assignToMemory(lhs->getName(), lhs->getArrIndexVarName(), rhs->getName(),
+			                                       rhs->getArrIndexVarName());
 		else
 			lhs->code = rhs->code + assignToMemory(lhs->getName(), lhs->getArrIndexVarName(), rhs->getName());
 	} else if (lhs->isVariable()) {
 		if (rhs->isArrayVar()) {
-			lhs->code = rhs->code + assignToMemory(lhs->getName(),0, rhs->getName(), rhs->getArrIndexVarName());
-		}
-		else
+			lhs->code = rhs->code + assignToMemory(lhs->getName(), 0, rhs->getName(), rhs->getArrIndexVarName());
+		} else
 			lhs->code = rhs->code + assignToMemory(lhs->getName(), rhs->getName());
 	}
 	return lhs;
@@ -588,7 +588,7 @@ SymbolInfo *getMultpOpVal(SymbolInfo *left, SymbolInfo *right, SymbolInfo *op) {
 
 
 SymbolInfo *getIncOpVal(SymbolInfo *varVal) {
-	SymbolInfo *opVal = new SymbolInfo(*varVal);
+	auto *opVal = new SymbolInfo(*varVal);
 	if (varVal->isArrayVar()) {
 		opVal->code = incMemoryValue(varVal->getName(), varVal->getArrIndexVarName(), "INC");
 //		opVal->code += copyFromCurSI(opVal->getName(), varVal->getName());
@@ -600,7 +600,7 @@ SymbolInfo *getIncOpVal(SymbolInfo *varVal) {
 }
 
 SymbolInfo *getDecOpVal(SymbolInfo *varVal) {
-	SymbolInfo *opVal = new SymbolInfo(*varVal);
+	auto *opVal = new SymbolInfo(*varVal);
 	if (varVal->isArrayVar()) {
 		opVal->code = incMemoryValue(varVal->getName(), varVal->getArrIndexVarName(), "DEC");
 //		opVal->code += copyFromCurSI(opVal->getName(), varVal->getName());
@@ -616,7 +616,7 @@ SymbolInfo *getNotOpVal(SymbolInfo *factor) {
 		printErrorLog("Invalid Operand for Logical Not Operation");
 		return nullVal();
 	}
-	SymbolInfo *opVal = new SymbolInfo(newTemp(), "");
+	auto opVal = new SymbolInfo(newTemp(), "");
 	opVal = getConstVal(opVal, INT_TYPE);
 	if (factor->isVariable()) {
 		opVal->code = notMemoryValue(opVal->getName(), factor->getName());
@@ -632,31 +632,16 @@ SymbolInfo *getUniAddOpVal(SymbolInfo *varVal, SymbolInfo *op) {
 		printErrorLog("Invalid Operand for Unary Operation");
 		return nullVal();
 	}
-	SymbolInfo *opVal = new SymbolInfo("", "");
-	opVal = getConstVal(opVal, varVal->getVarType());
+
 	const string &uniOp = op->getName();
-	if (varVal->getVarType() == FLOAT_TYPE) {
-		if (varVal->isVariable()) {
-			opVal->fltValue() = uniOp == "+" ? (varVal->fltValue()) : -(varVal->fltValue());
-		} else if (varVal->isArrayVar()) {
-			opVal->fltValue() =
-					uniOp == "+" ? (varVal->fltValue())
-					             : -(varVal->fltValue());
-		}
-	} else if (varVal->getVarType() == INT_TYPE) {
-		if (varVal->isVariable()) {
-			opVal->intValue() = uniOp == "+" ? (varVal->intValue()) : -(varVal->intValue());
-		} else if (varVal->isArrayVar()) {
-			opVal->intValue() =
-					uniOp == "+" ? (varVal->intValue()) : -(varVal->intValue());
-		}
-	}
-
-//	if (opVal->getVarType() == FLOAT_TYPE)
-//		printDebug(uniOp + " Unary Operation Val: " + to_string(opVal->fltValue()));
-//	else if (opVal->getVarType() == INT_TYPE)
-//		printDebug(uniOp + " Unary Operation Val: " + to_string(opVal->intValue()));
-
+	if (uniOp == "+") return varVal;
+	auto opVal = new SymbolInfo(newTemp(), "");
+	opVal = getConstVal(opVal, varVal->getVarType());
+	opVal->code = varVal->code;
+	if (varVal->isArrayVar())
+		opVal->code += minusMemoryValue(opVal->getName(), varVal->getName(), varVal->getArrIndexVarName());
+	else
+		opVal->code += minusMemoryValue(opVal->getName(), varVal->getName());
 	return opVal;
 }
 

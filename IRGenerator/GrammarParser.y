@@ -42,6 +42,7 @@ start: program
 				if(!syntaxErrors && !err_count_lex){
 						addCode($1->code);
 						writeASM();
+						printDebug($1->code);
 				}
 				pushVal(start,popVal(program));
 				printRuleLog(start,"program");
@@ -52,7 +53,7 @@ program: program unit
 		{
 			$$ = new SymbolInfo("","");
 			$$->code = $1->code + $2->code;
-			printDebug($2->code);
+			/* printDebug($2->code); */
 
 			pushVal(program,popVal(program)+popVal(unit));
 			printRuleLog(program,"program unit");
@@ -480,7 +481,7 @@ factor: variable
 		{
 			/* $$ = new SymbolInfo(*$1); */
 			/* $$->setName(newTemp()); */
-			/* $$->code = $1->code + assignToMemory($$->getName(),$1->getName());// need to think for array */ 
+			/* $$->code = $1->code + assignToMemory($$->getName(),$1->getName());// need to think for array */
 
 			pushVal(factor,popVal(variable));
 			printRuleLog(factor,"variable");
