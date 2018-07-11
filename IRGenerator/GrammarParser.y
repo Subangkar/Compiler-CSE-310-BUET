@@ -428,9 +428,7 @@ simple_expression: term
 				}
 		  | simple_expression ADDOP term
 				{
-					/* if(getAddtnOpVal($1,$3,$2)!=nullptr) */
 					$$ = getAddtnOpVal($1,$3,$2);
-					/* printDebug(string("term Val: ") + "float: " + to_string($3->floatData[0])+ "int: " + to_string($3->intData[0])); */
 
 					pushVal(simple_expression,popVal(simple_expression)+$2->getName()+popVal(term));
 					printRuleLog(simple_expression,"simple_expression ADDOP term");
@@ -444,10 +442,8 @@ term:	unary_expression
 				}
      | term MULOP unary_expression
 		 		{
-					/* printDebug($1->getName()+"Term Val : "+to_string($1->getVarType()=="INT" ? $1->intData[0]:$1->floatData[0])); */
 					SymbolInfo* t = getMultpOpVal($1,$3,$2);
-					if(t!=nullptr)
-					$$ = t;
+					if(t!=nullptr)$$ = t;
 
 					pushVal(term,popVal(term)+$2->getName()+popVal(unary_expression));
 					printRuleLog(term,"term MULOP unary_expression");
@@ -470,9 +466,6 @@ unary_expression: ADDOP unary_expression
 				}
 		 | factor
 		 		{
-					/* printDebug($1->getName()+"Fact Val : "+to_string($1->getVarType()=="INT" ? $1->intData[0]:$1->floatData[0])); */
-					/* printDebug($1->getName()+"Fact Type : "+$1->getVarType()); */
-
 					pushVal(unary_expression,popVal(factor));
 					printRuleLog(unary_expression,"factor");
 				}
@@ -480,18 +473,13 @@ unary_expression: ADDOP unary_expression
 
 factor: variable
 		{
-			/* $$ = new SymbolInfo(*$1); */
-			/* $$->setName(newTemp()); */
-			/* $$->code = $1->code + memoryToMemory($$->getName(),$1->getName());// need to think for array */
-
 			pushVal(factor,popVal(variable));
 			printRuleLog(factor,"variable");
 		}
 	| ID LPAREN argument_list RPAREN
 		{
 			SymbolInfo* t=getFuncCallValue($1);
-			if(t!=nullptr)
-			$$ = t;
+			if(t!=nullptr)$$ = t;
 
 			pushVal(factor,$1->getName()+"("+popVal(argument_list)+")");
 			printRuleLog(factor,"ID LPAREN argument_list RPAREN");
@@ -506,7 +494,6 @@ factor: variable
 	| CONST_INT
 		{
 			$$ = getConstVal($1,INT_TYPE);
-			/* printDebug($1->getName()+"CONST_INT Val : "+to_string($1->intData[0])); */
 
 			pushVal(factor,$1->getName());
 			printRuleLog(factor,"CONST_INT");
@@ -515,7 +502,7 @@ factor: variable
 		{
 			$$ = getConstVal($1,FLOAT_TYPE);
 
-			pushVal(factor,$1->getName());//
+			pushVal(factor,$1->getName());
 			printRuleLog(factor,"CONST_FLOAT");
 		}
 	| variable INCOP
@@ -527,7 +514,7 @@ factor: variable
 		}
 	| variable DECOP
 		{
-			$$ = getIncOpVal($1);
+			$$ = getDecOpVal($1);
 
 			pushVal(factor,popVal(variable)+"--");
 			printRuleLog(factor,"variable DECOP");

@@ -1,15 +1,13 @@
 int y;
-int a[2];
+int a[5];
 
 int main()
 {
 	int x,z;
-  a[3]=3;
-  // ar[1]=ar[0]++;
-  // x=ar[0]++;
-  // ar[1]=x++;
-  x = -a[3];
-
+  a[1]=-3;
+  a[5]=-5;
+  a[5]=a[1]*a[5];
+  x=a[5];
   println(x);
 
 	return 0;

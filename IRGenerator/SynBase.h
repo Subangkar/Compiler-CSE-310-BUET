@@ -571,17 +571,15 @@ SymbolInfo *getMultpOpVal(SymbolInfo *left, SymbolInfo *right, SymbolInfo *op) {
 		printErrorLog("Float operand for mod operator");
 		return nullVal();
 	}
-	SymbolInfo *opVal = new SymbolInfo("", "");
-	if (left->getVarType() == FLOAT_TYPE || right->getVarType() == FLOAT_TYPE) {
-		opVal = getConstVal(opVal, FLOAT_TYPE);
-	} else {
-		opVal = getConstVal(opVal, INT_TYPE);
-	}
+	SymbolInfo *opVal = new SymbolInfo(newTemp(), "");
+	opVal->code = left->code + right->code;
+//	if(mulOp == "*"){
+		opVal->code+=multMemoryValues(mulOp,opVal->getName(),left->getName(),left->getArrIndexVarName(),right->getName(),right->getArrIndexVarName());
+//	} else if(mulOp == "/"){
 
-//	if (opVal->getVarType() == FLOAT_TYPE)
-//		printDebug(mulOp + " Operation Val: " + to_string(opVal->fltValue()));
-//	else if (opVal->getVarType() == INT_TYPE)
-//		printDebug(mulOp + " Operation Val: " + to_string(opVal->intValue()));
+//	} else{
+
+//	}
 
 	return opVal;
 }

@@ -8,7 +8,7 @@
 #define PROC_START(x)   string(x)+" PROC\r\n"
 #define PROC_END(x)     string(x)+" ENDP\r\n"
 #define SCOPE_NO(x) "$"+(x)
-#define NEWLINE_ASM "\r\n"
+#define NEWLINE_ASM string("\r\n")
 #define ASM_INT_TYPE " DW "
 
 
@@ -150,11 +150,11 @@ void writeASM() {
 
 string memoryToMemory(const string &dest, const string &destOffsetVar, const string &src,
                       const string &srcOffsetVar = "") {
-	if(destOffsetVar.empty() && srcOffsetVar.empty()){
+	if (destOffsetVar.empty() && srcOffsetVar.empty()) {
 		string code = "MOV DX," + ASM_VAR_NAME(src) + NEWLINE_ASM;
 		code += "MOV " + ASM_VAR_NAME(dest) + ", DX" + NEWLINE_ASM;
 		return code;
-	} else if(!destOffsetVar.empty() && srcOffsetVar.empty()){
+	} else if (!destOffsetVar.empty() && srcOffsetVar.empty()) {
 		string code;
 		code += "MOV SI," + ASM_VAR_NAME(destOffsetVar) + NEWLINE_ASM;
 		code += string("ADD SI,SI") + NEWLINE_ASM;
@@ -162,7 +162,7 @@ string memoryToMemory(const string &dest, const string &destOffsetVar, const str
 		code += "MOV " + ASM_VAR_NAME(dest) + "[SI], DX" + NEWLINE_ASM;
 		return code;
 
-	} else if(destOffsetVar.empty() && !srcOffsetVar.empty()){
+	} else if (destOffsetVar.empty() && !srcOffsetVar.empty()) {
 		string code;
 		code += "MOV SI," + ASM_VAR_NAME(srcOffsetVar) + NEWLINE_ASM;
 		code += string("ADD SI,SI") + NEWLINE_ASM;
@@ -216,6 +216,55 @@ string minusMemoryValue(const string &dest, const string &mem) {
 
 string minusMemoryValue(const string &dest, const string &mem, const string &offsetVar) {
 	return memoryToMemory(dest, "", mem, offsetVar) + "NEG " + dest + NEWLINE_ASM;
+}
+
+string
+multMemoryValues(const string &op, const string &dest, const string &mult1, const string &offset1, const string &mult2,
+                 const string &offset2 = "") {
+	string oper;
+	if (op == "*") oper = "IMUL ";
+	else oper = "IDIV ";
+
+	string code;
+	string d = ASM_VAR_NAME(dest);
+	string mem1 = ASM_VAR_NAME(mult1), mem2 = ASM_VAR_NAME(mult2);
+	cout << mult1 << " ::: " << mult2 << endl;
+	if (!StringUtils::isAlpha(mult1[0])) {
+		string t = newTemp();
+		code += "MOV " + t + "," + mem1 + NEWLINE_ASM;
+		mem1 = t;
+	}
+	if (!StringUtils::isAlpha(mult2[0])) {
+		string t = newTemp();
+		code += "MOV " + t + "," + mem2 + NEWLINE_ASM;
+		mem2 = t;
+	}
+
+	if (offset1.empty() && offset2.empty()) {
+		code += "MOV AX," + mem1 + NEWLINE_ASM;
+		code += oper + mem2 + NEWLINE_ASM;
+	} else if (!offset1.empty() && offset2.empty()) {
+		code += "MOV SI," + offset1 + NEWLINE_ASM;
+		code += "ADD SI,SI" + NEWLINE_ASM;
+		code += "MOV AX," + mem1 + "[SI]" + NEWLINE_ASM;
+		code += oper + mem2 + NEWLINE_ASM;
+	} else if (offset1.empty() && !offset2.empty()) {
+		code += "MOV SI," + offset2 + NEWLINE_ASM;
+		code += "ADD SI,SI" + NEWLINE_ASM;
+		code += "MOV AX," + mem2 + "[SI]" + NEWLINE_ASM;
+		code += oper + mem1 + NEWLINE_ASM;
+	} else {
+		code += "MOV SI," + offset1 + NEWLINE_ASM;
+		code += "ADD SI,SI" + NEWLINE_ASM;
+		code += "MOV AX," + mem1 + "[SI]" + NEWLINE_ASM;
+		code += "MOV SI," + offset2 + NEWLINE_ASM;
+		code += "ADD SI,SI" + NEWLINE_ASM;
+		code += "MOV DX," + mem2 + "[SI]" + NEWLINE_ASM;
+		code += oper + "DX" + NEWLINE_ASM;
+	}
+	if (op == "%") code += "MOV " + d + ", DX" + NEWLINE_ASM;
+	else code += "MOV " + d + ", AX" + NEWLINE_ASM;
+	return code;
 }
 
 #endif //IRGENERATOR_ASMBASE_H

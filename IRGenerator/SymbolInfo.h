@@ -42,7 +42,7 @@ class SymbolInfo {
 
 	int scopeID=-1;
 
-	string arrIndexVarName;
+	string arrIndexVarName = "";
 public:
 
 	vector<string> paramList;    //INT, FLOAT, STRING, CHAR
