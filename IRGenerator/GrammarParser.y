@@ -26,7 +26,7 @@ SymbolInfo* symbolValue;
 
 %token <symbolValue>BITOP
 
-%type <symbolValue>type_specifier expression logic_expression rel_expression simple_expression term unary_expression factor variable
+%type <symbolValue>type_specifier expression logic_expression rel_expression simple_expression term unary_expression factor variable program unit var_declaration func_declaration func_definition parameter_list compound_statement declaration_list statements statement expression_statement argument_list arguments
 
 %nonassoc second_prec
 %nonassoc ELSE
@@ -39,9 +39,10 @@ SymbolInfo* symbolValue;
 
 start: program
 		{
-				if(!syntaxErrors && !err_count_lex)
-							writeASM();
-
+				if(!syntaxErrors && !err_count_lex){
+						addCode($1->code);
+						writeASM();
+				}
 				pushVal(start,popVal(program));
 				printRuleLog(start,"program");
 		}
@@ -49,6 +50,10 @@ start: program
 
 program: program unit
 		{
+			$$ = new SymbolInfo("","");
+			$$->code = $1->code + $2->code;
+			printDebug($2->code);
+
 			pushVal(program,popVal(program)+popVal(unit));
 			printRuleLog(program,"program unit");
 		}
@@ -108,6 +113,14 @@ func_definition: type_specifier ID LPAREN parameter_list RPAREN{addFuncDef($2,$1
 			}
 		| type_specifier ID LPAREN RPAREN {addFuncDef($2,$1);} compound_statement
 			{
+				$$ = new SymbolInfo("","");
+				$$->code = PROC_START($2->getName());
+				$$->code += $6->code;
+				if($2->getName()!="main")$$->code += "RET";
+				StringUtils::replaceAll($$->code,"\n","\n\t");
+				$$->code += PROC_END($2->getName());
+				delete $6;
+
 				pushVal(func_definition,popVal(type_specifier)+$2->getName()+"("+")"+popVal(compound_statement));
 				printRuleLog(func_definition,"type_specifier ID LPAREN RPAREN compound_statement");
 			}
@@ -155,6 +168,7 @@ parameter_list: parameter_list COMMA type_specifier ID
 
 compound_statement: LCURL {enterFuncScope();} statements RCURL
 			{
+					$$ = $3;
 			   	pushVal(compound_statement,"{"+popVal(statements)+"}");
 					printRuleLog(compound_statement,"LCURL statements RCURL");
 
@@ -247,6 +261,9 @@ statements: statement
 				printRuleLog(statements,"statement");
 			}
 	   | statements statement {
+			 	$$ = new SymbolInfo("","");
+			 	$$->code = $1->code + $2->code;
+
 		   	pushVal(statements,popVal(statements)+popVal(statement));
 				printRuleLog(statements,"statements statement");
 		 	}
@@ -290,7 +307,7 @@ statement: var_declaration
 			}
 	  | PRINTLN LPAREN ID RPAREN SEMICOLON
 			{
-				printVarValue($3);
+				$$->code = printVarValue($3);
 
 				pushVal(statement,"("+$3->getName()+")"+";");
 				printRuleLog(statement,"PRINTLN LPAREN ID RPAREN SEMICOLON");
@@ -305,7 +322,6 @@ statement: var_declaration
 			pushVal(statement,"return"+popVal(expression)+"");
 			printErrorRuleLog("; missing before return",statement,"RETURN expression error");
 		}
-		| PRINTLN LPAREN ID RPAREN error
 		| error ELSE {
 			printErrorLog("else without if");} statement{
 			pushVal(statement,string(ERROR_VAL)+" else"+popVal(statement));
@@ -326,6 +342,7 @@ invalid_condition: LPAREN error RPAREN {printErrorLog("invalid conditional expre
 
 expression_statement: SEMICOLON
 				{
+					$$ = new SymbolInfo(";","");
 					pushVal(expression_statement,";");
 					printRuleLog(expression_statement,"SEMICOLON");
 				}
@@ -461,6 +478,10 @@ unary_expression: ADDOP unary_expression
 
 factor: variable
 		{
+			$$ = new SymbolInfo(*$1);
+			$$->setName(newTemp());
+			$$->code = $1->code + assignExpToVar($$->getName(),$1->getName());// need to think for array
+
 			pushVal(factor,popVal(variable));
 			printRuleLog(factor,"variable");
 		}

@@ -4,6 +4,7 @@
 
 #ifndef SYNTAXANALYZER_SYNBASE_H
 #define SYNTAXANALYZER_SYNBASE_H
+
 #include "AsmBase.h"
 
 
@@ -14,7 +15,6 @@ using std::stack;
 
 #define INFINITY_INT  numeric_limits<int>::max();
 #define INFINITY_FLOAT numeric_limits<float>::infinity()
-
 
 
 std::ofstream logFile, errorFile, parserFile;
@@ -132,7 +132,7 @@ void printRule(const string &rule) {
 // after pushing value
 void printCode(NONTERMINAL_TYPE ruleNonterminal) {
 	logFile << CodeParser::formatCCode(nonTerminalBuffer.getValue(ruleNonterminal)) << endl << endl;
-//	logFile << (nonTerminalBuffer.getValue(ruleNonterminal)) << endl << endl;
+	logFile << (nonTerminalBuffer.getValue(ruleNonterminal)) << endl << endl;
 }
 
 
@@ -141,8 +141,8 @@ void printLog(const string &str) {
 }
 
 void printRuleLog(NONTERMINAL_TYPE nonterminal, const string &rule) {
-	printRule(ruleName[nonterminal] + ": " + rule);
-	printCode(nonterminal);
+//	printRule(ruleName[nonterminal] + ": " + rule);
+//	printCode(nonterminal);
 }
 
 void printErrorLog(const string &msg) {
@@ -211,7 +211,7 @@ SymbolInfo *insertVar(SymbolInfo *idVal) {
 			SymbolInfo *var = insertToTable(idVal);
 			var->setVarType(variableType);
 			var->setIDType(VARIABLE);
-			printDebug(var->getName() +"@ scope "+var->getScopeID());
+			addData(var->getName());
 			return var;
 		}
 	}
@@ -219,9 +219,17 @@ SymbolInfo *insertVar(SymbolInfo *idVal) {
 }
 
 void insertArr(SymbolInfo *idVal, SymbolInfo *size) {
-	SymbolInfo *arr = insertVar(idVal);
+	if (variableType == VOID_TYPE) {
+		printErrorLog("variable type can't be void");
+	} else {
+		if (table.lookUp(idVal->getName(), true) != nullptr) {
+			printErrorLog("Symbol " + idVal->getName() + " already declared in this scope");
+		}
+	}
+	SymbolInfo *arr = insertToTable(idVal);
 	arr->setIDType(ARRAY);
 	arr->setArrSize(static_cast<size_t>(StringParser::toInteger(size->getName().data())));
+	addData(arr->getName(), true);
 	for (int i = 0; i < arr->getArrSize(); i++) {
 		arr->intData.push_back(0);
 		arr->floatData.push_back(0);
@@ -360,6 +368,7 @@ SymbolInfo *getVariable(SymbolInfo *varVal) {
 		if (var->isArrayVar()) printErrorLog(varVal->getName() + " is an array must be accessed with an index");
 		else printErrorLog(varVal->getName() + " is not a variable");
 	} else {
+		var->code = "";
 		return var;
 	}
 	return nullVal();
@@ -392,6 +401,11 @@ SymbolInfo *getAssignExpVal(SymbolInfo *lhs, SymbolInfo *rhs) {
 	if (lhs->isArrayVar()) {
 		lhs->intData.push_back(0);
 
+		lhs->code = rhs->code;
+		lhs->code += "MOV DX," + rhs->getName() + NEWLINE_ASM;
+		lhs->code += string("ADD SI,SI") + NEWLINE_ASM;
+		lhs->code += "MOV " + getASM_VAR_NAME(lhs->getName()) + "[SI], DX" + NEWLINE_ASM;
+
 		if (rhs->getVarType() == INT_TYPE) {
 			if (lhs->getVarType() == FLOAT_TYPE)printWarningLog("Assigning integer value to float");
 
@@ -404,6 +418,8 @@ SymbolInfo *getAssignExpVal(SymbolInfo *lhs, SymbolInfo *rhs) {
 			else lhs->setIndexValue((int) rhs->fltValue());
 		}
 	} else if (lhs->isVariable()) {
+		lhs->code = rhs->code + assignExpToVar(lhs->getName(),rhs->getName());
+
 		if (rhs->getVarType() == INT_TYPE) {
 			if (lhs->getVarType() == FLOAT_TYPE)printWarningLog("Assigning integer value to float");
 
@@ -425,7 +441,7 @@ SymbolInfo *getLogicOpVal(SymbolInfo *left, SymbolInfo *right, SymbolInfo *op) {
 		return nullVal();
 	}
 
-	SymbolInfo *opVal = new SymbolInfo("", "");
+	SymbolInfo *opVal = new SymbolInfo(newTemp(), "");
 	opVal->setVarType(INT_TYPE);
 	const string &logicOp = op->getName();
 	int leftIVal = 0, rightIVal = 0;
@@ -478,7 +494,7 @@ SymbolInfo *getReltnOpVal(SymbolInfo *left, SymbolInfo *right, SymbolInfo *op) {
 		return nullVal();
 	}
 
-	SymbolInfo *opVal = new SymbolInfo("", "");
+	SymbolInfo *opVal = new SymbolInfo(newTemp(), "");
 	opVal->setVarType(INT_TYPE);
 	const string &relop = op->getName();
 	int leftIVal = 0, rightIVal = 0;
@@ -700,7 +716,7 @@ SymbolInfo *getFuncCallValue(SymbolInfo *funcVal) {
 		} else if (func->paramList != argsType) {
 			printErrorLog(func->getName() + ": argument type Mismatch");
 		}
-		retVal = getConstVal("", func->getFuncRetType());
+		retVal = getConstVal(newTemp(), func->getFuncRetType());
 //		if (func->isVoidFunc()) printErrorLog("Function " + funcVal->getName() + " returns void");
 	}
 	clearFunctionArgs();

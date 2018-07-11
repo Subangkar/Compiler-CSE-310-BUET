@@ -42,7 +42,6 @@ class SymbolInfo {
 
 	int scopeID=-1;
 
-	string code;
 public:
 
 	vector<string> paramList;    //INT, FLOAT, STRING, CHAR
@@ -50,6 +49,7 @@ public:
 	vector<int> intData;
 	vector<float> floatData;
 //	vector<char> charData;
+	string code;
 
 
 	explicit operator string() const {

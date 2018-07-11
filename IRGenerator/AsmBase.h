@@ -30,6 +30,31 @@ SymbolTable table(SYMBOL_TABLE_SIZE);
 
 string codeSegment, dataSegment;
 
+int labelCount = 0;
+int tempCount = 0;
+
+
+char *newLabel() {
+	char *lb = new char[4];
+	strcpy(lb, "L");
+	char b[3];
+	sprintf(b, "%d", labelCount);
+	labelCount++;
+	strcat(lb, b);
+	return lb;
+}
+
+char *newTemp() {
+	char *t = new char[4];
+	strcpy(t, "t");
+	char b[3];
+	sprintf(b, "%d", tempCount);
+	tempCount++;
+	strcat(t, b);
+	return t;
+}
+
+
 void makeCRLF(string &str) {
 	StringUtils::replaceAll(str, "\r", "");
 	StringUtils::replaceAll(str, "\n", "\r\n");
@@ -59,6 +84,8 @@ string getOUTDEC_PROC() {
 }
 
 string getASM_VAR_NAME(const string &cVarName) {
+	SymbolInfo *symbol = table.lookUp(cVarName);
+	if (symbol == nullptr || symbol->getType() != "ID") return cVarName;
 	return cVarName + SCOPE_NO(table.lookUp(cVarName)->getScopeID());
 }
 
@@ -83,25 +110,29 @@ void addCode(const string &code) {
 }
 
 
-void printVarValue(SymbolInfo *symbol) {
+string getInst(const string &code) {
+	string formattedCode = code;
+	makeCRLF(formattedCode);
+	return formattedCode;
+}
+
+
+string printVarValue(SymbolInfo *symbol) {
 	symbol = table.lookUp(symbol->getName());
 
 	if (symbol != nullptr && symbol->isVariable()) {
-//		addCode(PROC_START("main"));
-		addCode("MOV AX," + getASM_VAR_NAME(symbol->getName()));
-		addCode("CALL OUTDEC");
-//		addCode(PROC_END("main"));
-	}
-	else
-	{
+		return getInst("MOV AX," + getASM_VAR_NAME(symbol->getName())) + getInst("CALL OUTDEC");
+	} else {
 
 	}
 }
 
 void writeASM() {
 
-	string initDataSeg = "MOV AX,@DATA\r\nMOV DS,AX\r\n";
+	string initDataSeg = "\tMOV AX,@DATA\r\n\tMOV DS,AX\r\n";
+	string retOS = "MOV AH, 4ch\r\n\tMOV AL,0\r\n\tINT 21h\r\n" + PROC_END("main");
 	StringUtils::replaceAll(codeSegment, PROC_START("main"), PROC_START("main") + initDataSeg);
+	StringUtils::replaceAll(codeSegment, PROC_END("main"), retOS);
 	codeSegment += getOUTDEC_PROC();
 
 	asmFile << ".model small\r\n";
@@ -113,4 +144,24 @@ void writeASM() {
 	asmFile << "\r\nend main";
 }
 
+
+string assignExpToArr(string dest, string offsetVar, string src) {
+	string code;
+	code += "MOV SI," + offsetVar + NEWLINE_ASM;
+	code += string("ADD SI,SI") + NEWLINE_ASM;
+	code += "MOV DX," + getASM_VAR_NAME(src) + NEWLINE_ASM;
+	code += "MOV " + getASM_VAR_NAME(dest) + "[SI], DX" + NEWLINE_ASM;
+	return code;
+}
+
+string assignExpToVar(const string &dest, const string &src) {
+	string code = "MOV DX," + getASM_VAR_NAME(src) + NEWLINE_ASM;
+	code += "MOV " + getASM_VAR_NAME(dest) + ", DX" + NEWLINE_ASM;
+	return code;
+}
+
 #endif //IRGENERATOR_ASMBASE_H
+
+/*
+ * exp.val => AX (logic
+ * */

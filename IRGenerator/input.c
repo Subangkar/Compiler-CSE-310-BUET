@@ -2,8 +2,11 @@ int y;
 
 int main()
 {
-	int x;
+	int x,z;
+  int ar[2];
 	x=57;
-	println(d);
+  ar[1] = 7;
+  println(x);
+
 	return 0;
 }
