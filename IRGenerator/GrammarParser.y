@@ -53,6 +53,7 @@ program: program unit
 		{
 			$$ = new SymbolInfo("","");
 			$$->code = $1->code + $2->code;
+			delete $1,$2;
 			/* printDebug($2->code); */
 
 			pushVal(program,popVal(program)+popVal(unit));
@@ -481,7 +482,7 @@ factor: variable
 		{
 			/* $$ = new SymbolInfo(*$1); */
 			/* $$->setName(newTemp()); */
-			/* $$->code = $1->code + assignToMemory($$->getName(),$1->getName());// need to think for array */
+			/* $$->code = $1->code + memoryToMemory($$->getName(),$1->getName());// need to think for array */
 
 			pushVal(factor,popVal(variable));
 			printRuleLog(factor,"variable");

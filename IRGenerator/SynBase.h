@@ -401,15 +401,15 @@ SymbolInfo *getAssignExpVal(SymbolInfo *lhs, SymbolInfo *rhs) {
 
 	if (lhs->isArrayVar()) {
 		if (rhs->isArrayVar())
-			lhs->code = rhs->code + assignToMemory(lhs->getName(), lhs->getArrIndexVarName(), rhs->getName(),
+			lhs->code = rhs->code + memoryToMemory(lhs->getName(), lhs->getArrIndexVarName(), rhs->getName(),
 			                                       rhs->getArrIndexVarName());
 		else
-			lhs->code = rhs->code + assignToMemory(lhs->getName(), lhs->getArrIndexVarName(), rhs->getName());
+			lhs->code = rhs->code + memoryToMemory(lhs->getName(), lhs->getArrIndexVarName(), rhs->getName());
 	} else if (lhs->isVariable()) {
 		if (rhs->isArrayVar()) {
-			lhs->code = rhs->code + assignToMemory(lhs->getName(), 0, rhs->getName(), rhs->getArrIndexVarName());
+			lhs->code = rhs->code + memoryToMemory(lhs->getName(), "", rhs->getName(), rhs->getArrIndexVarName());
 		} else
-			lhs->code = rhs->code + assignToMemory(lhs->getName(), rhs->getName());
+			lhs->code = rhs->code + memoryToMemory(lhs->getName(), "", rhs->getName());
 	}
 	return lhs;
 }
@@ -594,7 +594,7 @@ SymbolInfo *getIncOpVal(SymbolInfo *varVal) {
 //		opVal->code += copyFromCurSI(opVal->getName(), varVal->getName());
 	} else if (varVal->isVariable()) {
 		opVal->code = incMemoryValue(varVal->getName(), "INC");
-//		opVal->code += assignToMemory(opVal->getName(), varVal->getName());
+//		opVal->code += memoryToMemory(opVal->getName(), varVal->getName());
 	}
 	return opVal;
 }
@@ -606,7 +606,7 @@ SymbolInfo *getDecOpVal(SymbolInfo *varVal) {
 //		opVal->code += copyFromCurSI(opVal->getName(), varVal->getName());
 	} else if (varVal->isVariable()) {
 		opVal->code = incMemoryValue(varVal->getName(), "DEC");
-//		opVal->code += assignToMemory(opVal->getName(), varVal->getName());
+//		opVal->code += memoryToMemory(opVal->getName(), varVal->getName());
 	}
 	return opVal;
 }

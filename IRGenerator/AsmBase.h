@@ -148,40 +148,37 @@ void writeASM() {
 }
 
 
-string assignToMemory(const string &dest, const string &src) {
-	string code = "MOV DX," + ASM_VAR_NAME(src) + NEWLINE_ASM;
-	code += "MOV " + ASM_VAR_NAME(dest) + ", DX" + NEWLINE_ASM;
-//	if (toTemp) code += "MOV " + newTemp() + ", DX" + NEWLINE_ASM;
-	return code;
-}
+string memoryToMemory(const string &dest, const string &destOffsetVar, const string &src,
+                      const string &srcOffsetVar = "") {
+	if(destOffsetVar.empty() && srcOffsetVar.empty()){
+		string code = "MOV DX," + ASM_VAR_NAME(src) + NEWLINE_ASM;
+		code += "MOV " + ASM_VAR_NAME(dest) + ", DX" + NEWLINE_ASM;
+		return code;
+	} else if(!destOffsetVar.empty() && srcOffsetVar.empty()){
+		string code;
+		code += "MOV SI," + ASM_VAR_NAME(destOffsetVar) + NEWLINE_ASM;
+		code += string("ADD SI,SI") + NEWLINE_ASM;
+		code += "MOV DX," + ASM_VAR_NAME(src) + NEWLINE_ASM;
+		code += "MOV " + ASM_VAR_NAME(dest) + "[SI], DX" + NEWLINE_ASM;
+		return code;
 
-string assignToMemory(const string &dest, const string &offsetVar, const string &src) {
-	string code;
-	code += "MOV SI," + ASM_VAR_NAME(offsetVar) + NEWLINE_ASM;
-	code += string("ADD SI,SI") + NEWLINE_ASM;
-	code += "MOV DX," + ASM_VAR_NAME(src) + NEWLINE_ASM;
-	code += "MOV " + ASM_VAR_NAME(dest) + "[SI], DX" + NEWLINE_ASM;
-	return code;
-}
-
-string assignToMemory(const string &dest, int destVar, const string &src, const string &srcOffsetVar) {
-	string code;
-	code += "MOV SI," + ASM_VAR_NAME(srcOffsetVar) + NEWLINE_ASM;
-	code += string("ADD SI,SI") + NEWLINE_ASM;
-	code += "MOV DX," + ASM_VAR_NAME(src) + "[SI]" + NEWLINE_ASM;
-	code += "MOV " + ASM_VAR_NAME(dest) + ", DX" + NEWLINE_ASM;
-	return code;
-}
-
-string assignToMemory(const string &dest, const string &destOffsetVar, const string &src, const string &srcOffsetVar) {
-	string code;
-	code += "MOV SI," + ASM_VAR_NAME(srcOffsetVar) + NEWLINE_ASM;
-	code += string("ADD SI,SI") + NEWLINE_ASM;
-	code += "MOV DI," + ASM_VAR_NAME(destOffsetVar) + NEWLINE_ASM;
-	code += string("ADD DI,DI") + NEWLINE_ASM;
-	code += "MOV DX," + ASM_VAR_NAME(src) + "[SI]" + NEWLINE_ASM;
-	code += "MOV " + ASM_VAR_NAME(dest) + "[DI], DX" + NEWLINE_ASM;
-	return code;
+	} else if(destOffsetVar.empty() && !srcOffsetVar.empty()){
+		string code;
+		code += "MOV SI," + ASM_VAR_NAME(srcOffsetVar) + NEWLINE_ASM;
+		code += string("ADD SI,SI") + NEWLINE_ASM;
+		code += "MOV DX," + ASM_VAR_NAME(src) + "[SI]" + NEWLINE_ASM;
+		code += "MOV " + ASM_VAR_NAME(dest) + ", DX" + NEWLINE_ASM;
+		return code;
+	} else {
+		string code;
+		code += "MOV SI," + ASM_VAR_NAME(srcOffsetVar) + NEWLINE_ASM;
+		code += string("ADD SI,SI") + NEWLINE_ASM;
+		code += "MOV DI," + ASM_VAR_NAME(destOffsetVar) + NEWLINE_ASM;
+		code += string("ADD DI,DI") + NEWLINE_ASM;
+		code += "MOV DX," + ASM_VAR_NAME(src) + "[SI]" + NEWLINE_ASM;
+		code += "MOV " + ASM_VAR_NAME(dest) + "[DI], DX" + NEWLINE_ASM;
+		return code;
+	}
 }
 
 string copyFromCurSI(const string &dest, const string &src) {
@@ -206,19 +203,19 @@ string incMemoryValue(const string &mem, const string &offsetVar, const string &
 }
 
 string notMemoryValue(const string &dest, const string &mem) {
-	return assignToMemory(dest, mem) + "NOT " + dest + NEWLINE_ASM;
+	return memoryToMemory(dest, "", mem) + "NOT " + dest + NEWLINE_ASM;
 }
 
 string notMemoryValue(const string &dest, const string &mem, const string &offsetVar) {
-	return assignToMemory(dest, 0, mem, offsetVar) + "NOT " + dest + NEWLINE_ASM;
+	return memoryToMemory(dest, "", mem, offsetVar) + "NOT " + dest + NEWLINE_ASM;
 }
 
 string minusMemoryValue(const string &dest, const string &mem) {
-	return assignToMemory(dest, mem) + "NEG " + dest + NEWLINE_ASM;//+ "INC " + dest + NEWLINE_ASM;
+	return memoryToMemory(dest, "", mem, "") + "NEG " + dest + NEWLINE_ASM;//+ "INC " + dest + NEWLINE_ASM;
 }
 
 string minusMemoryValue(const string &dest, const string &mem, const string &offsetVar) {
-	return assignToMemory(dest, 0, mem, offsetVar) + "NEG " + dest + NEWLINE_ASM;
+	return memoryToMemory(dest, "", mem, offsetVar) + "NEG " + dest + NEWLINE_ASM;
 }
 
 #endif //IRGENERATOR_ASMBASE_H
