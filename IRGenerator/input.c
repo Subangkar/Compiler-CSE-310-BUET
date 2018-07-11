@@ -4,6 +4,6 @@ int main()
 {
 	int x;
 	x=57;
-	println(x);
+	println(d);
 	return 0;
 }

@@ -41,6 +41,8 @@ class SymbolInfo {
 	float defFlt=0.0;
 
 	int scopeID=-1;
+
+	string code;
 public:
 
 	vector<string> paramList;    //INT, FLOAT, STRING, CHAR
@@ -71,6 +73,30 @@ public:
 //	explicit SymbolInfo(string name, string type = "");
 
 	explicit SymbolInfo(const string name, const string type = "") : name(name), type(type) { arrIndex = 0; }
+
+	SymbolInfo(const SymbolInfo &symbolInfo) {
+		this->name = symbolInfo.name;
+		this->type = symbolInfo.type;
+		this->arrSize = symbolInfo.arrSize;
+		this->arrIndex = symbolInfo.arrIndex;
+
+		this->varType = symbolInfo.varType;
+		this->idType = symbolInfo.idType;
+
+		this->funcDefined = symbolInfo.funcDefined;
+		this->funcRetType = symbolInfo.funcRetType;
+
+		this->intData = symbolInfo.intData;
+		this->floatData = symbolInfo.floatData;
+
+		this->paramList = symbolInfo.paramList;
+
+		this->scopeID = symbolInfo.scopeID;
+
+		this->code = symbolInfo.code;
+	}
+
+	SymbolInfo &operator=(const SymbolInfo &symbolInfo)= default;
 
 	void setName(const string &name) {
 		this->name = name;
@@ -169,28 +195,6 @@ public:
 		return floatData[0];
 	}
 
-	SymbolInfo(const SymbolInfo &symbolInfo) {
-		this->name = symbolInfo.name;
-		this->type = symbolInfo.type;
-		this->arrSize = symbolInfo.arrSize;
-		this->arrIndex = symbolInfo.arrIndex;
-
-		this->varType = symbolInfo.varType;
-		this->idType = symbolInfo.idType;
-
-		this->funcDefined = symbolInfo.funcDefined;
-		this->funcRetType = symbolInfo.funcRetType;
-
-		this->intData = symbolInfo.intData;
-		this->floatData = symbolInfo.floatData;
-
-		this->paramList = symbolInfo.paramList;
-
-		this->scopeID = symbolInfo.scopeID;
-	}
-
-	SymbolInfo &operator=(const SymbolInfo &symbolInfo)= default;
-
 	bool operator==(const SymbolInfo &rhs) const {
 //		return name == rhs.name && type == rhs.type;
 		return name == rhs.name;
@@ -233,9 +237,9 @@ public:
 
 
 	int &intValue() {
-		if (idType == VARIABLE && varType == INT_TYPE) {
-			if (!intData.size()) intData.push_back(0);
-			return intData[0];
+		if (idType == VARIABLE) {
+			if (intData.empty()) intData.push_back(0);
+			return varType == FLOAT_TYPE ? intData[0] = static_cast<int>(fltValue()) : intData[0];
 		} else if (idType == ARRAY && varType == INT_TYPE) {
 			return intData[getArrIndex()];
 		}
@@ -244,9 +248,9 @@ public:
 	}
 
 	float &fltValue() {
-		if (idType == VARIABLE && varType == FLOAT_TYPE) {
-			if (!floatData.size()) floatData.push_back(0);
-			return floatData[0];
+		if (idType == VARIABLE) {
+			if (floatData.empty()) floatData.push_back(0);
+			return varType == INT_TYPE ? floatData[0]=intValue() : floatData[0];
 		} else if (idType == ARRAY && varType == FLOAT_TYPE) {
 			return floatData[getArrIndex()];
 		}

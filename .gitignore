@@ -156,3 +156,14 @@ SyntaxAnalyzer/parser\.txt
 
 **/.idea/vcs.xml
 **/.idea/codeStyles/Project.xml
+IRGenerator/code\.asm
+
+IRGenerator/errors\.txt
+
+IRGenerator/log\.txt
+
+IRGenerator/parser\.txt
+
+IRGenerator/y\.output
+
+IRGenerator/y\.tab\.h

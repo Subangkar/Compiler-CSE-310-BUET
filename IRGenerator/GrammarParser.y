@@ -39,7 +39,8 @@ SymbolInfo* symbolValue;
 
 start: program
 		{
-				writeASM();
+				if(!syntaxErrors && !err_count_lex)
+							writeASM();
 
 				pushVal(start,popVal(program));
 				printRuleLog(start,"program");
@@ -289,11 +290,7 @@ statement: var_declaration
 			}
 	  | PRINTLN LPAREN ID RPAREN SEMICOLON
 			{
-				addCode(PROC_START("main"));
-				addCode("MOV AX,"+getASM_VAR_NAME($3->getName()));
-				addCode("CALL OUTDEC");
-				addCode(PROC_END("main"));
-				addCode(getOUTDEC_PROC());
+				printVarValue($3);
 
 				pushVal(statement,"("+$3->getName()+")"+";");
 				printRuleLog(statement,"PRINTLN LPAREN ID RPAREN SEMICOLON");

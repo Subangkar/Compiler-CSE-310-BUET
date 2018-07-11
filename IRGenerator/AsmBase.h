@@ -7,8 +7,9 @@
 
 #define PROC_START(x)   string(x)+" PROC\r\n"
 #define PROC_END(x)     string(x)+" ENDP\r\n"
-#define SCOPE_NO(x) "_sc"+(x)
+#define SCOPE_NO(x) "$cp"+(x)
 #define NEWLINE_ASM "\r\n"
+#define ASM_INT_TYPE " DW "
 
 
 #define FILE_OUTDEC_PROC "Assembly Procedures/Dec16bitOutput.asm"
@@ -67,10 +68,10 @@ void appendCode(const string &code) {
 	asmFile << formattedCode;
 }
 
-void addData(const string &varname,bool isArray = false) {
+void addData(const string &varname, bool isArray = false) {
 	string code;
-	if(!isArray) code = getASM_VAR_NAME(varname) + " DW 0";
-	else code = getASM_VAR_NAME(varname) + " DW "+ to_string(table.lookUp(varname)->getArrSize()) + " DUP(0)";
+	if (!isArray) code = getASM_VAR_NAME(varname) + ASM_INT_TYPE + "0";
+	else code = getASM_VAR_NAME(varname) + ASM_INT_TYPE + to_string(table.lookUp(varname)->getArrSize()) + " DUP(0)";
 	makeCRLF(code);
 	dataSegment += code;
 }
@@ -82,10 +83,26 @@ void addCode(const string &code) {
 }
 
 
+void printVarValue(SymbolInfo *symbol) {
+	symbol = table.lookUp(symbol->getName());
+
+	if (symbol != nullptr && symbol->isVariable()) {
+//		addCode(PROC_START("main"));
+		addCode("MOV AX," + getASM_VAR_NAME(symbol->getName()));
+		addCode("CALL OUTDEC");
+//		addCode(PROC_END("main"));
+	}
+	else
+	{
+
+	}
+}
+
 void writeASM() {
 
 	string initDataSeg = "MOV AX,@DATA\r\nMOV DS,AX\r\n";
 	StringUtils::replaceAll(codeSegment, PROC_START("main"), PROC_START("main") + initDataSeg);
+	codeSegment += getOUTDEC_PROC();
 
 	asmFile << ".model small\r\n";
 	asmFile << "\r\n.stack 100h\r\n";
