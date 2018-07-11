@@ -1,0 +1,26 @@
+program modexample(output);
+
+var
+
+    i,j,k: integer;
+
+procedure hello (a : array [1 .. 10] of real);
+
+begin
+	print(a)
+end;
+
+function foo (b,c : real) : real ;
+
+begin
+	print(b,c)
+end;
+
+begin
+
+	i := (3 + 7);
+	j := i + 5;
+        k := i * j
+
+
+end
