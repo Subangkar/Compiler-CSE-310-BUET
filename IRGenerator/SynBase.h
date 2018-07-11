@@ -546,16 +546,9 @@ SymbolInfo *getAddtnOpVal(SymbolInfo *left, SymbolInfo *right, SymbolInfo *op) {
 
 	const string &addop = op->getName();
 	SymbolInfo *opVal = new SymbolInfo(newTemp(), "");
-	if (left->getVarType() == FLOAT_TYPE || right->getVarType() == FLOAT_TYPE) {
-		getConstVal(opVal, FLOAT_TYPE);
-	} else {
-		getConstVal(opVal, INT_TYPE);
-	}
-//	if (opVal->getVarType() == FLOAT_TYPE)
-//		printDebug(addop + " Operation Val: " + to_string(opVal->fltValue()));
-//	else if (opVal->getVarType() == INT_TYPE)
-//		printDebug(addop + " Operation Val: " + to_string(opVal->intValue()));
-
+	opVal->code = left->code + right->code;
+	opVal->code += addMemoryValues(addop, opVal->getName(), left->getName(), left->getArrIndexVarName(),
+	                                right->getName(), right->getArrIndexVarName());
 	return opVal;
 }
 
@@ -573,14 +566,8 @@ SymbolInfo *getMultpOpVal(SymbolInfo *left, SymbolInfo *right, SymbolInfo *op) {
 	}
 	SymbolInfo *opVal = new SymbolInfo(newTemp(), "");
 	opVal->code = left->code + right->code;
-//	if(mulOp == "*"){
-		opVal->code+=multMemoryValues(mulOp,opVal->getName(),left->getName(),left->getArrIndexVarName(),right->getName(),right->getArrIndexVarName());
-//	} else if(mulOp == "/"){
-
-//	} else{
-
-//	}
-
+	opVal->code += multMemoryValues(mulOp, opVal->getName(), left->getName(), left->getArrIndexVarName(),
+	                                right->getName(), right->getArrIndexVarName());
 	return opVal;
 }
 

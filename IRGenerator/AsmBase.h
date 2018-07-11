@@ -228,7 +228,6 @@ multMemoryValues(const string &op, const string &dest, const string &mult1, cons
 	string code;
 	string d = ASM_VAR_NAME(dest);
 	string mem1 = ASM_VAR_NAME(mult1), mem2 = ASM_VAR_NAME(mult2);
-	cout << mult1 << " ::: " << mult2 << endl;
 	if (!StringUtils::isAlpha(mult1[0])) {
 		string t = newTemp();
 		code += "MOV " + t + "," + mem1 + NEWLINE_ASM;
@@ -264,6 +263,51 @@ multMemoryValues(const string &op, const string &dest, const string &mult1, cons
 	}
 	if (op == "%") code += "MOV " + d + ", DX" + NEWLINE_ASM;
 	else code += "MOV " + d + ", AX" + NEWLINE_ASM;
+	return code;
+}
+
+string
+addMemoryValues(const string &op, const string &dest, const string &upper, const string &offset1, const string &lower,
+                const string &offset2 = "") {
+	string oper;
+	if (op == "+") oper = "ADD ";
+	else oper = "SUB ";
+
+	string code;
+	string d = ASM_VAR_NAME(dest);
+	string mem1 = ASM_VAR_NAME(upper), mem2 = ASM_VAR_NAME(lower);
+	if (!StringUtils::isAlpha(upper[0])) {
+		string t = newTemp();
+		code += "MOV " + t + "," + mem1 + NEWLINE_ASM;
+		mem1 = t;
+	}
+	if (!StringUtils::isAlpha(lower[0])) {
+		string t = newTemp();
+		code += "MOV " + t + "," + mem2 + NEWLINE_ASM;
+		mem2 = t;
+	}
+
+	if (offset1.empty() && offset2.empty()) {
+//		code += oper + mem1 + "," + mem2 + NEWLINE_ASM;
+	} else if (!offset1.empty() && offset2.empty()) {
+		code += "MOV DI," + offset1 + NEWLINE_ASM;
+		code += "ADD DI,SI" + NEWLINE_ASM;
+		mem1 += "[DI]";
+	} else if (offset1.empty() && !offset2.empty()) {
+		code += "MOV SI," + offset2 + NEWLINE_ASM;
+		code += "ADD SI,SI" + NEWLINE_ASM;
+		mem2 += "[SI]";
+	} else {
+		code += "MOV DI," + offset1 + NEWLINE_ASM;
+		code += "ADD DI,DI" + NEWLINE_ASM;
+		code += "MOV SI," + offset2 + NEWLINE_ASM;
+		code += "ADD SI,SI" + NEWLINE_ASM;
+		mem1 += "[DI]";
+		mem2 += "[SI]";
+	}
+	code += "MOV AX," + mem1 + NEWLINE_ASM;
+	code += oper + "AX," + mem2 + NEWLINE_ASM;
+	code += "MOV " + d + ",AX" + NEWLINE_ASM;
 	return code;
 }
 
