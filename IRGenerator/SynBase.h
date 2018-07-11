@@ -337,7 +337,7 @@ SymbolInfo *getConstVal(SymbolInfo *constVal, const string &constVarType) {
 		constVal->fltValue() = static_cast<float>(atof(constVal->getName().data()));
 	} else if (constVarType == INT_TYPE) {
 		constVal->intData.push_back(0);
-		constVal->intValue() = StringParser::toInteger(constVal->getName().data());
+		constVal->intValue() = StringParser::toInteger(constVal->getName());
 	}
 	return constVal;
 }
@@ -385,10 +385,11 @@ SymbolInfo *getArrIndexVar(SymbolInfo *arrVal, SymbolInfo *idxVal) {
 		} else if (idxVal->getVarType() != INT_TYPE) {
 			printErrorLog(arrVal->getName() + " array index must be an integer");
 		} else {
-			arr->setArrIndex(static_cast<size_t>(idxVal->intValue()));
+			arr->setArrIndexVarName(idxVal->getName());
+//			arr->code =
 		}
 	}
-	return arr;
+	return new SymbolInfo(*arr);
 }
 
 
@@ -399,38 +400,16 @@ SymbolInfo *getAssignExpVal(SymbolInfo *lhs, SymbolInfo *rhs) {
 	}
 
 	if (lhs->isArrayVar()) {
-		lhs->intData.push_back(0);
-
-		lhs->code = rhs->code;
-		lhs->code += "MOV DX," + rhs->getName() + NEWLINE_ASM;
-		lhs->code += string("ADD SI,SI") + NEWLINE_ASM;
-		lhs->code += "MOV " + getASM_VAR_NAME(lhs->getName()) + "[SI], DX" + NEWLINE_ASM;
-
-		if (rhs->getVarType() == INT_TYPE) {
-			if (lhs->getVarType() == FLOAT_TYPE)printWarningLog("Assigning integer value to float");
-
-			if (rhs->isVariable())lhs->setIndexValue(rhs->intValue());
-			else lhs->setIndexValue(rhs->intValue());
-		} else {
-			if (lhs->getVarType() == INT_TYPE)printWarningLog("Assigning float value to integer");
-
-			if (rhs->isVariable())lhs->setIndexValue((int) rhs->fltValue());
-			else lhs->setIndexValue((int) rhs->fltValue());
-		}
+		if (rhs->isArrayVar())
+			lhs->code = rhs->code + assignToMemory(lhs->getName(), lhs->getArrIndexVarName(), rhs->getName(),rhs->getArrIndexVarName());
+		else
+			lhs->code = rhs->code + assignToMemory(lhs->getName(), lhs->getArrIndexVarName(), rhs->getName());
 	} else if (lhs->isVariable()) {
-		lhs->code = rhs->code + assignExpToVar(lhs->getName(),rhs->getName());
-
-		if (rhs->getVarType() == INT_TYPE) {
-			if (lhs->getVarType() == FLOAT_TYPE)printWarningLog("Assigning integer value to float");
-
-			if (rhs->isVariable())lhs->setVarValue(rhs->intValue());
-			else lhs->setVarValue(rhs->intValue());
-		} else {
-			if (lhs->getVarType() == INT_TYPE)printWarningLog("Assigning float value to integer");
-
-			if (rhs->isVariable())lhs->setVarValue(rhs->fltValue());
-			else lhs->setVarValue(rhs->fltValue());
+		if (rhs->isArrayVar()) {
+			lhs->code = rhs->code + assignToMemory(lhs->getName(),0, rhs->getName(), rhs->getArrIndexVarName());
 		}
+		else
+			lhs->code = rhs->code + assignToMemory(lhs->getName(), rhs->getName());
 	}
 	return lhs;
 }
@@ -566,7 +545,7 @@ SymbolInfo *getAddtnOpVal(SymbolInfo *left, SymbolInfo *right, SymbolInfo *op) {
 	}
 
 	const string &addop = op->getName();
-	SymbolInfo *opVal = new SymbolInfo("", "");
+	SymbolInfo *opVal = new SymbolInfo(newTemp(), "");
 	if (left->getVarType() == FLOAT_TYPE || right->getVarType() == FLOAT_TYPE) {
 		getConstVal(opVal, FLOAT_TYPE);
 	} else {
@@ -609,39 +588,25 @@ SymbolInfo *getMultpOpVal(SymbolInfo *left, SymbolInfo *right, SymbolInfo *op) {
 
 
 SymbolInfo *getIncOpVal(SymbolInfo *varVal) {
-	SymbolInfo *opVal = new SymbolInfo("", "");
-	opVal = getConstVal(opVal, varVal->getVarType());
+	SymbolInfo *opVal = new SymbolInfo(*varVal);
 	if (varVal->isArrayVar()) {
-		if (varVal->getVarType() == INT_TYPE) {
-			opVal->intValue() = ++varVal->intValue();
-		} else if (varVal->getVarType() == FLOAT_TYPE) {
-			opVal->fltValue() = ++varVal->fltValue();
-		}
+		opVal->code = incMemoryValue(varVal->getName(), varVal->getArrIndexVarName(), "INC");
+//		opVal->code += copyFromCurSI(opVal->getName(), varVal->getName());
 	} else if (varVal->isVariable()) {
-		if (varVal->getVarType() == INT_TYPE) {
-			opVal->intValue() = ++varVal->intValue();
-		} else if (varVal->getVarType() == FLOAT_TYPE) {
-			opVal->fltValue() = ++varVal->fltValue();
-		}
+		opVal->code = incMemoryValue(varVal->getName(), "INC");
+//		opVal->code += assignToMemory(opVal->getName(), varVal->getName());
 	}
 	return opVal;
 }
 
 SymbolInfo *getDecOpVal(SymbolInfo *varVal) {
-	SymbolInfo *opVal = new SymbolInfo("", "");
-	opVal = getConstVal(opVal, varVal->getVarType());
+	SymbolInfo *opVal = new SymbolInfo(*varVal);
 	if (varVal->isArrayVar()) {
-		if (varVal->getVarType() == INT_TYPE) {
-			opVal->intValue() = --varVal->intValue();
-		} else if (varVal->getVarType() == FLOAT_TYPE) {
-			opVal->fltValue() = --varVal->fltValue();
-		}
+		opVal->code = incMemoryValue(varVal->getName(), varVal->getArrIndexVarName(), "DEC");
+//		opVal->code += copyFromCurSI(opVal->getName(), varVal->getName());
 	} else if (varVal->isVariable()) {
-		if (varVal->getVarType() == INT_TYPE) {
-			opVal->intValue() = --varVal->intValue();
-		} else if (varVal->getVarType() == FLOAT_TYPE) {
-			opVal->fltValue() = --varVal->fltValue();
-		}
+		opVal->code = incMemoryValue(varVal->getName(), "DEC");
+//		opVal->code += assignToMemory(opVal->getName(), varVal->getName());
 	}
 	return opVal;
 }
@@ -651,18 +616,13 @@ SymbolInfo *getNotOpVal(SymbolInfo *factor) {
 		printErrorLog("Invalid Operand for Logical Not Operation");
 		return nullVal();
 	}
-	SymbolInfo *opVal = new SymbolInfo("", "");
+	SymbolInfo *opVal = new SymbolInfo(newTemp(), "");
 	opVal = getConstVal(opVal, INT_TYPE);
-	int value = 0;
-	if (factor->getVarType() == INT_TYPE) {
-		if (factor->isVariable()) value = factor->intValue();
-		else if (factor->isArrayVar())value = factor->intValue();
-	} else if (factor->getVarType() == FLOAT_TYPE) {
-		if (factor->isVariable()) value = (int) factor->fltValue();
-		else if (factor->isArrayVar()) value = (int) factor->fltValue();
+	if (factor->isVariable()) {
+		opVal->code = notMemoryValue(opVal->getName(), factor->getName());
+	} else if (factor->isArrayVar()) {
+		opVal->code = notMemoryValue(opVal->getName(), factor->getName(), factor->getArrIndexVarName());
 	}
-
-	opVal->intValue() = !value;
 //	printDebug("NOT Exp Val: " + to_string(opVal->intValue()));
 	return opVal;
 }

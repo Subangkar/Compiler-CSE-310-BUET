@@ -7,7 +7,7 @@
 
 #define PROC_START(x)   string(x)+" PROC\r\n"
 #define PROC_END(x)     string(x)+" ENDP\r\n"
-#define SCOPE_NO(x) "$cp"+(x)
+#define SCOPE_NO(x) "$"+(x)
 #define NEWLINE_ASM "\r\n"
 #define ASM_INT_TYPE " DW "
 
@@ -32,27 +32,7 @@ string codeSegment, dataSegment;
 
 int labelCount = 0;
 int tempCount = 0;
-
-
-char *newLabel() {
-	char *lb = new char[4];
-	strcpy(lb, "L");
-	char b[3];
-	sprintf(b, "%d", labelCount);
-	labelCount++;
-	strcat(lb, b);
-	return lb;
-}
-
-char *newTemp() {
-	char *t = new char[4];
-	strcpy(t, "t");
-	char b[3];
-	sprintf(b, "%d", tempCount);
-	tempCount++;
-	strcat(t, b);
-	return t;
-}
+int maxTemp = -1;
 
 
 void makeCRLF(string &str) {
@@ -68,7 +48,6 @@ string getOUTDEC_PROC() {
 	if (!_OUTDEC_PROC.empty()) return _OUTDEC_PROC;
 	std::ifstream file(FILE_OUTDEC_PROC);
 	if (file) {
-		cout << "here" << endl;
 		file.seekg(0, std::ios::end);
 		std::streampos length = file.tellg();
 		file.seekg(0, std::ios::beg);
@@ -83,7 +62,7 @@ string getOUTDEC_PROC() {
 	return _OUTDEC_PROC;
 }
 
-string getASM_VAR_NAME(const string &cVarName) {
+string ASM_VAR_NAME(const string &cVarName) {
 	SymbolInfo *symbol = table.lookUp(cVarName);
 	if (symbol == nullptr || symbol->getType() != "ID") return cVarName;
 	return cVarName + SCOPE_NO(table.lookUp(cVarName)->getScopeID());
@@ -97,8 +76,8 @@ void appendCode(const string &code) {
 
 void addData(const string &varname, bool isArray = false) {
 	string code;
-	if (!isArray) code = getASM_VAR_NAME(varname) + ASM_INT_TYPE + "0";
-	else code = getASM_VAR_NAME(varname) + ASM_INT_TYPE + to_string(table.lookUp(varname)->getArrSize()) + " DUP(0)";
+	if (!isArray) code = ASM_VAR_NAME(varname) + ASM_INT_TYPE + "0";
+	else code = ASM_VAR_NAME(varname) + ASM_INT_TYPE + to_string(table.lookUp(varname)->getArrSize()) + " DUP(0)";
 	makeCRLF(code);
 	dataSegment += code;
 }
@@ -117,11 +96,35 @@ string getInst(const string &code) {
 }
 
 
+char *newLabel() {
+	auto *lb = new char[4];
+	strcpy(lb, "L");
+	char b[3];
+	sprintf(b, "%d", labelCount);
+	labelCount++;
+	strcat(lb, b);
+	return lb;
+}
+
+string newTemp() {
+	string t = "t";
+	char b[3];
+	sprintf(b, "%d", tempCount);
+	t += b;
+	if (tempCount > maxTemp) {
+		maxTemp++;
+		addData(t);
+	}
+	tempCount++;
+	return t;
+}
+
+
 string printVarValue(SymbolInfo *symbol) {
 	symbol = table.lookUp(symbol->getName());
 
 	if (symbol != nullptr && symbol->isVariable()) {
-		return getInst("MOV AX," + getASM_VAR_NAME(symbol->getName())) + getInst("CALL OUTDEC");
+		return getInst("MOV AX," + ASM_VAR_NAME(symbol->getName())) + getInst("CALL OUTDEC");
 	} else {
 
 	}
@@ -145,23 +148,70 @@ void writeASM() {
 }
 
 
-string assignExpToArr(string dest, string offsetVar, string src) {
-	string code;
-	code += "MOV SI," + offsetVar + NEWLINE_ASM;
-	code += string("ADD SI,SI") + NEWLINE_ASM;
-	code += "MOV DX," + getASM_VAR_NAME(src) + NEWLINE_ASM;
-	code += "MOV " + getASM_VAR_NAME(dest) + "[SI], DX" + NEWLINE_ASM;
+string assignToMemory(const string &dest, const string &src) {
+	string code = "MOV DX," + ASM_VAR_NAME(src) + NEWLINE_ASM;
+	code += "MOV " + ASM_VAR_NAME(dest) + ", DX" + NEWLINE_ASM;
+//	if (toTemp) code += "MOV " + newTemp() + ", DX" + NEWLINE_ASM;
 	return code;
 }
 
-string assignExpToVar(const string &dest, const string &src) {
-	string code = "MOV DX," + getASM_VAR_NAME(src) + NEWLINE_ASM;
-	code += "MOV " + getASM_VAR_NAME(dest) + ", DX" + NEWLINE_ASM;
+string assignToMemory(const string &dest, const string &offsetVar, const string &src) {
+	string code;
+	code += "MOV SI," + ASM_VAR_NAME(offsetVar) + NEWLINE_ASM;
+	code += string("ADD SI,SI") + NEWLINE_ASM;
+	code += "MOV DX," + ASM_VAR_NAME(src) + NEWLINE_ASM;
+	code += "MOV " + ASM_VAR_NAME(dest) + "[SI], DX" + NEWLINE_ASM;
 	return code;
+}
+
+string assignToMemory(const string &dest, int destVar, const string &src, const string &srcOffsetVar) {
+	string code;
+	code += "MOV SI," + ASM_VAR_NAME(srcOffsetVar) + NEWLINE_ASM;
+	code += string("ADD SI,SI") + NEWLINE_ASM;
+	code += "MOV DX," + ASM_VAR_NAME(src) + "[SI]" + NEWLINE_ASM;
+	code += "MOV " + ASM_VAR_NAME(dest) + ", DX" + NEWLINE_ASM;
+	return code;
+}
+
+string assignToMemory(const string &dest, const string &destOffsetVar, const string &src, const string &srcOffsetVar) {
+	string code;
+	code += "MOV SI," + ASM_VAR_NAME(srcOffsetVar) + NEWLINE_ASM;
+	code += string("ADD SI,SI") + NEWLINE_ASM;
+	code += "MOV DI," + ASM_VAR_NAME(destOffsetVar) + NEWLINE_ASM;
+	code += string("ADD DI,DI") + NEWLINE_ASM;
+	code += "MOV DX," + ASM_VAR_NAME(src) + "[SI]" + NEWLINE_ASM;
+	code += "MOV " + ASM_VAR_NAME(dest) + "[DI], DX" + NEWLINE_ASM;
+	return code;
+}
+
+string copyFromCurSI(const string &dest, const string &src){
+	string code;
+	code += "MOV DX," + ASM_VAR_NAME(src) + "[SI]" + NEWLINE_ASM;
+	code += "MOV " + ASM_VAR_NAME(dest) + ", DX" + NEWLINE_ASM;
+	return code;
+}
+
+string incMemoryValue(const string &mem, const string &opType) {
+	string code;
+	code += opType + " " + ASM_VAR_NAME(mem) + NEWLINE_ASM;
+	return code;
+}
+
+string incMemoryValue(const string &mem, const string &offsetVar, const string &opType) {
+	string code;
+	code += "MOV SI," + ASM_VAR_NAME(offsetVar) + NEWLINE_ASM;
+	code += string("ADD SI,SI") + NEWLINE_ASM;
+	code += opType + " " + ASM_VAR_NAME(mem) + "[SI]" + NEWLINE_ASM;
+	return code;
+}
+
+string notMemoryValue(const string &dest,const string &mem) {
+	return assignToMemory(dest, mem) + "NOT " + dest + NEWLINE_ASM;
+}
+
+string notMemoryValue(const string &dest,const string &mem, const string &offsetVar) {
+	return assignToMemory(dest, 0, mem, offsetVar) + "NOT " + dest + NEWLINE_ASM;
 }
 
 #endif //IRGENERATOR_ASMBASE_H
 
-/*
- * exp.val => AX (logic
- * */

@@ -1,11 +1,13 @@
 int y;
+int ar[2];
 
 int main()
 {
 	int x,z;
-  int ar[2];
-	x=57;
-  ar[1] = 7;
+
+  // ar[1]=ar[0]++;
+  // x=ar[0]++;
+  ar[1]=x++;
   println(x);
 
 	return 0;

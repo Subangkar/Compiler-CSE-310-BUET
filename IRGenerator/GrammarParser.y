@@ -478,9 +478,9 @@ unary_expression: ADDOP unary_expression
 
 factor: variable
 		{
-			$$ = new SymbolInfo(*$1);
-			$$->setName(newTemp());
-			$$->code = $1->code + assignExpToVar($$->getName(),$1->getName());// need to think for array
+			/* $$ = new SymbolInfo(*$1); */
+			/* $$->setName(newTemp()); */
+			/* $$->code = $1->code + assignToMemory($$->getName(),$1->getName());// need to think for array */ 
 
 			pushVal(factor,popVal(variable));
 			printRuleLog(factor,"variable");

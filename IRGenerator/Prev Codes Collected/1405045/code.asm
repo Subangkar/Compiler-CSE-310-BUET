@@ -3,11 +3,44 @@
 
 .data
 x22 dw ?
+a22 dw 0 dup(?)
+a22 dw 0 dup(?)
+a22 dw 0 dup(?)
+a22 dw 0 dup(?)
+a22 dw 0 dup(?)
+a22 dw 0 dup(?)
 
 .code 
 main PROC NEAR
 
-	mov ax, 57
+	mov bx, 1
+	add bx, bx
+	mov ax, 3
+	mov  a2[bx], ax
+	mov bx, 2
+	add bx, bx
+	mov ax, 12
+	mov  a2[bx], ax
+	mov bx, 1
+	add bx, bx
+	mov ax, a2[bx]
+	mov t0, ax
+	mov bx, 2
+	add bx, bx
+	mov ax, a2[bx]
+	mov t1, ax
+	mov ax, t0
+	add ax, t1
+	mov t2 , ax
+	mov bx, 3
+	add bx, bx
+	mov ax, t2
+	mov  a2[bx], ax
+	mov bx, 3
+	add bx, bx
+	mov ax, a2[bx]
+	mov t0, ax
+	mov ax, t0
 	mov x2, ax
 	mov ax, x
 	call DECIMAL_OUT
@@ -58,5 +91,3 @@ print_loop:
 	ret
 
 DECIMAL_OUT ENDP
-
-end main

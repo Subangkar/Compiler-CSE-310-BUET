@@ -42,6 +42,7 @@ class SymbolInfo {
 
 	int scopeID=-1;
 
+	string arrIndexVarName;
 public:
 
 	vector<string> paramList;    //INT, FLOAT, STRING, CHAR
@@ -94,6 +95,7 @@ public:
 		this->scopeID = symbolInfo.scopeID;
 
 		this->code = symbolInfo.code;
+		this->arrIndexVarName = symbolInfo.arrIndexVarName;
 	}
 
 	SymbolInfo &operator=(const SymbolInfo &symbolInfo)= default;
@@ -193,6 +195,14 @@ public:
 		if (floatData.empty()) floatData.push_back(val);
 		else floatData[0] = val;
 		return floatData[0];
+	}
+
+	const string &getArrIndexVarName() const {
+		return arrIndexVarName;
+	}
+
+	void setArrIndexVarName(const string &arrIndexVarName) {
+		SymbolInfo::arrIndexVarName = arrIndexVarName;
 	}
 
 	bool operator==(const SymbolInfo &rhs) const {
