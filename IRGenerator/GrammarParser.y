@@ -42,7 +42,7 @@ start: program
 				if(!syntaxErrors && !err_count_lex){
 						addCode($1->code);
 						writeASM();
-						printDebug($1->code);
+						/* printDebug($1->code); */
 				}
 				pushVal(start,popVal(program));
 				printRuleLog(start,"program");
@@ -281,6 +281,7 @@ statement: var_declaration
 			}
 	  | expression_statement
 			{
+				printDebug($1->code);
 				pushVal(statement,popVal(expression_statement));
 				printRuleLog(statement,"expression_statement");
 			}
@@ -309,6 +310,8 @@ statement: var_declaration
 			}
 	  | WHILE LPAREN expression RPAREN statement
 			{
+				$$->code = whlLoopCode($3,$5);
+
 				pushVal(statement,(string("while")+"("+popVal(expression)+")"+popVal(statement)));
 				printRuleLog(statement,"WHILE LPAREN expression RPAREN statement");
 			}
@@ -356,7 +359,9 @@ expression_statement: SEMICOLON
 			| expression SEMICOLON {
 					tempCount = 0;
 					pTempCount = 0;
-					$$->code += NEWLINE_ASM;
+					$$ = new SymbolInfo("",TEMPORARY);
+					$$->code = $1->code + NEWLINE_ASM;
+					deleteTemp($1);
 
 					pushVal(expression_statement,popVal(expression)+";");
 					printRuleLog(expression_statement,"expression SEMICOLON");

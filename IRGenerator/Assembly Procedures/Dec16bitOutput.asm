@@ -40,6 +40,12 @@ OUTDEC PROC
     INT 21H                      
     LOOP @DISPLAY                  ; jump to label @DISPLAY if CX!=0
 
+  MOV AH,2
+  MOV DL,0AH
+  INT 21h
+  MOV DL,0DH
+  INT 21h
+
   POP DX                         
   POP CX                         
   POP BX                         

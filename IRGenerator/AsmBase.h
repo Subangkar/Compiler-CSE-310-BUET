@@ -321,15 +321,6 @@ string ifElseCode(SymbolInfo *expIf, SymbolInfo *stmtIf, SymbolInfo *stmtEls = n
 }
 
 string forLoopCode(SymbolInfo *expInit, SymbolInfo *expCond, SymbolInfo *expInc, SymbolInfo *stmt) {
-	/*
-	$3's code at first, which is already done by assigning $$=$3
-	create two labels and append one of them in code
-	compare $4's symbol with 0
-	if equal jump to 2nd label
-	append $7's code
-	append $5's code
-	append the second label in the code
-*/
 	string code;
 	string label1 = newLabel();
 	string label2 = newLabel();
@@ -344,6 +335,20 @@ string forLoopCode(SymbolInfo *expInit, SymbolInfo *expCond, SymbolInfo *expInc,
 
 	deleteTemp(expInit,expCond);
 	deleteTemp(expInc,stmt);
+	return code;
+}
+
+string whlLoopCode(SymbolInfo *expCond, SymbolInfo *stmt) {
+	string loop_start = newLabel(), loop_end = newLabel();
+	string code;
+	code += addLabel(loop_start);
+	code += expCond->code;
+	code += jumpTo(loop_end, "JE", expCond, &zero);
+	code += stmt->code; // if-part
+	cout << stmt->code;
+	code += jumpTo(loop_start);
+	code += addLabel(loop_end);
+	deleteTemp(expCond,stmt);
 	return code;
 }
 
