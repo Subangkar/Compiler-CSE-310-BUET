@@ -281,7 +281,6 @@ statement: var_declaration
 			}
 	  | expression_statement
 			{
-				printDebug($1->code);
 				pushVal(statement,popVal(expression_statement));
 				printRuleLog(statement,"expression_statement");
 			}
@@ -311,14 +310,12 @@ statement: var_declaration
 	  | WHILE LPAREN expression RPAREN statement
 			{
 				$$->code = whlLoopCode($3,$5);
-
 				pushVal(statement,(string("while")+"("+popVal(expression)+")"+popVal(statement)));
 				printRuleLog(statement,"WHILE LPAREN expression RPAREN statement");
 			}
 	  | PRINTLN LPAREN ID RPAREN SEMICOLON
 			{
 				$$->code += printVarValue($3);
-
 				pushVal(statement,"("+$3->getName()+")"+";");
 				printRuleLog(statement,"PRINTLN LPAREN ID RPAREN SEMICOLON");
 			}
@@ -359,7 +356,8 @@ expression_statement: SEMICOLON
 			| expression SEMICOLON {
 					tempCount = 0;
 					pTempCount = 0;
-					$$ = new SymbolInfo("",TEMPORARY);
+					$$ = new SymbolInfo(*$1);
+					$$->setType(TEMPORARY);
 					$$->code = $1->code + NEWLINE_ASM;
 					deleteTemp($1);
 
