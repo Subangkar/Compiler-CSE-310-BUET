@@ -34,6 +34,7 @@ int labelCount = 0;
 int tempCount = 0;
 int pTempCount = 0;
 int maxTemp = -1;
+int maxpTemp = -1;
 
 
 void makeCRLF(string &str) {
@@ -109,13 +110,16 @@ string newLabel() {
 string newTemp(bool isLogical = false) {
 	string t = !isLogical ? "t" : "p";
 	char b[3];
-	sprintf(b, "%d", tempCount);
+	sprintf(b, "%d", !isLogical ? tempCount : pTempCount);
 	t += b;
-	if (tempCount > maxTemp) {
+	if (!isLogical && tempCount > maxTemp) {
 		maxTemp++;
 		addData(t);
+	} else if (isLogical && pTempCount > maxpTemp) {
+		maxpTemp++;
+		addData(t);
 	}
-	tempCount++;
+	!isLogical ? tempCount++ : pTempCount++;
 	return t;
 }
 

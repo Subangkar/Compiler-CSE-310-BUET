@@ -353,7 +353,10 @@ expression_statement: SEMICOLON
 					printRuleLog(expression_statement,"SEMICOLON");
 				}
 			| expression SEMICOLON {
+					tempCount = 0;
+					pTempCount = 0;
 					$$->code += NEWLINE_ASM;
+
 					pushVal(expression_statement,popVal(expression)+";");
 					printRuleLog(expression_statement,"expression SEMICOLON");
 				}
