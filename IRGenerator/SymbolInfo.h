@@ -176,28 +176,6 @@ public:
 		SymbolInfo::funcDefined = FuncDefined;
 	}
 
-	int setIndexValue(int val) {
-		while (intData.size() <= getArrIndex()) intData.push_back(0);
-		return intValue() = val;
-	}
-
-	float setIndexValue(float val) {
-		while (floatData.size() <= getArrIndex()) floatData.push_back(0);
-		return fltValue() = val;
-	}
-
-	int setVarValue(int val) {
-		if (intData.empty()) intData.push_back(val);
-		else intData[0] = val;
-		return intData[0];
-	}
-
-	float setVarValue(float val) {
-		if (floatData.empty()) floatData.push_back(val);
-		else floatData[0] = val;
-		return floatData[0];
-	}
-
 	const string &getArrIndexVarName() const {
 		return arrIndexVarName;
 	}

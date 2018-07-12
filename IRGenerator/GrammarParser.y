@@ -183,8 +183,8 @@ compound_statement: LCURL {enterFuncScope();} statements RCURL
 
 					exitFuncScope();
 			}
-			/* | LCURL statements error {printErrorLog("} missing at the end of scope");} */
  		  ;
+
 
 var_declaration: type_specifier declaration_list SEMICOLON
  			{

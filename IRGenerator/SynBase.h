@@ -335,14 +335,6 @@ void exitFuncScope() {
 SymbolInfo *getConstVal(SymbolInfo *constVal, const string &constVarType) {
 	constVal->setIDType(VARIABLE);
 	constVal->setVarType(constVarType);
-
-	if (constVarType == FLOAT_TYPE) {
-		constVal->floatData.push_back(0);
-		constVal->fltValue() = static_cast<float>(atof(constVal->getName().data()));
-	} else if (constVarType == INT_TYPE) {
-		constVal->intData.push_back(0);
-		constVal->intValue() = StringParser::toInteger(constVal->getName());
-	}
 	return constVal;
 }
 
@@ -353,12 +345,8 @@ SymbolInfo *getConstVal(const string &value = "$CONST$", const string &constVarT
 
 	if (constVarType == FLOAT_TYPE) {
 		constVal->setType("CONST_FLOAT");
-		constVal->floatData.push_back(0);
-		constVal->fltValue() = static_cast<float>(atof(constVal->getName().data()));
 	} else if (constVarType == INT_TYPE) {
 		constVal->setType("CONST_INT");
-		constVal->intData.push_back(0);
-		constVal->intValue() = StringParser::toInteger(constVal->getName().data());
 	}
 	return constVal;
 }
@@ -379,7 +367,7 @@ SymbolInfo *getVariable(SymbolInfo *varVal) {
 }
 
 SymbolInfo *getArrIndexVar(SymbolInfo *arrVal, SymbolInfo *idxVal) {
-	SymbolInfo *arr = table.lookUp(arrVal->getName());
+	auto arr = table.lookUp(arrVal->getName());
 	if (arr == nullptr) {
 		printErrorLog(arrVal->getName() + " doesn't exist");
 		return nullVal();
@@ -390,10 +378,9 @@ SymbolInfo *getArrIndexVar(SymbolInfo *arrVal, SymbolInfo *idxVal) {
 			printErrorLog(arrVal->getName() + " array index must be an integer");
 		} else {
 			arr->setArrIndexVarName(idxVal->getName());
-//			arr->code =
 		}
 	}
-	SymbolInfo *ret = new SymbolInfo(*arr);
+	auto *ret = new SymbolInfo(*arr);
 	ret->setType(TEMPORARY);
 	return ret;
 }
@@ -529,14 +516,16 @@ SymbolInfo *getMultpOpVal(SymbolInfo *left, SymbolInfo *right, SymbolInfo *op) {
 
 
 SymbolInfo *getIncOpVal(SymbolInfo *varVal) {
-	auto *opVal = new SymbolInfo(*varVal);
-	opVal->code = incMemoryValue(*varVal, "INC");
+	auto opVal = new SymbolInfo(newTemp(), TEMPORARY);
+	opVal->code += memoryToMemory(*opVal,*varVal);
+	opVal->code += incMemoryValue(*varVal, "INC");
 	return opVal;
 }
 
 SymbolInfo *getDecOpVal(SymbolInfo *varVal) {
-	auto *opVal = new SymbolInfo(*varVal);
-	opVal->code = incMemoryValue(*varVal, "DEC");
+	auto opVal = new SymbolInfo(newTemp(), TEMPORARY);
+	opVal->code += memoryToMemory(*opVal,*varVal);
+	opVal->code += incMemoryValue(*varVal, "DEC");
 	return opVal;
 }
 

@@ -185,7 +185,8 @@ string compareREG(const string &reg, const SymbolInfo &symbolInfo) {
 	return code;
 }
 
-string jumpTo(const string &label, const string &jmpInst="", const SymbolInfo* sym1= nullptr, const SymbolInfo* sym2= nullptr) {
+string jumpTo(const string &label, const string &jmpInst = "", const SymbolInfo *sym1 = nullptr,
+              const SymbolInfo *sym2 = nullptr) {
 	if (jmpInst.empty()) return "JMP " + label + NEWLINE_ASM;
 	string code;
 	code += operToReg("AX", *sym1);
@@ -257,17 +258,12 @@ string multMemoryValues(const string &op, const SymbolInfo &dest, const SymbolIn
 	string code;
 	string d = ASM_VAR_NAME(dest.getName());
 	string mem1 = ASM_VAR_NAME(mult1.getName()), mem2 = ASM_VAR_NAME(mult2.getName());
-	if (StringUtils::isNumber(mult1.getName())) {
-		string t = newTemp();
-		code += "MOV " + t + "," + mem1 + NEWLINE_ASM;
-		mem1 = t;
-	}
+	code += setConstValue("DX","0");
 	if (StringUtils::isNumber(mult2.getName())) {
 		string t = newTemp();
 		code += "MOV " + t + "," + mem2 + NEWLINE_ASM;
 		mem2 = t;
 	}
-
 	if (!mult2.isArrayVar()) {
 		code += operToReg("AX", mult1);
 		code += oper + mem2 + NEWLINE_ASM;
@@ -290,11 +286,26 @@ string addMemoryValues(const string &op, const SymbolInfo &dest, const SymbolInf
 
 	string code;
 	string d = ASM_VAR_NAME(dest.getName());
-	code += operToReg("AX", upper,"MOV");
-	code += operToReg("AX", lower,oper);
+	code += operToReg("AX", upper, "MOV");
+	code += operToReg("AX", lower, oper);
 	code += "MOV " + d + ",AX" + NEWLINE_ASM;
 	return code;
 }
+
+
+string ifElseCode(const SymbolInfo *expIf,const SymbolInfo* stmtIf, const SymbolInfo *stmtEls= nullptr) {
+	string code;
+	string label = newLabel();
+	code += jumpTo(label, "JE", expIf, stmtEls);
+//	code += "MOV ax, " + expIf->getName() + "\n";
+//	code += "CMP ax, 0\n";
+//	code += "\tje " + string(label) + "\n";
+	code += stmtIf->code;
+	if (stmtEls != nullptr)code += stmtEls->code;
+	code += addLabel(label);
+	return code;
+}
+
 
 #endif //IRGENERATOR_ASMBASE_H
 
