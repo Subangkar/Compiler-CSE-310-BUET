@@ -105,6 +105,13 @@ public:
 	static bool isAlpha(char c){
 		return (c >= 'a' && c <= 'z')||(c >= 'A' && c <= 'Z')||c=='_';
 	}
+
+	static bool isNumber(const string& s){
+		for (char it : s) {
+			if(it <'0' || it >'9') return false;
+		}
+		return true;
+	}
 };
 
 

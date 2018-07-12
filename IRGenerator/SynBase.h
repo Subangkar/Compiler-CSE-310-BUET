@@ -176,6 +176,10 @@ void yyerror(const char *s) {
 	lookAheadBuf = yytext;
 }
 
+void deleteTemp(SymbolInfo *sym1, SymbolInfo *sym2 = nullptr) {
+	if (sym1 != nullptr && sym1->getType() == TEMPORARY)delete sym1;
+	if (sym2 != nullptr && sym2->getType() == TEMPORARY)delete sym2;
+}
 
 SymbolInfo *nullVal() {
 	static SymbolInfo *defVal = nullptr;
@@ -389,7 +393,9 @@ SymbolInfo *getArrIndexVar(SymbolInfo *arrVal, SymbolInfo *idxVal) {
 //			arr->code =
 		}
 	}
-	return new SymbolInfo(*arr);
+	SymbolInfo *ret = new SymbolInfo(*arr);
+	ret->setType(TEMPORARY);
+	return ret;
 }
 
 
@@ -398,142 +404,102 @@ SymbolInfo *getAssignExpVal(SymbolInfo *lhs, SymbolInfo *rhs) {
 		printErrorLog("Assign Operation on void type");
 		return nullVal();
 	}
-
-	if (lhs->isArrayVar()) {
-		if (rhs->isArrayVar())
-			lhs->code = rhs->code + memoryToMemory(lhs->getName(), lhs->getArrIndexVarName(), rhs->getName(),
-			                                       rhs->getArrIndexVarName());
-		else
-			lhs->code = rhs->code + memoryToMemory(lhs->getName(), lhs->getArrIndexVarName(), rhs->getName());
-	} else if (lhs->isVariable()) {
-		if (rhs->isArrayVar()) {
-			lhs->code = rhs->code + memoryToMemory(lhs->getName(), "", rhs->getName(), rhs->getArrIndexVarName());
-		} else
-			lhs->code = rhs->code + memoryToMemory(lhs->getName(), "", rhs->getName());
-	}
+	lhs->code = rhs->code + memoryToMemory(*lhs, *rhs);
+	deleteTemp(rhs);
 	return lhs;
 }
 
-SymbolInfo *getLogicOpVal(SymbolInfo *left, SymbolInfo *right, SymbolInfo *op) {
-	if (left->getVarType() == VOID_TYPE || right->getVarType() == VOID_TYPE) {
+SymbolInfo *getLogicOpVal(SymbolInfo *lhs, SymbolInfo *rhs, SymbolInfo *op) {
+	if (lhs->getVarType() == VOID_TYPE || rhs->getVarType() == VOID_TYPE) {
 		printErrorLog("Operand of void type.");
 		return nullVal();
 	}
 
-	SymbolInfo *opVal = new SymbolInfo(newTemp(), "");
+	SymbolInfo *opVal = new SymbolInfo(newTemp(true), TEMPORARY);
 	opVal->setVarType(INT_TYPE);
 	const string &logicOp = op->getName();
-	int leftIVal = 0, rightIVal = 0;
-	float leftFVal = 0, rightFVal = 0;
-	int &result = opVal->intValue();
+	opVal->code = lhs->code + rhs->code;
+	string temp = opVal->getName();
+	string resIs0 = newLabel();
+	string resIs1 = newLabel();
 
-	int8_t cmpMode = 0x00; // 0 -> int F-> float 0F -> int-float
-
-	if (left->getVarType() == INT_TYPE) {
-		leftIVal = left->intValue();
-		cmpMode &= 0x0F;
-	} else {
-		leftFVal = left->fltValue();
-		cmpMode |= 0xF0;
+	if (logicOp == "&&") {
+//		opVal->code += moveToReg("AX", *lhs);
+		opVal->code += jumpTo(resIs0, "JE", *lhs,* new SymbolInfo("0"));
+//		opVal->code += moveToReg("AX", *rhs);
+//		opVal->code += jumpTo(resIs0, "JE", "AX", "0");
+		opVal->code += jumpTo(resIs0, "JE", *rhs,* new SymbolInfo("0"));
+		opVal->code += setConstValue(temp, "1");
+		opVal->code += jumpTo(resIs1);
+		opVal->code += addLabel(resIs0);
+		opVal->code += setConstValue(temp, "0");
+		opVal->code += addLabel(resIs1);
+	} else if (logicOp == "||") {
+//		opVal->code += moveToReg("AX", *lhs);
+//		opVal->code += jumpTo(resIs1, "JNE", "AX", "0");
+		opVal->code += jumpTo(resIs0, "JNE", *lhs,* new SymbolInfo("0"));
+//		opVal->code += moveToReg("AX", *rhs);
+		opVal->code += jumpTo(resIs1, "JNE", *rhs,* new SymbolInfo("0"));
+		opVal->code += setConstValue(temp, "0");
+		opVal->code += jumpTo(resIs0);
+		opVal->code += addLabel(resIs1);
+		opVal->code += setConstValue(temp, "1");
+		opVal->code += addLabel(resIs0);
 	}
 
-	if (right->getVarType() == INT_TYPE) {
-		rightIVal = right->intValue();
-		cmpMode &= 0xF0;
-	} else {
-		rightFVal = right->fltValue();
-		cmpMode |= 0x0F;
-	}
-
-	if (cmpMode == 0x00) {
-		result = logicOp == "&&" ? leftIVal && rightIVal :
-		         logicOp == "||" ? leftIVal || rightIVal : 0;
-	} else if (cmpMode == 0x0F) {
-		result = logicOp == "&&" ? leftIVal && rightFVal :
-		         logicOp == "||" ? leftIVal || rightFVal : 0;
-	} else if (cmpMode == 0xF0) {
-		result = logicOp == "&&" ? leftFVal && rightIVal :
-		         logicOp == "||" ? leftFVal || rightIVal : 0;
-	} else if (cmpMode == 0xFF) {
-		result = logicOp == "&&" ? leftFVal && rightFVal :
-		         logicOp == "||" ? leftFVal || rightFVal : 0;
-	}
-
-	if (left->getVarType() != right->getVarType()) {
+	if (lhs->getVarType() != rhs->getVarType()) {
 		printWarningLog("Comparision between two different types.");
 	}
-//	printDebug("Logic Exp Val: " + to_string(opVal->intValue()));
+	deleteTemp(lhs, rhs);
 	return opVal;
 }
 
-SymbolInfo *getReltnOpVal(SymbolInfo *left, SymbolInfo *right, SymbolInfo *op) {
+SymbolInfo *getReltnOpVal(SymbolInfo *lhs, SymbolInfo *rhs, SymbolInfo *op) {
 
-	if (left->getVarType() == VOID_TYPE || right->getVarType() == VOID_TYPE) {
+	if (lhs->getVarType() == VOID_TYPE || rhs->getVarType() == VOID_TYPE) {
 		printErrorLog("Can't compare with void type expressions");
 		return nullVal();
 	}
 
-	SymbolInfo *opVal = new SymbolInfo(newTemp(), "");
+	SymbolInfo *opVal = new SymbolInfo(newTemp(true), TEMPORARY);
 	opVal->setVarType(INT_TYPE);
 	const string &relop = op->getName();
-	int leftIVal = 0, rightIVal = 0;
-	float leftFVal = 0, rightFVal = 0;
-	int &result = opVal->intValue();
 
+	opVal->code = lhs->code + rhs->code;
+	opVal->code += moveToReg("AX", *lhs);
+	opVal->code += compareREG("AX", *rhs);
 
-	int8_t cmpMode = 0x00; // 0 -> int F-> float 0F -> int-float
-
-	if (left->getVarType() == INT_TYPE) {
-		leftIVal = left->intValue();
-		cmpMode &= 0x0F;
-	} else {
-		leftFVal = left->fltValue();
-		cmpMode |= 0xF0;
+	string temp = opVal->getName();
+	string label1 = newLabel();
+	string label2 = newLabel();
+	string jmpCondition;
+	if (relop == "<") {
+		jmpCondition = "JL ";
+	} else if (relop == ">") {
+		jmpCondition = "JG ";
+	} else if (relop == ">=") {
+		jmpCondition = "JGE ";
+	} else if (relop == "<=") {
+		jmpCondition = "JLE ";
+	} else if (relop == "==") {
+		jmpCondition = "JE ";
+	} else if (relop == "!=") {
+		jmpCondition = "JNE ";
 	}
 
-	if (right->getVarType() == INT_TYPE) {
-		rightIVal = right->intValue();
-		cmpMode &= 0xF0;
-	} else {
-		rightFVal = right->fltValue();
-		cmpMode |= 0x0F;
-	}
+	opVal->code += jmpCondition + label1 + NEWLINE_ASM;
+//	opVal->code += jumpTo(label1,jmpCondition,"AX","0");
 
-	if (cmpMode == 0x00) {
-		result = relop == "==" ? leftIVal == rightIVal :
-		         relop == "!=" ? leftIVal != rightIVal :
-		         relop == "<=" ? leftIVal <= rightIVal :
-		         relop == ">=" ? leftIVal >= rightIVal :
-		         relop == "<" ? leftIVal < rightIVal :
-		         relop == ">" ? leftIVal > rightIVal : 0;
-	} else if (cmpMode == 0x0F) {
-		result = relop == "==" ? leftIVal == rightFVal :
-		         relop == "!=" ? leftIVal != rightFVal :
-		         relop == "<=" ? leftIVal <= rightFVal :
-		         relop == ">=" ? leftIVal >= rightFVal :
-		         relop == "<" ? leftIVal < rightFVal :
-		         relop == ">" ? leftIVal > rightFVal : 0;
-	} else if (cmpMode == 0xF0) {
-		result = relop == "==" ? leftFVal == rightIVal :
-		         relop == "!=" ? leftFVal != rightIVal :
-		         relop == "<=" ? leftFVal <= rightIVal :
-		         relop == ">=" ? leftFVal >= rightIVal :
-		         relop == "<" ? leftFVal < rightIVal :
-		         relop == ">" ? leftFVal > rightIVal : 0;
-	} else if (cmpMode == 0xFF) {
-		result = relop == "==" ? leftFVal == rightFVal :
-		         relop == "!=" ? leftFVal != rightFVal :
-		         relop == "<=" ? leftFVal <= rightFVal :
-		         relop == ">=" ? leftFVal >= rightFVal :
-		         relop == "<" ? leftFVal < rightFVal :
-		         relop == ">" ? leftFVal > rightFVal : 0;
-	}
+	opVal->code += setConstValue(temp, "0");
+	opVal->code += jumpTo(label2);
+	opVal->code += addLabel(label1);
+	opVal->code += setConstValue(temp, "1");
+	opVal->code += addLabel(label2);
 
-	if (relop == "==" && left->getVarType() != right->getVarType()) {
+	if (relop == "==" && lhs->getVarType() != rhs->getVarType()) {
 		printWarningLog("Comparision between two different types.");
 	}
-
-//	printDebug("Rel Exp Val: " + to_string(result));
+	deleteTemp(lhs, rhs);
 	return opVal;
 }
 
@@ -545,10 +511,11 @@ SymbolInfo *getAddtnOpVal(SymbolInfo *left, SymbolInfo *right, SymbolInfo *op) {
 	}
 
 	const string &addop = op->getName();
-	SymbolInfo *opVal = new SymbolInfo(newTemp(), "");
+	SymbolInfo *opVal = new SymbolInfo(newTemp(), TEMPORARY);
 	opVal->code = left->code + right->code;
 	opVal->code += addMemoryValues(addop, opVal->getName(), left->getName(), left->getArrIndexVarName(),
-	                                right->getName(), right->getArrIndexVarName());
+	                               right->getName(), right->getArrIndexVarName());
+	deleteTemp(left, right);
 	return opVal;
 }
 
@@ -564,35 +531,24 @@ SymbolInfo *getMultpOpVal(SymbolInfo *left, SymbolInfo *right, SymbolInfo *op) {
 		printErrorLog("Float operand for mod operator");
 		return nullVal();
 	}
-	SymbolInfo *opVal = new SymbolInfo(newTemp(), "");
+	SymbolInfo *opVal = new SymbolInfo(newTemp(), TEMPORARY);
 	opVal->code = left->code + right->code;
 	opVal->code += multMemoryValues(mulOp, opVal->getName(), left->getName(), left->getArrIndexVarName(),
 	                                right->getName(), right->getArrIndexVarName());
+	deleteTemp(left, right);
 	return opVal;
 }
 
 
 SymbolInfo *getIncOpVal(SymbolInfo *varVal) {
 	auto *opVal = new SymbolInfo(*varVal);
-	if (varVal->isArrayVar()) {
-		opVal->code = incMemoryValue(varVal->getName(), varVal->getArrIndexVarName(), "INC");
-//		opVal->code += copyFromCurSI(opVal->getName(), varVal->getName());
-	} else if (varVal->isVariable()) {
-		opVal->code = incMemoryValue(varVal->getName(), "INC");
-//		opVal->code += memoryToMemory(opVal->getName(), varVal->getName());
-	}
+	opVal->code = incMemoryValue(*varVal, "INC");
 	return opVal;
 }
 
 SymbolInfo *getDecOpVal(SymbolInfo *varVal) {
 	auto *opVal = new SymbolInfo(*varVal);
-	if (varVal->isArrayVar()) {
-		opVal->code = incMemoryValue(varVal->getName(), varVal->getArrIndexVarName(), "DEC");
-//		opVal->code += copyFromCurSI(opVal->getName(), varVal->getName());
-	} else if (varVal->isVariable()) {
-		opVal->code = incMemoryValue(varVal->getName(), "DEC");
-//		opVal->code += memoryToMemory(opVal->getName(), varVal->getName());
-	}
+	opVal->code = incMemoryValue(*varVal, "DEC");
 	return opVal;
 }
 
@@ -601,14 +557,10 @@ SymbolInfo *getNotOpVal(SymbolInfo *factor) {
 		printErrorLog("Invalid Operand for Logical Not Operation");
 		return nullVal();
 	}
-	auto opVal = new SymbolInfo(newTemp(), "");
+	auto opVal = new SymbolInfo(newTemp(), TEMPORARY);
 	opVal = getConstVal(opVal, INT_TYPE);
-	if (factor->isVariable()) {
-		opVal->code = notMemoryValue(opVal->getName(), factor->getName());
-	} else if (factor->isArrayVar()) {
-		opVal->code = notMemoryValue(opVal->getName(), factor->getName(), factor->getArrIndexVarName());
-	}
-//	printDebug("NOT Exp Val: " + to_string(opVal->intValue()));
+	opVal->code = notMemoryValue(*opVal, *factor);
+	deleteTemp(factor);
 	return opVal;
 }
 
@@ -620,13 +572,10 @@ SymbolInfo *getUniAddOpVal(SymbolInfo *varVal, SymbolInfo *op) {
 
 	const string &uniOp = op->getName();
 	if (uniOp == "+") return varVal;
-	auto opVal = new SymbolInfo(newTemp(), "");
+	auto opVal = new SymbolInfo(newTemp(), TEMPORARY);
 	opVal = getConstVal(opVal, varVal->getVarType());
 	opVal->code = varVal->code;
-	if (varVal->isArrayVar())
-		opVal->code += minusMemoryValue(opVal->getName(), varVal->getName(), varVal->getArrIndexVarName());
-	else
-		opVal->code += minusMemoryValue(opVal->getName(), varVal->getName());
+	opVal->code += minusMemoryValue(*opVal, *varVal);
 	return opVal;
 }
 

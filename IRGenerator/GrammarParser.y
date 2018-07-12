@@ -259,12 +259,15 @@ declaration_list: declaration_list COMMA ID
 
 statements: statement
 			{
+				$1->code += NEWLINE_ASM;
+
 				pushVal(statements,popVal(statement));
 				printRuleLog(statements,"statement");
 			}
 	   | statements statement {
 			 	$$ = new SymbolInfo("","");
 			 	$$->code = $1->code + $2->code;
+				$$->code += NEWLINE_ASM;
 
 		   	pushVal(statements,popVal(statements)+popVal(statement));
 				printRuleLog(statements,"statements statement");
@@ -292,13 +295,14 @@ statement: var_declaration
 				printRuleLog(statement,"FOR LPAREN expression_statement expression_statement expression RPAREN statement");
 			}
 	  | IF LPAREN expression RPAREN statement %prec second_prec
-
 			{
+				$$ = $3;
 				pushVal(statement,(string("if")+"("+popVal(expression)+")"+popVal(statement)));
 				printRuleLog(statement,"IF LPAREN expression RPAREN statement");
 			}
 	  | IF LPAREN expression RPAREN statement ELSE statement
 			{
+				$$ = $3;
 				pushVal(statement,(string("if")+"("+popVal(expression)+")"+popVal(statement)+"else"+popVal(statement)));
 				printRuleLog(statement,"IF LPAREN expression RPAREN statement ELSE statement");
 			}
@@ -309,7 +313,7 @@ statement: var_declaration
 			}
 	  | PRINTLN LPAREN ID RPAREN SEMICOLON
 			{
-				$$->code = printVarValue($3);
+				$$->code += printVarValue($3);
 
 				pushVal(statement,"("+$3->getName()+")"+";");
 				printRuleLog(statement,"PRINTLN LPAREN ID RPAREN SEMICOLON");
@@ -330,7 +334,7 @@ statement: var_declaration
 			printErrorRuleLog("",statement,"error ELSE statement");
 		}
 		| IF invalid_condition statement %prec second_prec
-	{
+		{
 			pushVal(statement,(string("if")+"("+ERROR_VAL+")"+popVal(statement)));
 			printErrorRuleLog("",statement,"IF LPAREN error RPAREN statement");
 		}
@@ -349,6 +353,7 @@ expression_statement: SEMICOLON
 					printRuleLog(expression_statement,"SEMICOLON");
 				}
 			| expression SEMICOLON {
+					$$->code += NEWLINE_ASM;
 					pushVal(expression_statement,popVal(expression)+";");
 					printRuleLog(expression_statement,"expression SEMICOLON");
 				}
@@ -391,12 +396,15 @@ expression: logic_expression
 
 logic_expression: rel_expression
 				{
+					$$->code += NEWLINE_ASM;
+
 					pushVal(logic_expression,popVal(rel_expression));
 					printRuleLog(logic_expression,"rel_expression");
 				}
 		 | rel_expression LOGICOP rel_expression
 		 		{
 					$$ = getLogicOpVal($1,$3,$2);
+					$$->code += NEWLINE_ASM;
 
 					string r2 = popVal(rel_expression);
 					string r1 = popVal(rel_expression);

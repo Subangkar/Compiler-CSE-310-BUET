@@ -20,6 +20,7 @@
 #define INT_TYPE "INT"
 #define FLOAT_TYPE "FLOAT"
 #define VOID_TYPE "VOID"
+#define TEMPORARY "TEMP"
 #define CHAR_TYPE "CHAR"
 
 
@@ -73,7 +74,7 @@ public:
 
 //	explicit SymbolInfo(string name, string type = "");
 
-	explicit SymbolInfo(const string name, const string type = "") : name(name), type(type) { arrIndex = 0; }
+	explicit SymbolInfo(const string name, const string type = TEMPORARY) : name(name), type(type) { arrIndex = 0; }
 
 	SymbolInfo(const SymbolInfo &symbolInfo) {
 		this->name = symbolInfo.name;

@@ -32,6 +32,7 @@ string codeSegment, dataSegment;
 
 int labelCount = 0;
 int tempCount = 0;
+int pTempCount = 0;
 int maxTemp = -1;
 
 
@@ -96,18 +97,17 @@ string getInst(const string &code) {
 }
 
 
-char *newLabel() {
-	auto *lb = new char[4];
-	strcpy(lb, "L");
+string newLabel() {
+	string lb = "L";
 	char b[3];
 	sprintf(b, "%d", labelCount);
 	labelCount++;
-	strcat(lb, b);
+	lb += b;
 	return lb;
 }
 
-string newTemp() {
-	string t = "t";
+string newTemp(bool isLogical = false) {
+	string t = !isLogical ? "t" : "p";
 	char b[3];
 	sprintf(b, "%d", tempCount);
 	t += b;
@@ -132,7 +132,7 @@ string printVarValue(SymbolInfo *symbol) {
 
 void writeASM() {
 
-	string initDataSeg = "\tMOV AX,@DATA\r\n\tMOV DS,AX\r\n";
+	string initDataSeg = "\tMOV AX,@DATA\r\n\tMOV DS,AX\r\n" + NEWLINE_ASM;
 	string retOS = "MOV AH, 4ch\r\n\tMOV AL,0\r\n\tINT 21h\r\n" + PROC_END("main");
 	StringUtils::replaceAll(codeSegment, PROC_START("main"), PROC_START("main") + initDataSeg);
 	StringUtils::replaceAll(codeSegment, PROC_END("main"), retOS);
@@ -147,75 +147,109 @@ void writeASM() {
 	asmFile << "\r\nend main";
 }
 
+string setIndexInREG(const string &reg, const string &offsetVar) {
+	string code;
+	code += "MOV " + reg + "," + ASM_VAR_NAME(offsetVar) + NEWLINE_ASM;
+	code += "ADD " + reg + "," + reg + NEWLINE_ASM;
+	return code;
+}
 
-string memoryToMemory(const string &dest, const string &destOffsetVar, const string &src,
-                      const string &srcOffsetVar = "") {
-	if (destOffsetVar.empty() && srcOffsetVar.empty()) {
-		string code = "MOV DX," + ASM_VAR_NAME(src) + NEWLINE_ASM;
-		code += "MOV " + ASM_VAR_NAME(dest) + ", DX" + NEWLINE_ASM;
-		return code;
-	} else if (!destOffsetVar.empty() && srcOffsetVar.empty()) {
-		string code;
-		code += "MOV SI," + ASM_VAR_NAME(destOffsetVar) + NEWLINE_ASM;
-		code += string("ADD SI,SI") + NEWLINE_ASM;
-		code += "MOV DX," + ASM_VAR_NAME(src) + NEWLINE_ASM;
-		code += "MOV " + ASM_VAR_NAME(dest) + "[SI], DX" + NEWLINE_ASM;
-		return code;
+string arrayToReg(const string &reg, const string &array, const string &offsetVar) {
+	string code;
+	code += setIndexInREG("SI", offsetVar);
+	code += "MOV " + reg + " ," + ASM_VAR_NAME(array) + "[SI]" + NEWLINE_ASM;
+	return code;
+}
 
-	} else if (destOffsetVar.empty() && !srcOffsetVar.empty()) {
-		string code;
-		code += "MOV SI," + ASM_VAR_NAME(srcOffsetVar) + NEWLINE_ASM;
-		code += string("ADD SI,SI") + NEWLINE_ASM;
-		code += "MOV DX," + ASM_VAR_NAME(src) + "[SI]" + NEWLINE_ASM;
-		code += "MOV " + ASM_VAR_NAME(dest) + ", DX" + NEWLINE_ASM;
-		return code;
-	} else {
-		string code;
-		code += "MOV SI," + ASM_VAR_NAME(srcOffsetVar) + NEWLINE_ASM;
-		code += string("ADD SI,SI") + NEWLINE_ASM;
-		code += "MOV DI," + ASM_VAR_NAME(destOffsetVar) + NEWLINE_ASM;
-		code += string("ADD DI,DI") + NEWLINE_ASM;
-		code += "MOV DX," + ASM_VAR_NAME(src) + "[SI]" + NEWLINE_ASM;
-		code += "MOV " + ASM_VAR_NAME(dest) + "[DI], DX" + NEWLINE_ASM;
-		return code;
+string memorToReg(const string &reg, const string &mem) {
+	return "MOV " + reg + "," + ASM_VAR_NAME(mem) + NEWLINE_ASM;
+}
+
+string moveToReg(const string &reg, const SymbolInfo &symbolInfo) {
+	if (symbolInfo.isArrayVar()) return arrayToReg(reg, symbolInfo.getName(), symbolInfo.getArrIndexVarName());
+	else return memorToReg(reg, symbolInfo.getName());
+}
+
+string compareREG(const string &reg, const SymbolInfo &symbolInfo) {
+	string code;
+	string oper2 = ASM_VAR_NAME(symbolInfo.getName());
+	if (symbolInfo.isArrayVar()) {
+		code += setIndexInREG("SI", symbolInfo.getArrIndexVarName());
+		oper2 += "[SI]";
 	}
-}
-
-string copyFromCurSI(const string &dest, const string &src) {
-	string code;
-	code += "MOV DX," + ASM_VAR_NAME(src) + "[SI]" + NEWLINE_ASM;
-	code += "MOV " + ASM_VAR_NAME(dest) + ", DX" + NEWLINE_ASM;
+	code += "CMP " + reg + "," + oper2 + NEWLINE_ASM;
 	return code;
 }
 
-string incMemoryValue(const string &mem, const string &opType) {
+string jumpTo(const string &label, const string &jmpInst = "", const string &oper1 = "", const string &oper2 = "") {
+	if (jmpInst.empty()) return "JMP " + label + NEWLINE_ASM;
 	string code;
-	code += opType + " " + ASM_VAR_NAME(mem) + NEWLINE_ASM;
+	code += "CMP " + oper1 + ", " + oper2 + NEWLINE_ASM;
+	code += jmpInst + " " + label + NEWLINE_ASM;
 	return code;
 }
 
-string incMemoryValue(const string &mem, const string &offsetVar, const string &opType) {
+string jumpTo(const string &label, const string &jmpInst, const SymbolInfo &sym1, const SymbolInfo &sym2) {
 	string code;
-	code += "MOV SI," + ASM_VAR_NAME(offsetVar) + NEWLINE_ASM;
-	code += string("ADD SI,SI") + NEWLINE_ASM;
-	code += opType + " " + ASM_VAR_NAME(mem) + "[SI]" + NEWLINE_ASM;
+	code += moveToReg("AX", sym1);
+	code += compareREG("AX", sym2);
+	code += jmpInst + " " + label + NEWLINE_ASM;
 	return code;
 }
 
-string notMemoryValue(const string &dest, const string &mem) {
-	return memoryToMemory(dest, "", mem) + "NOT " + dest + NEWLINE_ASM;
+string setConstValue(const string &dest, const string &val) {
+	return "MOV " + dest + "," + val + NEWLINE_ASM;
 }
 
-string notMemoryValue(const string &dest, const string &mem, const string &offsetVar) {
-	return memoryToMemory(dest, "", mem, offsetVar) + "NOT " + dest + NEWLINE_ASM;
+string addLabel(const string &label) {
+	return label + ":" + NEWLINE_ASM;
 }
 
-string minusMemoryValue(const string &dest, const string &mem) {
-	return memoryToMemory(dest, "", mem, "") + "NEG " + dest + NEWLINE_ASM;//+ "INC " + dest + NEWLINE_ASM;
+
+string memoryToMemory(const SymbolInfo &destSym, const SymbolInfo &srcSym) {
+	string destIdx, srcIdx;
+	string code;
+
+	if (destSym.isArrayVar()) {
+		code += setIndexInREG("DI", destSym.getArrIndexVarName());
+		destIdx = "[DI]";
+	}
+	string destMem = ASM_VAR_NAME(destSym.getName()) + destIdx;
+
+	if (StringUtils::isNumber(srcSym.getName())) {
+		return code + "MOV " + destMem + ", " + srcSym.getName() + NEWLINE_ASM;// MOV x,3 or MOV x[SI],3
+	}
+
+	if (srcSym.isArrayVar()) {
+		code += setIndexInREG("SI", srcSym.getArrIndexVarName());
+		srcIdx = "[SI]";
+	}
+	string srcMem = ASM_VAR_NAME(srcSym.getName()) + srcIdx;
+
+	code += "MOV DX," + srcMem + NEWLINE_ASM;
+	code += "MOV " + destMem + ", DX" + NEWLINE_ASM;
+	return code;
 }
 
-string minusMemoryValue(const string &dest, const string &mem, const string &offsetVar) {
-	return memoryToMemory(dest, "", mem, offsetVar) + "NEG " + dest + NEWLINE_ASM;
+string incMemoryValue(const SymbolInfo &mem, const string &opType) {
+	string code;
+	string idx;
+	if (mem.isArrayVar()) {
+		code += setIndexInREG("SI", ASM_VAR_NAME(mem.getArrIndexVarName()));
+		idx = "[SI]";
+	}
+	code += opType + " " + ASM_VAR_NAME(mem.getName()) + idx + NEWLINE_ASM;
+	return code;
+}
+
+//dest must be temp
+string notMemoryValue(const SymbolInfo &dest, const SymbolInfo &mem) {
+	return memoryToMemory(dest, mem) + "NOT " + dest.getName() + NEWLINE_ASM;
+}
+
+//dest must be temp
+string minusMemoryValue(const SymbolInfo &dest, const SymbolInfo &mem) {
+	return memoryToMemory(dest, mem) + "NEG " + dest.getName() + NEWLINE_ASM;//+ "INC " + dest + NEWLINE_ASM;
 }
 
 string
@@ -243,21 +277,17 @@ multMemoryValues(const string &op, const string &dest, const string &mult1, cons
 		code += "MOV AX," + mem1 + NEWLINE_ASM;
 		code += oper + mem2 + NEWLINE_ASM;
 	} else if (!offset1.empty() && offset2.empty()) {
-		code += "MOV SI," + offset1 + NEWLINE_ASM;
-		code += "ADD SI,SI" + NEWLINE_ASM;
+		code += setIndexInREG("SI", offset1);
 		code += "MOV AX," + mem1 + "[SI]" + NEWLINE_ASM;
 		code += oper + mem2 + NEWLINE_ASM;
 	} else if (offset1.empty() && !offset2.empty()) {
-		code += "MOV SI," + offset2 + NEWLINE_ASM;
-		code += "ADD SI,SI" + NEWLINE_ASM;
+		code += setIndexInREG("SI", offset2);
 		code += "MOV AX," + mem2 + "[SI]" + NEWLINE_ASM;
 		code += oper + mem1 + NEWLINE_ASM;
 	} else {
-		code += "MOV SI," + offset1 + NEWLINE_ASM;
-		code += "ADD SI,SI" + NEWLINE_ASM;
+		code += setIndexInREG("SI", offset1);
 		code += "MOV AX," + mem1 + "[SI]" + NEWLINE_ASM;
-		code += "MOV SI," + offset2 + NEWLINE_ASM;
-		code += "ADD SI,SI" + NEWLINE_ASM;
+		code += setIndexInREG("SI", offset2);
 		code += "MOV DX," + mem2 + "[SI]" + NEWLINE_ASM;
 		code += oper + "DX" + NEWLINE_ASM;
 	}
@@ -271,7 +301,9 @@ addMemoryValues(const string &op, const string &dest, const string &upper, const
                 const string &offset2 = "") {
 	string oper;
 	if (op == "+") oper = "ADD ";
-	else oper = "SUB ";
+	else if (op == "-") oper = "SUB ";
+	else if (op == "&&") oper = "AND ";
+	else oper = "OR ";
 
 	string code;
 	string d = ASM_VAR_NAME(dest);
@@ -290,18 +322,14 @@ addMemoryValues(const string &op, const string &dest, const string &upper, const
 	if (offset1.empty() && offset2.empty()) {
 //		code += oper + mem1 + "," + mem2 + NEWLINE_ASM;
 	} else if (!offset1.empty() && offset2.empty()) {
-		code += "MOV DI," + offset1 + NEWLINE_ASM;
-		code += "ADD DI,SI" + NEWLINE_ASM;
+		code += setIndexInREG("DI", offset1);
 		mem1 += "[DI]";
 	} else if (offset1.empty() && !offset2.empty()) {
-		code += "MOV SI," + offset2 + NEWLINE_ASM;
-		code += "ADD SI,SI" + NEWLINE_ASM;
+		code += setIndexInREG("SI", offset2);
 		mem2 += "[SI]";
 	} else {
-		code += "MOV DI," + offset1 + NEWLINE_ASM;
-		code += "ADD DI,DI" + NEWLINE_ASM;
-		code += "MOV SI," + offset2 + NEWLINE_ASM;
-		code += "ADD SI,SI" + NEWLINE_ASM;
+		code += setIndexInREG("DI", offset1);
+		code += setIndexInREG("SI", offset2);
 		mem1 += "[DI]";
 		mem2 += "[SI]";
 	}

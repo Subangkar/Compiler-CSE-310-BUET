@@ -663,9 +663,9 @@ void HashTable<T>::printTable(FILE *printStream) {
 		{
 			fprintf(printStream, " %03d --> ", i);
 
-			vector<T> vc = arr[i].get();
-			for (int j = 0; j < vc.size(); j++) {
-				fprintf(printStream,"%s",vc[j].printString().data());
+//			vector<T> vc = arr[i].get();
+			for (int j = 0; j < arr[i].get().size(); j++) {
+				fprintf(printStream,"%s",arr[i].get()[j].printString().data());
 //				fprintf(printStream, "%s", (char *) vc[j]);
 			}
 			fprintf(printStream, "\n");
