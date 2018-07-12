@@ -176,11 +176,6 @@ void yyerror(const char *s) {
 	lookAheadBuf = yytext;
 }
 
-void deleteTemp(SymbolInfo *sym1, SymbolInfo *sym2 = nullptr) {
-	if (sym1 != nullptr && sym1->getType() == TEMPORARY)delete sym1;
-	if (sym2 != nullptr && sym2->getType() == TEMPORARY)delete sym2;
-}
-
 SymbolInfo *nullVal() {
 	static SymbolInfo *defVal = nullptr;
 	if (defVal == nullptr) {

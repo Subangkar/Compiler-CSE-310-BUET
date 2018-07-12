@@ -296,13 +296,13 @@ statement: var_declaration
 			}
 	  | IF LPAREN expression RPAREN statement %prec second_prec
 			{
-				$$ = $3;
+				$$->code = ifElseCode($3,$5);
 				pushVal(statement,(string("if")+"("+popVal(expression)+")"+popVal(statement)));
 				printRuleLog(statement,"IF LPAREN expression RPAREN statement");
 			}
 	  | IF LPAREN expression RPAREN statement ELSE statement
 			{
-				$$ = $3;
+				$$->code = ifElseCode($3,$5,$7);
 				pushVal(statement,(string("if")+"("+popVal(expression)+")"+popVal(statement)+"else"+popVal(statement)));
 				printRuleLog(statement,"IF LPAREN expression RPAREN statement ELSE statement");
 			}

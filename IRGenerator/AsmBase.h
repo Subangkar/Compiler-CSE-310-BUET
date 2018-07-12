@@ -293,16 +293,32 @@ string addMemoryValues(const string &op, const SymbolInfo &dest, const SymbolInf
 }
 
 
-string ifElseCode(const SymbolInfo *expIf,const SymbolInfo* stmtIf, const SymbolInfo *stmtEls= nullptr) {
+
+
+
+
+void deleteTemp(SymbolInfo *sym1, SymbolInfo *sym2 = nullptr) {
+	if (sym1 != nullptr && sym1->getType() == TEMPORARY)delete sym1;
+	if (sym2 != nullptr && sym2->getType() == TEMPORARY)delete sym2;
+}
+
+string ifElseCode(SymbolInfo *expIf,SymbolInfo* stmtIf, SymbolInfo *stmtEls= nullptr) {
+	string label_else_body = newLabel(),label_end_ifEls = newLabel();
+	SymbolInfo zero = SymbolInfo("0");
 	string code;
-	string label = newLabel();
-	code += jumpTo(label, "JE", expIf, stmtEls);
-//	code += "MOV ax, " + expIf->getName() + "\n";
-//	code += "CMP ax, 0\n";
-//	code += "\tje " + string(label) + "\n";
-	code += stmtIf->code;
-	if (stmtEls != nullptr)code += stmtEls->code;
-	code += addLabel(label);
+	code += expIf->code;
+	code += jumpTo(label_else_body, "JE", expIf, &zero);
+	code += stmtIf->code; // if-part
+	if (stmtEls != nullptr) {
+		code += jumpTo(label_end_ifEls);
+		code += addLabel(label_else_body);
+		code += stmtEls->code; // else-part
+	}
+	if(stmtEls != nullptr)code += addLabel(label_end_ifEls);
+	else code += addLabel(label_else_body);
+
+	deleteTemp(expIf);
+	deleteTemp(stmtIf,stmtEls);
 	return code;
 }
 
