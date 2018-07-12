@@ -422,24 +422,19 @@ SymbolInfo *getLogicOpVal(SymbolInfo *lhs, SymbolInfo *rhs, SymbolInfo *op) {
 	string temp = opVal->getName();
 	string resIs0 = newLabel();
 	string resIs1 = newLabel();
+	SymbolInfo zero("0");
 
 	if (logicOp == "&&") {
-//		opVal->code += operToReg("AX", *lhs);
-		opVal->code += jumpTo(resIs0, "JE", *lhs, *new SymbolInfo("0"));
-//		opVal->code += operToReg("AX", *rhs);
-//		opVal->code += jumpTo(resIs0, "JE", "AX", "0");
-		opVal->code += jumpTo(resIs0, "JE", *rhs, *new SymbolInfo("0"));
+		opVal->code += jumpTo(resIs0, "JE", lhs, &zero);
+		opVal->code += jumpTo(resIs0, "JE", rhs, &zero);
 		opVal->code += setConstValue(temp, "1");
 		opVal->code += jumpTo(resIs1);
 		opVal->code += addLabel(resIs0);
 		opVal->code += setConstValue(temp, "0");
 		opVal->code += addLabel(resIs1);
 	} else if (logicOp == "||") {
-//		opVal->code += operToReg("AX", *lhs);
-//		opVal->code += jumpTo(resIs1, "JNE", "AX", "0");
-		opVal->code += jumpTo(resIs0, "JNE", *lhs, *new SymbolInfo("0"));
-//		opVal->code += operToReg("AX", *rhs);
-		opVal->code += jumpTo(resIs1, "JNE", *rhs, *new SymbolInfo("0"));
+		opVal->code += jumpTo(resIs1, "JNE", lhs, &zero);
+		opVal->code += jumpTo(resIs1, "JNE", rhs, &zero);
 		opVal->code += setConstValue(temp, "0");
 		opVal->code += jumpTo(resIs0);
 		opVal->code += addLabel(resIs1);

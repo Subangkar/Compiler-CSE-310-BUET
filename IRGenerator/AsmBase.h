@@ -181,18 +181,11 @@ string compareREG(const string &reg, const SymbolInfo &symbolInfo) {
 	return code;
 }
 
-string jumpTo(const string &label, const string &jmpInst = "", const string &oper1 = "", const string &oper2 = "") {
+string jumpTo(const string &label, const string &jmpInst="", const SymbolInfo* sym1= nullptr, const SymbolInfo* sym2= nullptr) {
 	if (jmpInst.empty()) return "JMP " + label + NEWLINE_ASM;
 	string code;
-	code += "CMP " + oper1 + ", " + oper2 + NEWLINE_ASM;
-	code += jmpInst + " " + label + NEWLINE_ASM;
-	return code;
-}
-
-string jumpTo(const string &label, const string &jmpInst, const SymbolInfo &sym1, const SymbolInfo &sym2) {
-	string code;
-	code += operToReg("AX", sym1);
-	code += compareREG("AX", sym2);
+	code += operToReg("AX", *sym1);
+	code += compareREG("AX", *sym2);
 	code += jmpInst + " " + label + NEWLINE_ASM;
 	return code;
 }
