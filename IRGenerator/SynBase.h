@@ -424,22 +424,22 @@ SymbolInfo *getLogicOpVal(SymbolInfo *lhs, SymbolInfo *rhs, SymbolInfo *op) {
 	string resIs1 = newLabel();
 
 	if (logicOp == "&&") {
-//		opVal->code += moveToReg("AX", *lhs);
-		opVal->code += jumpTo(resIs0, "JE", *lhs,* new SymbolInfo("0"));
-//		opVal->code += moveToReg("AX", *rhs);
+//		opVal->code += operToReg("AX", *lhs);
+		opVal->code += jumpTo(resIs0, "JE", *lhs, *new SymbolInfo("0"));
+//		opVal->code += operToReg("AX", *rhs);
 //		opVal->code += jumpTo(resIs0, "JE", "AX", "0");
-		opVal->code += jumpTo(resIs0, "JE", *rhs,* new SymbolInfo("0"));
+		opVal->code += jumpTo(resIs0, "JE", *rhs, *new SymbolInfo("0"));
 		opVal->code += setConstValue(temp, "1");
 		opVal->code += jumpTo(resIs1);
 		opVal->code += addLabel(resIs0);
 		opVal->code += setConstValue(temp, "0");
 		opVal->code += addLabel(resIs1);
 	} else if (logicOp == "||") {
-//		opVal->code += moveToReg("AX", *lhs);
+//		opVal->code += operToReg("AX", *lhs);
 //		opVal->code += jumpTo(resIs1, "JNE", "AX", "0");
-		opVal->code += jumpTo(resIs0, "JNE", *lhs,* new SymbolInfo("0"));
-//		opVal->code += moveToReg("AX", *rhs);
-		opVal->code += jumpTo(resIs1, "JNE", *rhs,* new SymbolInfo("0"));
+		opVal->code += jumpTo(resIs0, "JNE", *lhs, *new SymbolInfo("0"));
+//		opVal->code += operToReg("AX", *rhs);
+		opVal->code += jumpTo(resIs1, "JNE", *rhs, *new SymbolInfo("0"));
 		opVal->code += setConstValue(temp, "0");
 		opVal->code += jumpTo(resIs0);
 		opVal->code += addLabel(resIs1);
@@ -466,7 +466,7 @@ SymbolInfo *getReltnOpVal(SymbolInfo *lhs, SymbolInfo *rhs, SymbolInfo *op) {
 	const string &relop = op->getName();
 
 	opVal->code = lhs->code + rhs->code;
-	opVal->code += moveToReg("AX", *lhs);
+	opVal->code += operToReg("AX", *lhs);
 	opVal->code += compareREG("AX", *rhs);
 
 	string temp = opVal->getName();
@@ -513,8 +513,7 @@ SymbolInfo *getAddtnOpVal(SymbolInfo *left, SymbolInfo *right, SymbolInfo *op) {
 	const string &addop = op->getName();
 	SymbolInfo *opVal = new SymbolInfo(newTemp(), TEMPORARY);
 	opVal->code = left->code + right->code;
-	opVal->code += addMemoryValues(addop, opVal->getName(), left->getName(), left->getArrIndexVarName(),
-	                               right->getName(), right->getArrIndexVarName());
+	opVal->code += addMemoryValues(addop, *opVal, *left, *right);
 	deleteTemp(left, right);
 	return opVal;
 }
@@ -533,8 +532,7 @@ SymbolInfo *getMultpOpVal(SymbolInfo *left, SymbolInfo *right, SymbolInfo *op) {
 	}
 	SymbolInfo *opVal = new SymbolInfo(newTemp(), TEMPORARY);
 	opVal->code = left->code + right->code;
-	opVal->code += multMemoryValues(mulOp, opVal->getName(), left->getName(), left->getArrIndexVarName(),
-	                                right->getName(), right->getArrIndexVarName());
+	opVal->code += multMemoryValues(mulOp, *opVal, *left, *right);
 	deleteTemp(left, right);
 	return opVal;
 }
