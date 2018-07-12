@@ -291,6 +291,7 @@ statement: var_declaration
 			}
 	  | FOR LPAREN expression_statement expression_statement expression RPAREN statement
 			{
+				$$->code = forLoopCode($3,$4,$5,$7);
 				pushVal(statement,(string("for")+"("+popVal(expression_statement)+popVal(expression_statement)+popVal(expression)+")"+popVal(statement)));
 				printRuleLog(statement,"FOR LPAREN expression_statement expression_statement expression RPAREN statement");
 			}
@@ -348,7 +349,7 @@ invalid_condition: LPAREN error RPAREN {printErrorLog("invalid conditional expre
 
 expression_statement: SEMICOLON
 				{
-					$$ = new SymbolInfo(";","");
+					$$ = new SymbolInfo(";");
 					pushVal(expression_statement,";");
 					printRuleLog(expression_statement,"SEMICOLON");
 				}

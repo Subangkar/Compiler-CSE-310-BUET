@@ -8,14 +8,13 @@ int main()
   a[3] = 1;
   x=0+1;
   a[x]=4+(17%12);
-  if(a[x]<10){
-    a[x]=15;
-  } 
-  else
+  int i;
+  i = 0+10;
+  for(; i < (6+16); i++)
   {
-    a[x]=7;
+    a[x]++;
   }
-  
+   
   x = a[x];
   println(x);
 

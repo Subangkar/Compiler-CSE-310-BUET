@@ -258,7 +258,7 @@ string multMemoryValues(const string &op, const SymbolInfo &dest, const SymbolIn
 	string code;
 	string d = ASM_VAR_NAME(dest.getName());
 	string mem1 = ASM_VAR_NAME(mult1.getName()), mem2 = ASM_VAR_NAME(mult2.getName());
-	code += setConstValue("DX","0");
+	code += setConstValue("DX", "0");
 	if (StringUtils::isNumber(mult2.getName())) {
 		string t = newTemp();
 		code += "MOV " + t + "," + mem2 + NEWLINE_ASM;
@@ -293,17 +293,15 @@ string addMemoryValues(const string &op, const SymbolInfo &dest, const SymbolInf
 }
 
 
-
-
-
+const SymbolInfo zero("0"), one("1");
 
 void deleteTemp(SymbolInfo *sym1, SymbolInfo *sym2 = nullptr) {
 	if (sym1 != nullptr && sym1->getType() == TEMPORARY)delete sym1;
 	if (sym2 != nullptr && sym2->getType() == TEMPORARY)delete sym2;
 }
 
-string ifElseCode(SymbolInfo *expIf,SymbolInfo* stmtIf, SymbolInfo *stmtEls= nullptr) {
-	string label_else_body = newLabel(),label_end_ifEls = newLabel();
+string ifElseCode(SymbolInfo *expIf, SymbolInfo *stmtIf, SymbolInfo *stmtEls = nullptr) {
+	string label_else_body = newLabel(), label_end_ifEls = newLabel();
 	SymbolInfo zero = SymbolInfo("0");
 	string code;
 	code += expIf->code;
@@ -314,14 +312,40 @@ string ifElseCode(SymbolInfo *expIf,SymbolInfo* stmtIf, SymbolInfo *stmtEls= nul
 		code += addLabel(label_else_body);
 		code += stmtEls->code; // else-part
 	}
-	if(stmtEls != nullptr)code += addLabel(label_end_ifEls);
+	if (stmtEls != nullptr)code += addLabel(label_end_ifEls);
 	else code += addLabel(label_else_body);
 
 	deleteTemp(expIf);
-	deleteTemp(stmtIf,stmtEls);
+	deleteTemp(stmtIf, stmtEls);
 	return code;
 }
 
+string forLoopCode(SymbolInfo *expInit, SymbolInfo *expCond, SymbolInfo *expInc, SymbolInfo *stmt) {
+	/*
+	$3's code at first, which is already done by assigning $$=$3
+	create two labels and append one of them in code
+	compare $4's symbol with 0
+	if equal jump to 2nd label
+	append $7's code
+	append $5's code
+	append the second label in the code
+*/
+	string code;
+	string label1 = newLabel();
+	string label2 = newLabel();
+	code += expInit->code;
+	code += addLabel(label1);
+	code += expCond->code;
+	code += jumpTo(label2, "JE", expCond, &zero);
+	code += stmt->code;
+	code += expInc->code;
+	code += jumpTo(label1);
+	code += addLabel(label2);
+
+	deleteTemp(expInit,expCond);
+	deleteTemp(expInc,stmt);
+	return code;
+}
 
 #endif //IRGENERATOR_ASMBASE_H
 
