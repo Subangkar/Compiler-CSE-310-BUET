@@ -461,9 +461,6 @@ SymbolInfo *getReltnOpVal(SymbolInfo *lhs, SymbolInfo *rhs, SymbolInfo *op) {
 	const string &relop = op->getName();
 
 	opVal->code = lhs->code + rhs->code;
-	opVal->code += operToReg("AX", *lhs);
-	opVal->code += compareREG("AX", *rhs);
-
 	string temp = opVal->getName();
 	string label1 = newLabel();
 	string label2 = newLabel();
@@ -482,9 +479,7 @@ SymbolInfo *getReltnOpVal(SymbolInfo *lhs, SymbolInfo *rhs, SymbolInfo *op) {
 		jmpCondition = "JNE ";
 	}
 
-	opVal->code += jmpCondition + label1 + NEWLINE_ASM;
-//	opVal->code += jumpTo(label1,jmpCondition,"AX","0");
-
+	opVal->code += jumpTo(label1,jmpCondition,lhs,rhs);
 	opVal->code += setConstValue(temp, "0");
 	opVal->code += jumpTo(label2);
 	opVal->code += addLabel(label1);

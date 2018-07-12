@@ -8,7 +8,7 @@ int main()
   a[3] = 1;
   x=1;
   a[x]=9;
-  a[x] = (a[x] && a[3]) || a[2]; // x && 
+  a[x] = (a[x] <= a[3]) && (a[2]<a[x]); // x && 
   x = a[x];
   println(x);
 
