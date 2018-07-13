@@ -249,6 +249,7 @@ void insertFunc(SymbolInfo *funcVal, SymbolInfo *retType) {
 	func->setFuncRetType(retType->getName());
 	func->setVarType(retType->getName());
 	func->paramList = argsType;
+	func->setReturnLabel(newRetLabel(func->getName()));
 
 	if (IDargsNo && find(argsType.begin(), argsType.end(), VOID_TYPE) != argsType.end()) {
 		printErrorLog("Function " + funcVal->getName() + ": prototype can't be void");

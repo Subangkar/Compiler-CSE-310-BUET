@@ -16,10 +16,10 @@
 #define ARRAY "ARR"
 #define VARIABLE "VAR"
 #define FUNCTION "FUNC"
+#define TEMPORARY "TEMP"
 #define INT_TYPE "INT"
 #define FLOAT_TYPE "FLOAT"
 #define VOID_TYPE "VOID"
-#define TEMPORARY "TEMP"
 #define CHAR_TYPE "CHAR"
 
 
@@ -39,6 +39,7 @@ class SymbolInfo {
 	int scopeID=-1;
 
 	string arrIndexVarName = "";
+	string returnLabel;
 public:
 
 	vector<string> paramList{};    //INT, FLOAT, STRING, CHAR
@@ -152,6 +153,14 @@ public:
 
 	void setArrIndexVarName(const string &arrIndexVarName) {
 		SymbolInfo::arrIndexVarName = arrIndexVarName;
+	}
+
+	const string &getReturnLabel() const {
+		return returnLabel;
+	}
+
+	void setReturnLabel(const string &returnLabel) {
+		SymbolInfo::returnLabel = returnLabel;
 	}
 
 	bool operator==(const SymbolInfo &rhs) const {

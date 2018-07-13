@@ -1,5 +1,16 @@
 // int y;
 // int a[5];
+
+int foo()
+{
+    int a;
+    a=1;
+    if(a==1) return a;
+    int b;
+    b=a+1;
+    return b;
+}
+
 int main(){
     int a,b,i;
     b=0;

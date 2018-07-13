@@ -107,6 +107,10 @@ string newLabel() {
 	return lb;
 }
 
+string newRetLabel(const string &funcName) {
+	return "RET_" + funcName;
+}
+
 string newTemp(bool isLogical = false) {
 	string t = !isLogical ? "t" : "p";
 	char b[3];
@@ -294,6 +298,7 @@ string addMemoryValues(const string &op, const SymbolInfo &dest, const SymbolInf
 
 
 const SymbolInfo zero("0"), one("1");
+extern SymbolInfo *currentFunc;
 
 void deleteTemp(SymbolInfo *sym1, SymbolInfo *sym2 = nullptr) {
 	if (sym1 != nullptr && sym1->getType() == TEMPORARY)delete sym1;
@@ -333,8 +338,8 @@ string forLoopCode(SymbolInfo *expInit, SymbolInfo *expCond, SymbolInfo *expInc,
 	code += jumpTo(label1);
 	code += addLabel(label2);
 
-	deleteTemp(expInit,expCond);
-	deleteTemp(expInc,stmt);
+	deleteTemp(expInit, expCond);
+	deleteTemp(expInc, stmt);
 	return code;
 }
 
@@ -347,7 +352,31 @@ string whlLoopCode(SymbolInfo *expCond, SymbolInfo *stmt) {
 	code += stmt->code; // if-part
 	code += jumpTo(loop_start);
 	code += addLabel(loop_end);
-	deleteTemp(expCond,stmt);
+	deleteTemp(expCond, stmt);
+	return code;
+}
+
+string funcBodyCode(SymbolInfo *func, SymbolInfo *cstmt) {
+	string code;
+	code = PROC_START(func->getName());
+	if (func->getName() != "main") code += "PUSH AX" + NEWLINE_ASM;
+	code += cstmt->code;
+	if (func->getName() != "main") code += addLabel(currentFunc->getReturnLabel());
+	if (func->getName() != "main") code += "POP AX" + NEWLINE_ASM;
+	StringUtils::replaceAll(code, "\n", "\n\t");
+	if (func->getName() != "main") code += "RET" + NEWLINE_ASM;
+	code += PROC_END(func->getName());
+	deleteTemp(cstmt);
+	return code;
+}
+
+string returnExpCode(SymbolInfo *exp) {
+//	if (exp!= nullptr || exp->getName().empty()) return "RET" + NEWLINE_ASM;
+	string code;
+//	code += "\tmov dx," + exp->getName() + "\n";
+//	code += "\tjmp   " + string(return_label) + "\n";
+	code += operToReg("DX", *exp);
+	code += jumpTo(currentFunc->getReturnLabel());
 	return code;
 }
 
