@@ -43,6 +43,7 @@ class SymbolInfo {
 public:
 
 	vector<string> paramList{};    //INT, FLOAT, STRING, CHAR
+	vector<SymbolInfo> parameters;    //x, y
 
 	string code;
 

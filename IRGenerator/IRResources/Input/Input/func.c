@@ -13,7 +13,9 @@ int main(){
     int a,b;
     a=1;
     b=2;
-    a=f(a,b);
+    a=f(a);
     println(a);
+    b=g(1,2);
+    println(b);
     return 0;
 }

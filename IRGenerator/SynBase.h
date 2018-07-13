@@ -309,7 +309,14 @@ void checkReturnType(SymbolInfo *exp) {
 void enterFuncScope() {
 	table.enterScope();
 	printLog("\n >> Entered into ScopeTable #" + to_string(table.getCurrentId()));
-	for (const auto &param : parameters) table.insert(param);
+	for (auto &param : parameters) {
+		param.setScopeID(table.getCurrentId());
+		table.insert(param);
+		SymbolInfo sym(ASM_VAR_NAME(param.getName()));
+		currentFunc->parameters.push_back(sym);
+		addData(param.getName());
+	}
+
 	clearFunctionArgs();
 }
 
@@ -559,9 +566,18 @@ SymbolInfo *getFuncCallValue(SymbolInfo *funcVal) {
 		} else if (func->paramList != argsType) {
 			printErrorLog(func->getName() + ": argument type Mismatch");
 		}
+
+		//pass arguments
+//		for(const auto& arg:func->parameters){
+////			memoryToMemory(arg,)
+//		}
+
 		retVal = new SymbolInfo(newTemp(),TEMPORARY);
 		retVal->setVarType(func->getFuncRetType());
-		retVal->code = procRetValue(*retVal,*funcVal);
+		for (int i = 0; i < func->parameters.size(); ++i) {
+			retVal->code += memoryToMemory(func->parameters[i],argsFunc[i]);
+		}
+		retVal->code += procRetValue(*retVal,*funcVal);
 //		if (func->isVoidFunc()) printErrorLog("Function " + funcVal->getName() + " returns void");
 	}
 	clearFunctionArgs();

@@ -110,7 +110,9 @@ func_declaration: type_specifier ID LPAREN parameter_list RPAREN SEMICOLON
 
 func_definition: type_specifier ID LPAREN parameter_list RPAREN{addFuncDef($2,$1);} compound_statement
 			{
-				/* currentFunc = nullptr; */
+				$$ = new SymbolInfo("",TEMPORARY);
+				$$->code = funcBodyCode($2,$7) + NEWLINE_ASM;
+				currentFunc = nullptr;
 
 				pushVal(func_definition,popVal(type_specifier)+$2->getName()+"("+popVal(parameter_list)+")"+popVal(compound_statement));
 				printRuleLog(func_definition,"type_specifier ID LPAREN parameter_list RPAREN compound_statement");
@@ -119,7 +121,7 @@ func_definition: type_specifier ID LPAREN parameter_list RPAREN{addFuncDef($2,$1
 			{
 				$$ = new SymbolInfo("",TEMPORARY);
 				$$->code = funcBodyCode($2,$6) + NEWLINE_ASM;
-				/* currentFunc = nullptr; */
+				currentFunc = nullptr;
 
 				pushVal(func_definition,popVal(type_specifier)+$2->getName()+"("+")"+popVal(compound_statement));
 				printRuleLog(func_definition,"type_specifier ID LPAREN RPAREN compound_statement");
@@ -492,8 +494,7 @@ factor: variable
 		}
 	| ID LPAREN argument_list RPAREN
 		{
-			SymbolInfo* t=getFuncCallValue($1);
-			if(t!=nullptr)$$ = t;
+			$$=getFuncCallValue($1);
 
 			pushVal(factor,$1->getName()+"("+popVal(argument_list)+")");
 			printRuleLog(factor,"ID LPAREN argument_list RPAREN");

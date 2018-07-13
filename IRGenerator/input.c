@@ -1,37 +1,31 @@
 // int y;
 // int a[5];
 int a,b;
-int add1()
-{
-    return a+b;
-}
-int sub1()
-{
-    return a-b;
+int l;
+int add1(int l)
+{   
+    int i,v;
+    v=0;
+    
+    for(i = 0; l; i++)
+    {
+       v++;
+       l = l/2;
+    }
+    
+    return v;
 }
 
-int val(){
-    int x;
-    x=1;
-    a=10;
-    b=5;
-    if(x==3) return add1();
-    else return sub1();
-}
 
 int main(){
     int a,b,i;
-    b=0;
-    for(i=0;i<4;i++){
-        a=3;
-        while(a--){
-            b++;
-        }
-    }
+    l=10;
+    a=15;
+    b=21;
     int x;
-    x=val();
-    println(a);
-    println(b);
+    x=add1(a);
+    println(x);
+    x=add1(b);
     println(x);
     return 0;
 }
