@@ -53,14 +53,14 @@ string getOUTDEC_PROC() {
 		file.seekg(0, std::ios::end);
 		std::streampos length = file.tellg();
 		file.seekg(0, std::ios::beg);
-		auto *buff = new char[length];
+		auto *buff = new char[length+(std::streampos)1];
 		file.read(buff, length);
+		buff[length] = NULL;
 		_OUTDEC_PROC = buff;
 		delete[] buff;
-
 	}
 	StringUtils::replaceAll(_OUTDEC_PROC, "\r", "");
-	StringUtils::replaceAll(_OUTDEC_PROC, "\n", "\r\n");
+	StringUtils::replaceAll(_OUTDEC_PROC, "\n", NEWLINE_ASM);
 	return _OUTDEC_PROC;
 }
 
@@ -144,13 +144,14 @@ void writeASM() {
 	string retOS = "MOV AH, 4ch\r\n\tMOV AL,0\r\n\tINT 21h\r\n" + PROC_END("main");
 	StringUtils::replaceAll(codeSegment, PROC_START("main"), PROC_START("main") + initDataSeg);
 	StringUtils::replaceAll(codeSegment, PROC_END("main"), retOS);
-	codeSegment += getOUTDEC_PROC();
+//	codeSegment += getOUTDEC_PROC();
 
 	asmFile << ".model small\r\n";
 	asmFile << "\r\n.stack 100h\r\n";
 	asmFile << "\r\n.data\r\n" << dataSegment;
 	asmFile << "\r\n.code\r\n" << codeSegment;
 
+	asmFile << getOUTDEC_PROC();
 	asmFile << NEWLINE_ASM;
 	asmFile << "\r\nend main";
 }
@@ -186,6 +187,17 @@ string compareREG(const string &reg, const SymbolInfo &symbolInfo) {
 		oper2 += "[SI]";
 	}
 	code += "CMP " + reg + "," + oper2 + NEWLINE_ASM;
+	return code;
+}
+
+string regToMemory(const SymbolInfo &mem, const string &reg) {
+	string code;
+	string idx;
+	if (mem.isArrayVar()) {
+		code += setIndexInREG("DI", mem.getArrIndexVarName());
+		idx = "[DI]";
+	}
+	code += "MOV " + ASM_VAR_NAME(mem.getName()) + idx + "," + reg + NEWLINE_ASM;
 	return code;
 }
 
@@ -296,9 +308,21 @@ string addMemoryValues(const string &op, const SymbolInfo &dest, const SymbolInf
 	return code;
 }
 
+string procRetValue(const SymbolInfo &dest, const SymbolInfo &func) {
+	string code;
+	code += "PUSH DX" + NEWLINE_ASM;
+	code += "CALL " + func.getName() + NEWLINE_ASM;
+	code += regToMemory(dest, "DX");
+	code += "POP DX" + NEWLINE_ASM;
+	return code;
+}
+
 
 const SymbolInfo zero("0"), one("1");
 extern SymbolInfo *currentFunc;
+
+
+void printDebug(const string &);
 
 void deleteTemp(SymbolInfo *sym1, SymbolInfo *sym2 = nullptr) {
 	if (sym1 != nullptr && sym1->getType() == TEMPORARY)delete sym1;
@@ -356,25 +380,25 @@ string whlLoopCode(SymbolInfo *expCond, SymbolInfo *stmt) {
 	return code;
 }
 
-string funcBodyCode(SymbolInfo *func, SymbolInfo *cstmt) {
+string funcBodyCode(SymbolInfo *funcSrc, SymbolInfo *cstmt) {
+	SymbolInfo *func = table.lookUp(funcSrc->getName());
 	string code;
 	code = PROC_START(func->getName());
 	if (func->getName() != "main") code += "PUSH AX" + NEWLINE_ASM;
 	code += cstmt->code;
-	if (func->getName() != "main") code += addLabel(currentFunc->getReturnLabel());
+	code += addLabel(func->getReturnLabel());
 	if (func->getName() != "main") code += "POP AX" + NEWLINE_ASM;
 	StringUtils::replaceAll(code, "\n", "\n\t");
 	if (func->getName() != "main") code += "RET" + NEWLINE_ASM;
 	code += PROC_END(func->getName());
-	deleteTemp(cstmt);
+	deleteTemp(funcSrc, cstmt);
 	return code;
 }
 
+// sets ret Value in DX
 string returnExpCode(SymbolInfo *exp) {
-//	if (exp!= nullptr || exp->getName().empty()) return "RET" + NEWLINE_ASM;
 	string code;
-//	code += "\tmov dx," + exp->getName() + "\n";
-//	code += "\tjmp   " + string(return_label) + "\n";
+	code += exp->code;
 	code += operToReg("DX", *exp);
 	code += jumpTo(currentFunc->getReturnLabel());
 	return code;

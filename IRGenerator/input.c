@@ -1,14 +1,22 @@
 // int y;
 // int a[5];
-
-int foo()
+int a,b;
+int add1()
 {
-    int a;
-    a=1;
-    if(a==1) return a;
-    int b;
-    b=a+1;
-    return b;
+    return a+b;
+}
+int sub1()
+{
+    return a-b;
+}
+
+int val(){
+    int x;
+    x=1;
+    a=10;
+    b=5;
+    if(x==3) return add1();
+    else return sub1();
 }
 
 int main(){
@@ -20,10 +28,15 @@ int main(){
             b++;
         }
     }
+    int x;
+    x=val();
     println(a);
     println(b);
-    // println(c);
+    println(x);
+    return 0;
 }
+
+
 
 
 // int main()

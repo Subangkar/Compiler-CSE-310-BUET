@@ -273,12 +273,12 @@ void addFuncDef(SymbolInfo *funcVal, SymbolInfo *retType) {
 			printErrorLog("Function " + funcVal->getName() + " :argument mismatch");
 		} else {
 			func->setFuncDefined(true);
+			currentFunc = func;
 		}
 	} else {
 		insertFunc(funcVal, retType);
 		func = table.lookUp(*funcVal);
 		func->setFuncDefined(true);
-
 		currentFunc = func;
 	}
 }
@@ -314,7 +314,7 @@ void enterFuncScope() {
 }
 
 void exitFuncScope() {
-	currentFunc = nullptr;
+//	currentFunc = nullptr;
 
 	table.printAllScope(logFile);
 	printLog("\n >> ScopeTable #" + to_string(table.getCurrentId()) + " removed");
@@ -478,6 +478,7 @@ SymbolInfo *getAddtnOpVal(SymbolInfo *left, SymbolInfo *right, SymbolInfo *op) {
 
 	const string &addop = op->getName();
 	SymbolInfo *opVal = new SymbolInfo(newTemp(), TEMPORARY);
+	opVal->setVarType(INT_TYPE);
 	opVal->code = left->code + right->code;
 	opVal->code += addMemoryValues(addop, *opVal, *left, *right);
 	deleteTemp(left, right);
@@ -497,6 +498,7 @@ SymbolInfo *getMultpOpVal(SymbolInfo *left, SymbolInfo *right, SymbolInfo *op) {
 		return nullVal();
 	}
 	SymbolInfo *opVal = new SymbolInfo(newTemp(), TEMPORARY);
+	opVal->setVarType(INT_TYPE);
 	opVal->code = left->code + right->code;
 	opVal->code += multMemoryValues(mulOp, *opVal, *left, *right);
 	deleteTemp(left, right);
@@ -506,6 +508,7 @@ SymbolInfo *getMultpOpVal(SymbolInfo *left, SymbolInfo *right, SymbolInfo *op) {
 
 SymbolInfo *getIncOpVal(SymbolInfo *varVal, const string &op = "++") {
 	auto opVal = new SymbolInfo(newTemp(), TEMPORARY);
+	opVal->setVarType(INT_TYPE);
 	opVal->code += memoryToMemory(*opVal, *varVal);
 	opVal->code += incMemoryValue(*varVal, op == "++" ? "INC" : "DEC");
 	return opVal;
@@ -545,16 +548,20 @@ SymbolInfo *getFuncCallValue(SymbolInfo *funcVal) {
 		printErrorLog("Function " + funcVal->getName() + " doesn't exist");
 	} else if (!func->isFunction()) {
 		printErrorLog(funcVal->getName() + " is not a function");
-	} else if (!func->isFuncDefined()) {
-		printErrorLog(funcVal->getName() + " does not have a body");
-	} else {
+	}
+//	else if (!func->isFuncDefined()) {
+//		printErrorLog(funcVal->getName() + " does not have a body");
+//	}
+	else {
 		if (func->paramList.size() != argsType.size()) {
 			printErrorLog(func->getName() + ": " + to_string(func->paramList.size()) + " arguments expected" +
 			              " instead passed " + to_string(argsType.size()));
 		} else if (func->paramList != argsType) {
 			printErrorLog(func->getName() + ": argument type Mismatch");
 		}
-		retVal = getConstVal(newTemp(), func->getFuncRetType());
+		retVal = new SymbolInfo(newTemp(),TEMPORARY);
+		retVal->setVarType(func->getFuncRetType());
+		retVal->code = procRetValue(*retVal,*funcVal);
 //		if (func->isVoidFunc()) printErrorLog("Function " + funcVal->getName() + " returns void");
 	}
 	clearFunctionArgs();

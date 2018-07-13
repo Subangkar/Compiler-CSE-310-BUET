@@ -110,7 +110,7 @@ func_declaration: type_specifier ID LPAREN parameter_list RPAREN SEMICOLON
 
 func_definition: type_specifier ID LPAREN parameter_list RPAREN{addFuncDef($2,$1);} compound_statement
 			{
-				exitFuncScope();
+				/* currentFunc = nullptr; */
 
 				pushVal(func_definition,popVal(type_specifier)+$2->getName()+"("+popVal(parameter_list)+")"+popVal(compound_statement));
 				printRuleLog(func_definition,"type_specifier ID LPAREN parameter_list RPAREN compound_statement");
@@ -119,7 +119,7 @@ func_definition: type_specifier ID LPAREN parameter_list RPAREN{addFuncDef($2,$1
 			{
 				$$ = new SymbolInfo("",TEMPORARY);
 				$$->code = funcBodyCode($2,$6) + NEWLINE_ASM;
-				exitFuncScope();
+				/* currentFunc = nullptr; */
 
 				pushVal(func_definition,popVal(type_specifier)+$2->getName()+"("+")"+popVal(compound_statement));
 				printRuleLog(func_definition,"type_specifier ID LPAREN RPAREN compound_statement");
@@ -172,14 +172,14 @@ compound_statement: LCURL {enterFuncScope();} statements RCURL
 			   	pushVal(compound_statement,"{"+popVal(statements)+"}");
 					printRuleLog(compound_statement,"LCURL statements RCURL");
 
-					/* exitFuncScope(); */
+					exitFuncScope();
 			}
  		  | LCURL {enterFuncScope();} RCURL
 			{
 			   	pushVal(compound_statement,"{}");
 					printRuleLog(compound_statement,"LCURL RCURL");
 
-					/* exitFuncScope(); */
+					exitFuncScope();
 			}
  		  ;
 

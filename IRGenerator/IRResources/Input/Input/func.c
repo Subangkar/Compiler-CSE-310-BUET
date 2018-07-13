@@ -1,4 +1,4 @@
-inf f(int a){
+int f(int a){
     return 2*a;
     a=9;
 }
