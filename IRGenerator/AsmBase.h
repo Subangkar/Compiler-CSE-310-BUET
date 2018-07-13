@@ -53,7 +53,7 @@ string getOUTDEC_PROC() {
 		file.seekg(0, std::ios::end);
 		std::streampos length = file.tellg();
 		file.seekg(0, std::ios::beg);
-		auto *buff = new char[length+(std::streampos)1];
+		auto *buff = new char[length + (std::streampos) 1];
 		file.read(buff, length);
 		buff[length] = NULL;
 		_OUTDEC_PROC = buff;
@@ -144,14 +144,13 @@ void writeASM() {
 	string retOS = "MOV AH, 4ch\r\n\tMOV AL,0\r\n\tINT 21h\r\n" + PROC_END("main");
 	StringUtils::replaceAll(codeSegment, PROC_START("main"), PROC_START("main") + initDataSeg);
 	StringUtils::replaceAll(codeSegment, PROC_END("main"), retOS);
-//	codeSegment += getOUTDEC_PROC();
+	codeSegment += getOUTDEC_PROC();
 
 	asmFile << ".model small\r\n";
 	asmFile << "\r\n.stack 100h\r\n";
 	asmFile << "\r\n.data\r\n" << dataSegment;
 	asmFile << "\r\n.code\r\n" << codeSegment;
 
-	asmFile << getOUTDEC_PROC();
 	asmFile << NEWLINE_ASM;
 	asmFile << "\r\nend main";
 }

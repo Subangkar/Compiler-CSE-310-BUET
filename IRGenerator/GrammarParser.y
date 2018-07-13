@@ -587,9 +587,9 @@ int main(int argc,char *argv[])
 		exit(1);
 	}
 
-	logFile.open("log.txt");
-	errorFile.open("errors.txt");
-	parserFile.open("parser.txt");
+	/* logFile.open("log.txt"); */
+	errorFile.open("log.txt");
+	/* parserFile.open("parser.txt"); */
 
 	asmFile.open("code.asm");
 
@@ -605,7 +605,7 @@ int main(int argc,char *argv[])
 
 	logFile.close();
 	errorFile.close();
-	parserFile.close();
+	/* parserFile.close(); */
 
 	/* table.printAllScope(); */
 
