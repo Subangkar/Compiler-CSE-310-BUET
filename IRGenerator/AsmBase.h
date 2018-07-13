@@ -24,7 +24,7 @@
 #include <cstdlib>
 
 
-ofstream asmFile;
+ofstream asmFile,optAsmFile;
 SymbolTable table(SYMBOL_TABLE_SIZE);
 
 
@@ -44,9 +44,8 @@ void makeCRLF(string &str) {
 	if (str[str.size() - 1] != '\n')str += "\r\n";
 }
 
-string _OUTDEC_PROC;
-
 string getOUTDEC_PROC() {
+	static string _OUTDEC_PROC;
 	if (!_OUTDEC_PROC.empty()) return _OUTDEC_PROC;
 	std::ifstream file(FILE_OUTDEC_PROC);
 	if (file) {
@@ -253,11 +252,6 @@ string incMemoryValue(const SymbolInfo &mem, const string &opType) {
 	}
 	code += opType + " " + ASM_VAR_NAME(mem.getName()) + idx + NEWLINE_ASM;
 	return code;
-}
-
-//dest must be temp
-string notMemoryValue(const SymbolInfo &dest, const SymbolInfo &mem) {
-	return memoryToMemory(dest, mem) + "NOT " + dest.getName() + NEWLINE_ASM;
 }
 
 //dest must be temp

@@ -36,8 +36,6 @@ int yyparse();
 int yylex();
 
 
-
-
 void printLog(const string &str) {
 	logFile << str << endl;
 }
@@ -285,7 +283,7 @@ SymbolInfo *getLogicOpVal(SymbolInfo *lhs, SymbolInfo *rhs, SymbolInfo *op) {
 	}
 
 	SymbolInfo *opVal = new SymbolInfo(newTemp(true), TEMPORARY);
-	opVal->setVarType(INT_TYPE);
+	opVal = getConstVal(opVal, INT_TYPE);
 	const string &logicOp = op->getName();
 	opVal->code = lhs->code + rhs->code;
 	string temp = opVal->getName();
@@ -325,7 +323,7 @@ SymbolInfo *getReltnOpVal(SymbolInfo *lhs, SymbolInfo *rhs, SymbolInfo *op) {
 	}
 
 	SymbolInfo *opVal = new SymbolInfo(newTemp(true), TEMPORARY);
-	opVal->setVarType(INT_TYPE);
+	opVal = getConstVal(opVal, INT_TYPE);
 	const string &relop = op->getName();
 
 	opVal->code = lhs->code + rhs->code;
@@ -370,7 +368,7 @@ SymbolInfo *getAddtnOpVal(SymbolInfo *left, SymbolInfo *right, SymbolInfo *op) {
 
 	const string &addop = op->getName();
 	SymbolInfo *opVal = new SymbolInfo(newTemp(), TEMPORARY);
-	opVal->setVarType(INT_TYPE);
+	opVal = getConstVal(opVal,INT_TYPE);
 	opVal->code = left->code + right->code;
 	opVal->code += addMemoryValues(addop, *opVal, *left, *right);
 	deleteTemp(left, right);
@@ -390,7 +388,7 @@ SymbolInfo *getMultpOpVal(SymbolInfo *left, SymbolInfo *right, SymbolInfo *op) {
 		return nullVal();
 	}
 	SymbolInfo *opVal = new SymbolInfo(newTemp(), TEMPORARY);
-	opVal->setVarType(INT_TYPE);
+	opVal = getConstVal(opVal,INT_TYPE);
 	opVal->code = left->code + right->code;
 	opVal->code += multMemoryValues(mulOp, *opVal, *left, *right);
 	deleteTemp(left, right);
@@ -400,7 +398,7 @@ SymbolInfo *getMultpOpVal(SymbolInfo *left, SymbolInfo *right, SymbolInfo *op) {
 
 SymbolInfo *getIncOpVal(SymbolInfo *varVal, const string &op = "++") {
 	auto opVal = new SymbolInfo(newTemp(), TEMPORARY);
-	opVal->setVarType(INT_TYPE);
+	opVal = getConstVal(opVal, INT_TYPE);
 	opVal->code += memoryToMemory(*opVal, *varVal);
 	opVal->code += incMemoryValue(*varVal, op == "++" ? "INC" : "DEC");
 	return opVal;
@@ -411,11 +409,9 @@ SymbolInfo *getNotOpVal(SymbolInfo *factor) {
 		printErrorLog("Invalid Operand for Logical Not Operation");
 		return nullVal();
 	}
-	auto opVal = new SymbolInfo(newTemp(), TEMPORARY);
-	opVal = getConstVal(opVal, INT_TYPE);
-	opVal->code = notMemoryValue(*opVal, *factor);
-	deleteTemp(factor);
-	return opVal;
+	SymbolInfo op("==");
+	auto zero = getConstVal("0");
+	return getReltnOpVal(factor, zero, &op);
 }
 
 SymbolInfo *getUniAddOpVal(SymbolInfo *varVal, SymbolInfo *op) {
@@ -452,17 +448,12 @@ SymbolInfo *getFuncCallValue(SymbolInfo *funcVal) {
 			printErrorLog(func->getName() + ": argument type Mismatch");
 		}
 
-		//pass arguments
-//		for(const auto& arg:func->parameters){
-////			memoryToMemory(arg,)
-//		}
-
-		retVal = new SymbolInfo(newTemp(),TEMPORARY);
-		retVal->setVarType(func->getFuncRetType());
+		retVal = new SymbolInfo(newTemp(), TEMPORARY);
+		retVal = getConstVal(retVal, func->getFuncRetType());
 		for (int i = 0; i < func->parameters.size(); ++i) {
-			retVal->code += memoryToMemory(func->parameters[i],argsFunc[i]);
+			retVal->code += memoryToMemory(func->parameters[i], argsFunc[i]);
 		}
-		retVal->code += procRetValue(*retVal,*funcVal);
+		retVal->code += procRetValue(*retVal, *funcVal);
 //		if (func->isVoidFunc()) printErrorLog("Function " + funcVal->getName() + " returns void");
 	}
 	clearFunctionArgs();

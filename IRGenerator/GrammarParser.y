@@ -284,16 +284,12 @@ term:	unary_expression
 unary_expression: ADDOP unary_expression
 				{
 					$$ = getUniAddOpVal($2,$1);
-
 				}
 		 | NOT unary_expression
 		 		{
 					$$ = getNotOpVal($2);
-
 				}
 		 | factor
-		 		{
-				}
 		 ;
 
 factor: variable
