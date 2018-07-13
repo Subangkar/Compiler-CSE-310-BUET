@@ -522,14 +522,14 @@ factor: variable
 		}
 	| variable INCOP
 		{
-			$$ = getIncOpVal($1);
+			$$ = getIncOpVal($1,"++");
 
 			pushVal(factor,popVal(variable)+"++");
 			printRuleLog(factor,"variable INCOP");
 		}
 	| variable DECOP
 		{
-			$$ = getDecOpVal($1);
+			$$ = getIncOpVal($1,"--");
 
 			pushVal(factor,popVal(variable)+"--");
 			printRuleLog(factor,"variable DECOP");
@@ -607,7 +607,7 @@ int main(int argc,char *argv[])
 	errorFile.close();
 	parserFile.close();
 
-	table.printAllScope();
+	/* table.printAllScope(); */
 
 	return 0;
 }

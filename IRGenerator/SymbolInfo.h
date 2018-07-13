@@ -6,7 +6,6 @@
 #define SYNTAXANALYZER_SYMBOLNFO_H
 
 #include <ostream>
-#include "DSBasic.h"
 //
 // Created by SubangkarKr on 07-Apr-18.
 //
@@ -35,22 +34,15 @@ class SymbolInfo {
 	string funcRetType;// INT_TYPE, FLOAT_TYPE, VOID_TYPE
 	bool funcDefined = false;
 
-	size_t arrSize;
-	size_t arrIndex;
-
-	int defInt=0;
-	float defFlt=0.0;
+	size_t arrSize{};
 
 	int scopeID=-1;
 
 	string arrIndexVarName = "";
 public:
 
-	vector<string> paramList;    //INT, FLOAT, STRING, CHAR
+	vector<string> paramList{};    //INT, FLOAT, STRING, CHAR
 
-	vector<int> intData;
-	vector<float> floatData;
-//	vector<char> charData;
 	string code;
 
 
@@ -72,24 +64,18 @@ public:
 
 	const string &getName() const { return name; };
 
-//	explicit SymbolInfo(string name, string type = "");
-
-	explicit SymbolInfo(const string name, const string type = TEMPORARY) : name(name), type(type) { arrIndex = 0; }
+	explicit SymbolInfo(string name, string type = TEMPORARY) : name(std::move(name)), type(std::move(type)){};
 
 	SymbolInfo(const SymbolInfo &symbolInfo) {
 		this->name = symbolInfo.name;
 		this->type = symbolInfo.type;
 		this->arrSize = symbolInfo.arrSize;
-		this->arrIndex = symbolInfo.arrIndex;
 
 		this->varType = symbolInfo.varType;
 		this->idType = symbolInfo.idType;
 
 		this->funcDefined = symbolInfo.funcDefined;
 		this->funcRetType = symbolInfo.funcRetType;
-
-		this->intData = symbolInfo.intData;
-		this->floatData = symbolInfo.floatData;
 
 		this->paramList = symbolInfo.paramList;
 
@@ -113,10 +99,6 @@ public:
 		this->type = type;
 	}
 
-	const string &getIDType() const {
-		return idType;
-	}
-
 	void setIDType(const string &IDType) {
 		SymbolInfo::idType = IDType;
 	}
@@ -127,8 +109,6 @@ public:
 
 	void setVarType(const string &VarType) {
 		this->varType = VarType;
-		if (VarType == INT_TYPE) intData.push_back(0);
-		else if (VarType == FLOAT_TYPE) floatData.push_back(0);
 	}
 
 	const string &getFuncRetType() const {
@@ -156,16 +136,6 @@ public:
 		if (!isArrayVar())
 			return;
 		this->arrSize = ArrSize;
-	}
-
-	size_t getArrIndex() const {
-		return isArrayVar() ? arrIndex : 0;
-	}
-
-	void setArrIndex(size_t ArrIndex) {
-		if (varType != ARRAY)
-			return;
-		this->arrIndex = ArrIndex;
 	}
 
 	bool isFuncDefined() const {
@@ -225,27 +195,6 @@ public:
 	bool isVoidFunc() const { return isFunction() && getFuncRetType() == VOID_TYPE; }
 
 
-	int &intValue() {
-		if (idType == VARIABLE) {
-			if (intData.empty()) intData.push_back(0);
-			return varType == FLOAT_TYPE ? intData[0] = static_cast<int>(fltValue()) : intData[0];
-		} else if (idType == ARRAY && varType == INT_TYPE) {
-			return intData[getArrIndex()];
-		}
-		cout << "Not Variable/Array/Int Type" << endl;
-		return defInt;
-	}
-
-	float &fltValue() {
-		if (idType == VARIABLE) {
-			if (floatData.empty()) floatData.push_back(0);
-			return varType == INT_TYPE ? floatData[0]=intValue() : floatData[0];
-		} else if (idType == ARRAY && varType == FLOAT_TYPE) {
-			return floatData[getArrIndex()];
-		}
-		cout << "Not Variable/Array/Flt Type" << endl;
-		return defFlt;
-	}
 private:
 
 	int64_p reverseDigits(int64_p n) const {

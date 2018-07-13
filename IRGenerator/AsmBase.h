@@ -345,7 +345,6 @@ string whlLoopCode(SymbolInfo *expCond, SymbolInfo *stmt) {
 	code += expCond->code;
 	code += jumpTo(loop_end, "JE", expCond, &zero);
 	code += stmt->code; // if-part
-	cout << stmt->code;
 	code += jumpTo(loop_start);
 	code += addLabel(loop_end);
 	deleteTemp(expCond,stmt);

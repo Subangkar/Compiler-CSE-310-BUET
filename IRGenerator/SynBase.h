@@ -182,8 +182,6 @@ SymbolInfo *nullVal() {
 		defVal = new SymbolInfo("$NULL$", "");
 		defVal->setIDType(VARIABLE);
 		defVal->setVarType(INT_TYPE);
-		defVal->intData.push_back(0);
-		defVal->floatData.push_back(0);
 	}
 	return defVal;
 }
@@ -227,12 +225,8 @@ void insertArr(SymbolInfo *idVal, SymbolInfo *size) {
 	}
 	SymbolInfo *arr = insertToTable(idVal);
 	arr->setIDType(ARRAY);
-	arr->setArrSize(static_cast<size_t>(StringParser::toInteger(size->getName().data())));
+	arr->setArrSize(static_cast<size_t>(StringParser::toInteger(size->getName())));
 	addData(arr->getName(), true);
-	for (int i = 0; i < arr->getArrSize(); i++) {
-		arr->intData.push_back(0);
-		arr->floatData.push_back(0);
-	}
 }
 
 
@@ -404,7 +398,6 @@ SymbolInfo *getLogicOpVal(SymbolInfo *lhs, SymbolInfo *rhs, SymbolInfo *op) {
 	string temp = opVal->getName();
 	string resIs0 = newLabel();
 	string resIs1 = newLabel();
-	SymbolInfo zero("0");
 
 	if (logicOp == "&&") {
 		opVal->code += jumpTo(resIs0, "JE", lhs, &zero);
@@ -461,7 +454,7 @@ SymbolInfo *getReltnOpVal(SymbolInfo *lhs, SymbolInfo *rhs, SymbolInfo *op) {
 		jmpCondition = "JNE ";
 	}
 
-	opVal->code += jumpTo(label1,jmpCondition,lhs,rhs);
+	opVal->code += jumpTo(label1, jmpCondition, lhs, rhs);
 	opVal->code += setConstValue(temp, "0");
 	opVal->code += jumpTo(label2);
 	opVal->code += addLabel(label1);
@@ -510,17 +503,10 @@ SymbolInfo *getMultpOpVal(SymbolInfo *left, SymbolInfo *right, SymbolInfo *op) {
 }
 
 
-SymbolInfo *getIncOpVal(SymbolInfo *varVal) {
+SymbolInfo *getIncOpVal(SymbolInfo *varVal, const string &op = "++") {
 	auto opVal = new SymbolInfo(newTemp(), TEMPORARY);
-	opVal->code += memoryToMemory(*opVal,*varVal);
-	opVal->code += incMemoryValue(*varVal, "INC");
-	return opVal;
-}
-
-SymbolInfo *getDecOpVal(SymbolInfo *varVal) {
-	auto opVal = new SymbolInfo(newTemp(), TEMPORARY);
-	opVal->code += memoryToMemory(*opVal,*varVal);
-	opVal->code += incMemoryValue(*varVal, "DEC");
+	opVal->code += memoryToMemory(*opVal, *varVal);
+	opVal->code += incMemoryValue(*varVal, op == "++" ? "INC" : "DEC");
 	return opVal;
 }
 
