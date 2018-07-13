@@ -11,13 +11,7 @@
 using std::stack;
 
 
-#define ERROR_VAL popVal(error)//"$ERROR$" //
-
-#define INFINITY_INT  numeric_limits<int>::max();
-#define INFINITY_FLOAT numeric_limits<float>::infinity()
-
-
-std::ofstream logFile, errorFile, parserFile;
+std::ofstream logFile, errorFile;
 
 size_t syntaxErrors = 0;
 size_t warnings = 0;
@@ -29,9 +23,6 @@ vector<SymbolInfo> argsFunc;
 SymbolInfo *currentFunc = nullptr;
 
 string variableType;
-
-bool errorRule = false;
-string lookAheadBuf;
 
 
 extern int line_count;
@@ -45,118 +36,15 @@ int yyparse();
 int yylex();
 
 
-#pragma-region RULE_CODE_BUF
-
-const string ruleName[] = {"start", "program", "unit", "func_declaration", "func_definition", "parameter_list",
-                           "compound_statement", "var_declaration", "type_specifier", "declaration_list", "statements",
-                           "statement", "expression_statement", "variable", "expression", "logic_expression",
-                           "rel_expression", "simple_expression", "term", "unary_expression", "factor", "argument_list",
-                           "arguments"};
-
-enum NONTERMINAL_TYPE {
-	start = 0,
-	program,
-	unit,
-	func_declaration,
-	func_definition,
-	parameter_list,
-	compound_statement,
-	var_declaration,
-	type_specifier,
-	declaration_list,
-	statements,
-	statement,
-	expression_statement,
-	variable,
-	expression,
-	logic_expression,
-	rel_expression,
-	simple_expression,
-	term,
-	unary_expression,
-	factor,
-	argument_list,
-	arguments,
-	error
-};
-
-class NonTerminalBuffer {
-private:
-	stack<string> nonTerminalBuf[NONTERMINAL_TYPE::error + 1];
-	NONTERMINAL_TYPE lastNonTerminal = NONTERMINAL_TYPE::error;
-public:
-	string getValue(NONTERMINAL_TYPE nonterminal) {
-		if (nonterminal < start || nonterminal > lastNonTerminal || nonTerminalBuf[nonterminal].empty())
-			return string("");
-		return nonTerminalBuf[nonterminal].top();
-	}
-
-	string extractValue(NONTERMINAL_TYPE nonterminal) {
-		if (nonterminal < start || nonterminal > lastNonTerminal) return string("");
-
-		if (nonTerminalBuf[nonterminal].empty()) return "";
-
-		string str = nonTerminalBuf[nonterminal].top();
-		nonTerminalBuf[nonterminal].pop();
-		return str;
-	}
-
-	void pushValue(NONTERMINAL_TYPE nonterminal, const string &val) {
-		if (nonterminal < start || nonterminal > lastNonTerminal) return;
-
-		nonTerminalBuf[nonterminal].push(val);
-	}
-};
-
-
-NonTerminalBuffer nonTerminalBuffer;
-#pragma endregion
-
-
-void pushVal(NONTERMINAL_TYPE nonterminal, const string &val) {
-	nonTerminalBuffer.pushValue(nonterminal, val);
-}
-
-string popVal(NONTERMINAL_TYPE nonterminal) {
-	string val = nonTerminalBuffer.extractValue(nonterminal);
-	val = (isalnum(val[0]) ? " " : "") + val + (isalnum(val[val.length() - 1]) ? " " : "");
-	return val + ((val[val.length() - 1] == ' ') ? "" : " ");
-}
-
-
-void printRule(const string &rule) {
-	logFile << "At line no: " << line_count << " " << rule << endl << endl;
-	if (!errorRule) parserFile << "At line no: " << line_count << " " << rule << endl << endl;
-}
-
-// after pushing value
-void printCode(NONTERMINAL_TYPE ruleNonterminal) {
-	logFile << CodeParser::formatCCode(nonTerminalBuffer.getValue(ruleNonterminal)) << endl << endl;
-	logFile << (nonTerminalBuffer.getValue(ruleNonterminal)) << endl << endl;
-}
 
 
 void printLog(const string &str) {
 	logFile << str << endl;
 }
 
-void printRuleLog(NONTERMINAL_TYPE nonterminal, const string &rule) {
-//	printRule(ruleName[nonterminal] + ": " + rule);
-//	printCode(nonterminal);
-}
-
 void printErrorLog(const string &msg) {
 	errorFile << " >> Error at line " << line_count << ": " << msg << endl << endl;
 	++syntaxErrors;
-}
-
-void printErrorRuleLog(const string &msg, NONTERMINAL_TYPE nonterminal, const string &rule) {
-	if (!msg.empty()) printErrorLog(msg);
-	errorRule = true;
-	printRuleLog(nonterminal, rule);
-	errorRule = false;
-	popVal(error);
-	lookAheadBuf.clear();
 }
 
 void printWarningLog(const string &msg) {
@@ -170,10 +58,7 @@ void printDebug(const string &msg) {
 
 
 void yyerror(const char *s) {
-	printDebug(string(s) + " < " + yytext + ":=>:" + lookAheadBuf + " >");
-	pushVal(error, ERROR_VAL + lookAheadBuf);
-	errorRule = true;
-	lookAheadBuf = yytext;
+	printDebug(string(s) + " < " + yytext + " >");
 }
 
 SymbolInfo *nullVal() {

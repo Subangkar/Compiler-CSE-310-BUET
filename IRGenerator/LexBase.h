@@ -18,10 +18,8 @@
 #include <locale>
 
 
-extern ofstream logFile, errorFile, parserFile;
+extern ofstream logFile, errorFile;
 extern char *yytext;
-//SymbolTable hashTable(SYMBOL_TABLE_SIZE);
-//FILE *logout, *tokenout;
 int line_count = 1;
 
 int err_count_lex = 0;
@@ -33,8 +31,6 @@ StringUtils::replaceAll(string_literal, "\\\n", ""); // LF
 
 
 void printLexError(const string &msg, std::ofstream &out) {
-//	fprintf(logout, LOG_ERROR_PRINT, line_count, msg.data(),yytext);
-
 	out << " >> LEXICAL Error @ Line no " << line_count << ": " << msg.data() << ": <" << yytext << "> >>" << endl << endl;
 
 	err_count_lex++;
@@ -45,11 +41,6 @@ void printLexError(const string &msg, std::ofstream &out) {
 void printLexError(const string& msg) {
 	printLexError(msg,errorFile);
 }
-
-//void printLog(int lineNo, string tokenName, string lexemeName) {
-//	// fprintf(logout, LOG_TOKEN_PRINT, line_count, tokenName.data(), lexemeName.data());
-//}
-
 
 
 void assignSymbol(const string& name,const string& type) {
