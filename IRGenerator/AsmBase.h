@@ -12,7 +12,7 @@
 #define ASM_INT_TYPE " DW "
 
 
-#define FILE_OUTDEC_PROC "Assembly Procedures/Dec16bitOutput.asm"
+#define FILE_OUTDEC_PROC "Dec16bitOutput.asm"
 #define SYMBOL_TABLE_SIZE 73
 
 #include <iostream>
@@ -436,4 +436,3 @@ string returnExpCode(SymbolInfo *exp) {
 }
 
 #endif //IRGENERATOR_ASMBASE_H
-
