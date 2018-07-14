@@ -92,6 +92,7 @@ SymbolInfo *insertVar(SymbolInfo *idVal) {
 			var->setVarType(variableType);
 			var->setIDType(VARIABLE);
 			addData(var->getName());
+			if (currentFunc != nullptr) currentFunc->memberVars.push_back(ASM_VAR_NAME(var->getName()));
 			return var;
 		}
 	}
@@ -107,6 +108,7 @@ void insertArr(SymbolInfo *idVal, SymbolInfo *size) {
 		}
 	}
 	SymbolInfo *arr = insertToTable(idVal);
+	arr->setVarType(variableType);
 	arr->setIDType(ARRAY);
 	arr->setArrSize(static_cast<size_t>(StringParser::toInteger(size->getName())));
 	addData(arr->getName(), true);
@@ -197,6 +199,7 @@ void enterFuncScope() {
 		table.insert(param);
 		SymbolInfo sym(ASM_VAR_NAME(param.getName()));
 		currentFunc->parameters.push_back(sym);
+		currentFunc->memberVars.push_back(ASM_VAR_NAME(param.getName()));
 		addData(param.getName());
 	}
 
@@ -240,8 +243,10 @@ SymbolInfo *getVariable(SymbolInfo *varVal) {
 		if (var->isArrayVar()) printErrorLog(varVal->getName() + " is an array must be accessed with an index");
 		else printErrorLog(varVal->getName() + " is not a variable");
 	} else {
-		var->code = "";
-		return var;
+//		var->code=""; // to prevent repeted code for assigned Variable
+		auto retVar = new SymbolInfo(*var);
+		retVar->setType(TEMPORARY);
+		return retVar;
 	}
 	return nullVal();
 }
@@ -426,11 +431,12 @@ SymbolInfo *getUniAddOpVal(SymbolInfo *varVal, SymbolInfo *op) {
 	opVal = getConstVal(opVal, varVal->getVarType());
 	opVal->code = varVal->code;
 	opVal->code += minusMemoryValue(*opVal, *varVal);
+//	deleteTemp(varVal,op);
 	return opVal;
 }
 
 
-SymbolInfo *getFuncCallValue(SymbolInfo *funcVal) {
+SymbolInfo *getFuncCallValue(SymbolInfo *funcVal, SymbolInfo *arguments) {
 	SymbolInfo *func = table.lookUp(funcVal->getName()), *retVal = nullVal();
 	if (func == nullptr) {
 		printErrorLog("Function " + funcVal->getName() + " doesn't exist");
@@ -450,21 +456,23 @@ SymbolInfo *getFuncCallValue(SymbolInfo *funcVal) {
 
 		retVal = new SymbolInfo(newTemp(), TEMPORARY);
 		retVal = getConstVal(retVal, func->getFuncRetType());
+		retVal->code += arguments->code;
 		for (const auto &argFuncVar : func->parameters) {
 			retVal->code += stackOp("PUSH", argFuncVar);
 		}
 		for (int i = 0; i < func->parameters.size(); ++i) {
-			retVal->code += argsFunc[i].code;
+//			retVal->code += argsFunc[i].code;
 			retVal->code += memoryToMemory(func->parameters[i], argsFunc[i]);
 		}
 		retVal->code += procRetValue(*retVal, *funcVal);
-		for (int i = static_cast<int>(func->parameters.size())-1; i >= 0; --i) {
-			const SymbolInfo& argFuncVar = func->parameters[i];
+		for (int i = static_cast<int>(func->parameters.size()) - 1; i >= 0; --i) {
+			const SymbolInfo &argFuncVar = func->parameters[i];
 			retVal->code += stackOp("POP", argFuncVar);
 		}
 //		if (func->isVoidFunc()) printErrorLog("Function " + funcVal->getName() + " returns void");
 	}
 	clearFunctionArgs();
+//	deleteTemp(funcVal,arguments);
 	return retVal;
 }
 

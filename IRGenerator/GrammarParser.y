@@ -186,27 +186,28 @@ statement: var_declaration
 	  | compound_statement
 	  | FOR LPAREN expression_statement expression_statement expression RPAREN statement
 			{
-				$$->code = forLoopCode($3,$4,$5,$7);
+				$$->code = forLoopCode($3,$4,$5,$7); deleteTemp($3,$4,$5,$7);
 			}
 	  | IF LPAREN expression RPAREN statement %prec second_prec
 			{
-				$$->code = ifElseCode($3,$5);
+				$$->code = ifElseCode($3,$5);deleteTemp($3,$5);
 			}
 	  | IF LPAREN expression RPAREN statement ELSE statement
 			{
-				$$->code = ifElseCode($3,$5,$7);
+				$$->code = ifElseCode($3,$5,$7);deleteTemp($3,$5,$7);
 			}
 	  | WHILE LPAREN expression RPAREN statement
 			{
-				$$->code = whlLoopCode($3,$5);
+				$$->code = whlLoopCode($3,$5);deleteTemp($3,$5);
 			}
 	  | PRINTLN LPAREN ID RPAREN SEMICOLON
 			{
-				$$->code += printVarValue($3);
+				$$->code += printVarValue($3);deleteTemp($3);
 			}
 		| RETURN expression SEMICOLON	{
 				checkReturnType($2);
 				$$->code += returnExpCode($2);
+				/* deleteTemp($2); */
 			}
 		| RETURN expression error	{	printErrorLog("; missing before return");	}
 		| error ELSE {printErrorLog("else without if");} statement	{}
@@ -215,10 +216,7 @@ statement: var_declaration
 		;
 invalid_condition: LPAREN error RPAREN {printErrorLog("invalid conditional expression");};
 
-expression_statement: SEMICOLON
-				{
-					$$ = new SymbolInfo(";");
-				}
+expression_statement: SEMICOLON	{	}
 			| expression SEMICOLON {
 					tempCount = 0;
 					pTempCount = 0;
@@ -250,7 +248,6 @@ expression: logic_expression
 logic_expression: rel_expression
 				{
 					$$->code += NEWLINE_ASM;
-
 				}
 		 | rel_expression LOGICOP rel_expression
 		 		{
@@ -295,13 +292,11 @@ unary_expression: ADDOP unary_expression
 factor: variable
 	| ID LPAREN argument_list RPAREN
 		{
-			$$=getFuncCallValue($1);
-
+			$$=getFuncCallValue($1,$3);
 		}
 	| LPAREN expression RPAREN
 		{
 			$$=$2;
-
 		}
 	| CONST_INT
 		{
@@ -315,32 +310,30 @@ factor: variable
 	| variable INCOP
 		{
 			$$ = getIncOpVal($1,"++");
-
 		}
 	| variable DECOP
 		{
 			$$ = getIncOpVal($1,"--");
-
 		}
 	| ID LPAREN argument_list error {	printErrorLog("right parentheses missing");clearFunctionArgs();}
 	| LPAREN expression error {	printErrorLog("right parentheses missing");}
 	;
 
-argument_list: arguments
-					{
-					}
-			  |
-					{
-					}
+argument_list: arguments {}
+			  | {}
 			  ;
 
 arguments: arguments COMMA logic_expression
 					{
+						$$ = new SymbolInfo("");
+						$$->code = $1->code + $3->code;
 						argsFunc.push_back(*$3);
 						argsType.push_back($3->getVarType());
+						deleteTemp($1,$3);
 					}
 	      | logic_expression
 					{
+						/* printDebug($$->code); */
 						argsFunc.push_back(*$1);
 						argsType.push_back($1->getVarType());
 					}

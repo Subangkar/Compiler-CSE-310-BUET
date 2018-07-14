@@ -70,12 +70,6 @@ string ASM_VAR_NAME(const string &cVarName) {
 	return cVarName + SCOPE_NO(table.lookUp(cVarName)->getScopeID());
 }
 
-void appendCode(const string &code) {
-	string formattedCode = code;
-	makeCRLF(formattedCode);
-	asmFile << formattedCode;
-}
-
 void addData(const string &varname, bool isArray = false) {
 	string code;
 	if (!isArray) code = ASM_VAR_NAME(varname) + ASM_INT_TYPE + "0";
@@ -128,22 +122,15 @@ string newTemp(bool isLogical = false) {
 }
 
 
-string printVarValue(SymbolInfo *symbol) {
-	symbol = table.lookUp(symbol->getName());
-
-	if (symbol != nullptr && symbol->isVariable()) {
-		return getInst("MOV AX," + ASM_VAR_NAME(symbol->getName())) + getInst("CALL OUTDEC");
-	} else {
-
-	}
-}
-
 void writeASM() {
 
 	string initDataSeg = "\tMOV AX,@DATA\r\n\tMOV DS,AX\r\n" + NEWLINE_ASM;
 	string retOS = "MOV AH, 4ch\r\n\tMOV AL,0\r\n\tINT 21h\r\n" + PROC_END("main");
 	StringUtils::replaceAll(codeSegment, PROC_START("main"), PROC_START("main") + initDataSeg);
 	StringUtils::replaceAll(codeSegment, PROC_END("main"), retOS);
+
+	string optCodeSegment = ASMParser::optimizedASM(codeSegment);
+
 	codeSegment += getOUTDEC_PROC();
 
 	asmFile << ".model small\r\n";
@@ -151,19 +138,19 @@ void writeASM() {
 	asmFile << "\r\n.data\r\n" << dataSegment;
 	asmFile << "\r\n.code\r\n" << codeSegment;
 
-	asmFile << NEWLINE_ASM;
-	asmFile << "\r\nend main";
+	asmFile << NEWLINE_ASM << NEWLINE_ASM;
+	asmFile << "end main";
 
 
-	string optCodeSegment = ASMParser::optimizedASM(codeSegment);
+	optCodeSegment += getOUTDEC_PROC();
 
 	optAsmFile << ".model small\r\n";
 	optAsmFile << "\r\n.stack 100h\r\n";
 	optAsmFile << "\r\n.data\r\n" << dataSegment;
 	optAsmFile << "\r\n.code\r\n" << optCodeSegment;
 
-	optAsmFile << NEWLINE_ASM;
-	optAsmFile << "\r\nend main";
+	optAsmFile << NEWLINE_ASM << NEWLINE_ASM;
+	optAsmFile << "end main";
 }
 
 string setIndexInREG(const string &reg, const string &offsetVar) {
@@ -200,6 +187,7 @@ string compareREG(const string &reg, const SymbolInfo &symbolInfo) {
 	return code;
 }
 
+// reg=const_val set memory to
 string regToMemory(const SymbolInfo &mem, const string &reg) {
 	string code;
 	string idx;
@@ -230,22 +218,20 @@ string addLabel(const string &label) {
 }
 
 string stackOp(const string &oper, const SymbolInfo &varName) {
-	return oper + " " + varName.getName() + NEWLINE_ASM;
+	return oper + " " + ASM_VAR_NAME(varName.getName()) + NEWLINE_ASM;
+}
+
+string stackOp(const string &oper, const string &reg) {
+	return oper + " " + reg + NEWLINE_ASM;
 }
 
 
 string memoryToMemory(const SymbolInfo &destSym, const SymbolInfo &srcSym) {
-	string destIdx, srcIdx;
+	string srcIdx;
 	string code;
 
-	if (destSym.isArrayVar()) {
-		code += setIndexInREG("DI", destSym.getArrIndexVarName());
-		destIdx = "[DI]";
-	}
-	string destMem = ASM_VAR_NAME(destSym.getName()) + destIdx;
-
 	if (StringUtils::isNumber(srcSym.getName())) {
-		return code + "MOV " + destMem + ", " + srcSym.getName() + NEWLINE_ASM;// MOV x,3 or MOV x[SI],3
+		return regToMemory(destSym, srcSym.getName());
 	}
 
 	if (srcSym.isArrayVar()) {
@@ -254,10 +240,8 @@ string memoryToMemory(const SymbolInfo &destSym, const SymbolInfo &srcSym) {
 	}
 	string srcMem = ASM_VAR_NAME(srcSym.getName()) + srcIdx;
 
-	code += memorToReg("DX",srcMem);
-	code += regToMemory(destSym,"DX");
-//	code += "MOV DX," + srcMem + NEWLINE_ASM;
-//	code += "MOV " + destMem + ",DX" + NEWLINE_ASM;
+	code += memorToReg("DX", srcMem);
+	code += regToMemory(destSym, "DX");
 	return code;
 }
 
@@ -335,9 +319,24 @@ extern SymbolInfo *currentFunc;
 
 void printDebug(const string &);
 
-void deleteTemp(SymbolInfo *sym1, SymbolInfo *sym2 = nullptr) {
+void printErrorLog(const string &);
+
+void deleteTemp(SymbolInfo *sym1, SymbolInfo *sym2 = nullptr, SymbolInfo *sym3 = nullptr, SymbolInfo *sym4 = nullptr) {
+	return;
 	if (sym1 != nullptr && sym1->getType() == TEMPORARY)delete sym1;
 	if (sym2 != nullptr && sym2->getType() == TEMPORARY)delete sym2;
+	if (sym3 != nullptr && sym3->getType() == TEMPORARY)delete sym3;
+	if (sym4 != nullptr && sym4->getType() == TEMPORARY)delete sym4;
+}
+
+string printVarValue(SymbolInfo *symbol) {
+	symbol = table.lookUp(symbol->getName());
+
+	if (symbol != nullptr && symbol->isVariable()) {
+		return getInst("MOV AX," + ASM_VAR_NAME(symbol->getName())) + getInst("CALL OUTDEC");
+	} else {
+		printErrorLog("Invalid Variable");
+	}
 }
 
 string ifElseCode(SymbolInfo *expIf, SymbolInfo *stmtIf, SymbolInfo *stmtEls = nullptr) {
@@ -395,10 +394,27 @@ string funcBodyCode(SymbolInfo *funcSrc, SymbolInfo *cstmt) {
 	SymbolInfo *func = table.lookUp(funcSrc->getName());
 	string code;
 	code = PROC_START(func->getName());
-	if (func->getName() != "main") code += "PUSH AX" + NEWLINE_ASM;
+	stack<string> memVars;
+	for (int i = 0; i <= maxTemp; ++i) {
+		memVars.push("t"+to_string(i));
+		code += stackOp("PUSH", memVars.top());
+	}
+	for (int i = 0; i <= maxpTemp; ++i) {
+		memVars.push("p"+to_string(i));
+		code += stackOp("PUSH", memVars.top());
+	}
+	for (const string &var:func->memberVars) {
+		code += stackOp("PUSH", var);
+		memVars.push(var);
+	}
+	if (func->getName() != "main") code += stackOp("PUSH", "AX");
 	code += cstmt->code;
 	code += addLabel(func->getReturnLabel());
-	if (func->getName() != "main") code += "POP AX" + NEWLINE_ASM;
+	if (func->getName() != "main") code += stackOp("POP", "AX");
+	while(!memVars.empty()){
+		code += stackOp("POP", memVars.top());
+		memVars.pop();
+	}
 	StringUtils::replaceAll(code, "\n", "\n\t");
 	if (func->getName() != "main") code += "RET" + NEWLINE_ASM;
 	code += PROC_END(func->getName());

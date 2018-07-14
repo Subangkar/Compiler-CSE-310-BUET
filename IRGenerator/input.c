@@ -1,24 +1,47 @@
 // int y;
 // int a[5];
+
+// #define println(x) cout <<x<<endl
+// #include <bits/stdc++.h>
+// using namespace std;
+
 int a,b;
 int l;
-// int sum(int a)
-// {   
-//     if(!a) return 0;
-//     return (a)+sum(a-1);
-// }
+int sumf(int a,int b)
+{   
+    int t;
+    if(!a) return 0;
+    return (a+b)+sumf(a-1,b-1);
+}
 
+int fact(int x)
+{
+    if(!x) return 1;
+    return x*fact(x-1);
+}
+
+int subf(int a,int b)
+{   
+    ;
+    return (a)+(-b);
+}
 
 int main(){
     int a,b,i;
-    // l=10;
-    // a=15;
-    // b=21;
+    int y[3];
+    l=10;
+    a=15;
+    b=21;
+    y[2]=4;
     int x;
+    // a=y[2];
+    x=a;
+    // 7&&8;
     x=a;
     a=x;
     x=a;
-    // x=sum(5);
+    x=y[2];
+    x=fact(7);
     println(x);
     return 0;
 }

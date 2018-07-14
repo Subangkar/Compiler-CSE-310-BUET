@@ -42,8 +42,9 @@ class SymbolInfo {
 	string returnLabel;
 public:
 
-	vector<string> paramList{};    //INT, FLOAT, STRING, CHAR
-	vector<SymbolInfo> parameters;    //x, y
+	vector<string> paramList{};    // INT, FLOAT, STRING, CHAR
+	vector<SymbolInfo> parameters;  // x, y
+	vector<string> memberVars; // During Function Call all must be stacked asm name
 
 	string code;
 

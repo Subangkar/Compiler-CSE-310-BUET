@@ -13,3 +13,4 @@ gio trash lex.yy.c
 
 
 gio trash code.asm
+gio trash optimized-code.asm
