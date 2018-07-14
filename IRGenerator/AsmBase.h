@@ -322,6 +322,7 @@ void printDebug(const string &);
 void printErrorLog(const string &);
 
 void deleteTemp(SymbolInfo *sym1, SymbolInfo *sym2 = nullptr, SymbolInfo *sym3 = nullptr, SymbolInfo *sym4 = nullptr) {
+	return;
 	if (sym1 != nullptr && sym1->getType() == TEMPORARY)delete sym1;
 	if (sym2 != nullptr && sym2->getType() == TEMPORARY)delete sym2;
 	if (sym3 != nullptr && sym3->getType() == TEMPORARY)delete sym3;
@@ -394,25 +395,29 @@ string funcBodyCode(SymbolInfo *funcSrc, SymbolInfo *cstmt) {
 	string code;
 	code = PROC_START(func->getName());
 	stack<string> memVars;
-	for (int i = 0; i <= maxTemp; ++i) {
-		memVars.push("t"+to_string(i));
-		code += stackOp("PUSH", memVars.top());
+	if (func->getName() != "main") {
+		for (int i = 0; i <= maxTemp; ++i) {
+			memVars.push("t" + to_string(i));
+			code += stackOp("PUSH", memVars.top());
+		}
+		for (int i = 0; i <= maxpTemp; ++i) {
+			memVars.push("p" + to_string(i));
+			code += stackOp("PUSH", memVars.top());
+		}
+		for (const string &var:func->memberVars) {
+			code += stackOp("PUSH", var);
+			memVars.push(var);
+		}
+		code += stackOp("PUSH", "AX");
 	}
-	for (int i = 0; i <= maxpTemp; ++i) {
-		memVars.push("p"+to_string(i));
-		code += stackOp("PUSH", memVars.top());
-	}
-	for (const string &var:func->memberVars) {
-		code += stackOp("PUSH", var);
-		memVars.push(var);
-	}
-	if (func->getName() != "main") code += stackOp("PUSH", "AX");
 	code += cstmt->code;
 	code += addLabel(func->getReturnLabel());
-	if (func->getName() != "main") code += stackOp("POP", "AX");
-	while(!memVars.empty()){
-		code += stackOp("POP", memVars.top());
-		memVars.pop();
+	if (func->getName() != "main") {
+		if (func->getName() != "main") code += stackOp("POP", "AX");
+		while (!memVars.empty()) {
+			code += stackOp("POP", memVars.top());
+			memVars.pop();
+		}
 	}
 	StringUtils::replaceAll(code, "\n", "\n\t");
 	if (func->getName() != "main") code += "RET" + NEWLINE_ASM;

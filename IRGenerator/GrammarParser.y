@@ -241,7 +241,7 @@ int main(int argc,char *argv[])
 	optAsmFile.open("optimized-code.asm");
 
 	yyparse();
-	logFile << "Total Lines : " << line_count << std::endl << std::endl;
+	errorFile << "Total Lines : " << line_count << std::endl << std::endl;
 	errorFile << "Total Syntax/Semantic Errors : " << syntaxErrors << std::endl;
 	errorFile << "Total Lexical Errors : " << err_count_lex << std::endl;
 	errorFile << "Total Warning : " << warnings << std::endl;
