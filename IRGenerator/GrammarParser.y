@@ -338,7 +338,6 @@ arguments: arguments COMMA logic_expression
 					{
 						argsFunc.push_back(*$3);
 						argsType.push_back($3->getVarType());
-
 					}
 	      | logic_expression
 					{

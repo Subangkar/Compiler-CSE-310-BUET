@@ -24,7 +24,7 @@
 #include <cstdlib>
 
 
-ofstream asmFile,optAsmFile;
+ofstream asmFile, optAsmFile;
 SymbolTable table(SYMBOL_TABLE_SIZE);
 
 
@@ -215,6 +215,10 @@ string setConstValue(const string &dest, const string &val) {
 
 string addLabel(const string &label) {
 	return label + ":" + NEWLINE_ASM;
+}
+
+string stackOp(const string &oper, const SymbolInfo &varName) {
+	return oper + " " + varName.getName() + NEWLINE_ASM;
 }
 
 

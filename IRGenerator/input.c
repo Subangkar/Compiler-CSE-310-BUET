@@ -2,30 +2,20 @@
 // int a[5];
 int a,b;
 int l;
-int add1(int l)
+int sum(int a)
 {   
-    int i,v;
-    v=0;
-    
-    for(i = 0; l; i++)
-    {
-       v++;
-       l = l/2;
-    }
-    
-    return v;
+    if(!a) return 0;
+    return (a)+sum(a-1);
 }
 
 
 int main(){
     int a,b,i;
-    l=10;
-    a=15;
-    b=21;
+    // l=10;
+    // a=15;
+    // b=21;
     int x;
-    x=add1(a);
-    println(x);
-    x=add1(b);
+    x=sum(5);
     println(x);
     return 0;
 }

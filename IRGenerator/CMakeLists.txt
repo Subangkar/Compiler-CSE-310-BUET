@@ -3,4 +3,4 @@ project(IRGenerator)
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_executable(IRGenerator DataStructure.h DSBasic.h GrammarParser.y LexAnalyzer.l LexBase.h SymbolInfo.h SynBase.h Utils.h yacc-bison.sh main.cpp AsmBase.h)
+add_executable(IRGenerator DataStructure.h DSBasic.h GrammarParser.y LexAnalyzer.l LexBase.h SymbolInfo.h SynBase.h Utils.h yacc-bison.sh main.cpp AsmBase.h ASMParser.h)

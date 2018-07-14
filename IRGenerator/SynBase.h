@@ -368,7 +368,7 @@ SymbolInfo *getAddtnOpVal(SymbolInfo *left, SymbolInfo *right, SymbolInfo *op) {
 
 	const string &addop = op->getName();
 	SymbolInfo *opVal = new SymbolInfo(newTemp(), TEMPORARY);
-	opVal = getConstVal(opVal,INT_TYPE);
+	opVal = getConstVal(opVal, INT_TYPE);
 	opVal->code = left->code + right->code;
 	opVal->code += addMemoryValues(addop, *opVal, *left, *right);
 	deleteTemp(left, right);
@@ -388,7 +388,7 @@ SymbolInfo *getMultpOpVal(SymbolInfo *left, SymbolInfo *right, SymbolInfo *op) {
 		return nullVal();
 	}
 	SymbolInfo *opVal = new SymbolInfo(newTemp(), TEMPORARY);
-	opVal = getConstVal(opVal,INT_TYPE);
+	opVal = getConstVal(opVal, INT_TYPE);
 	opVal->code = left->code + right->code;
 	opVal->code += multMemoryValues(mulOp, *opVal, *left, *right);
 	deleteTemp(left, right);
@@ -450,10 +450,18 @@ SymbolInfo *getFuncCallValue(SymbolInfo *funcVal) {
 
 		retVal = new SymbolInfo(newTemp(), TEMPORARY);
 		retVal = getConstVal(retVal, func->getFuncRetType());
+		for (const auto &argFuncVar : func->parameters) {
+			retVal->code += stackOp("PUSH", argFuncVar);
+		}
 		for (int i = 0; i < func->parameters.size(); ++i) {
+			retVal->code += argsFunc[i].code;
 			retVal->code += memoryToMemory(func->parameters[i], argsFunc[i]);
 		}
 		retVal->code += procRetValue(*retVal, *funcVal);
+		for (int i = static_cast<int>(func->parameters.size())-1; i >= 0; --i) {
+			const SymbolInfo& argFuncVar = func->parameters[i];
+			retVal->code += stackOp("POP", argFuncVar);
+		}
 //		if (func->isVoidFunc()) printErrorLog("Function " + funcVal->getName() + " returns void");
 	}
 	clearFunctionArgs();
