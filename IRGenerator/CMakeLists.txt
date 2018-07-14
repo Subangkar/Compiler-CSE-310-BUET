@@ -3,4 +3,4 @@ project(IRGenerator)
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_executable(IRGenerator DataStructure.h DSBasic.h 1505015.y 1505015.l LexBase.h SymbolInfo.h SynBase.h Utils.h 1505015.sh main.cpp AsmBase.h ASMParser.h 1505015.sh)
+add_executable(IRGenerator DataStructure.h DSBasic.h 1505015.y 1505015.l LexBase.h SymbolInfo.h SynBase.h Utils.h 1505015.sh AsmBase.h ASMParser.h 1505015.sh)
