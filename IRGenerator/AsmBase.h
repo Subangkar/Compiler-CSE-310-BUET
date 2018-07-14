@@ -18,6 +18,7 @@
 #include <iostream>
 #include "DataStructure.h"
 #include "Utils.h"
+#include "ASMParser.h"
 #include <stack>
 #include <sstream>
 #include <utility>
@@ -152,6 +153,17 @@ void writeASM() {
 
 	asmFile << NEWLINE_ASM;
 	asmFile << "\r\nend main";
+
+
+	string optCodeSegment = ASMParser::optimizedASM(codeSegment);
+
+	optAsmFile << ".model small\r\n";
+	optAsmFile << "\r\n.stack 100h\r\n";
+	optAsmFile << "\r\n.data\r\n" << dataSegment;
+	optAsmFile << "\r\n.code\r\n" << optCodeSegment;
+
+	optAsmFile << NEWLINE_ASM;
+	optAsmFile << "\r\nend main";
 }
 
 string setIndexInREG(const string &reg, const string &offsetVar) {
@@ -242,8 +254,10 @@ string memoryToMemory(const SymbolInfo &destSym, const SymbolInfo &srcSym) {
 	}
 	string srcMem = ASM_VAR_NAME(srcSym.getName()) + srcIdx;
 
-	code += "MOV DX," + srcMem + NEWLINE_ASM;
-	code += "MOV " + destMem + ", DX" + NEWLINE_ASM;
+	code += memorToReg("DX",srcMem);
+	code += regToMemory(destSym,"DX");
+//	code += "MOV DX," + srcMem + NEWLINE_ASM;
+//	code += "MOV " + destMem + ",DX" + NEWLINE_ASM;
 	return code;
 }
 

@@ -2,11 +2,11 @@
 // int a[5];
 int a,b;
 int l;
-int sum(int a)
-{   
-    if(!a) return 0;
-    return (a)+sum(a-1);
-}
+// int sum(int a)
+// {   
+//     if(!a) return 0;
+//     return (a)+sum(a-1);
+// }
 
 
 int main(){
@@ -15,7 +15,10 @@ int main(){
     // a=15;
     // b=21;
     int x;
-    x=sum(5);
+    x=a;
+    a=x;
+    x=a;
+    // x=sum(5);
     println(x);
     return 0;
 }

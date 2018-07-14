@@ -363,6 +363,7 @@ int main(int argc,char *argv[])
 	errorFile.open("log.txt");
 
 	asmFile.open("code.asm");
+	optAsmFile.open("optimized-code.asm");
 
 	yyparse();
 	logFile << "Total Lines : " << line_count << std::endl << std::endl;

@@ -12,11 +12,14 @@
 #define STRINGPARSER_STRINGPARSER_H
 
 
+#include <vector>
 #include <string>
 #include <algorithm>
 #include <locale>
 
 using std::string;
+using std::vector;
+using std::stringstream;
 
 class StringParser {
 //	static const string nwline = "\n", tab = "\t", slash = "\\";
@@ -54,8 +57,44 @@ public:
 		return str;
 	}
 
-	static int toInteger(const string& str){
+	static int toInteger(const string &str) {
 		return atoi(str.data());
+	}
+	// ============================================================================
+	//    Author: K Perkins
+	//    Date:   Jun 13, 2014
+	//    Taken From: http://programmingnotes.org/
+	//    File:  Strtok.cpp
+	//    Description: Demonstrates the use of a custom "strtok" function which
+	//      splits a string into individual tokens according to delimiters.
+	// ============================================================================
+
+	/**
+	* FUNCTION: str_tok
+	* USE: Splits a string into individual tokens and saves them into a vector.
+	* @param str: A std::string to be broken up into smaller std::strings (tokens).
+	* @param delimiter: A std::string containing the delimiter characters.
+	* @return: A vector containing all the found tokens in the string.
+	*/
+	// http://programmingnotes.org/
+	static vector<string> str_tok(const string &str, const string &delimiters) {
+		unsigned prev = 0;
+		unsigned long currentPos = 0;
+		vector <string> tokens;
+
+		// loop thru string until we reach the end
+		while ((currentPos = str.find_first_of(delimiters, prev)) != string::npos) {
+			if (currentPos > prev) {
+				tokens.push_back(str.substr(prev, currentPos - prev));
+			}
+			prev = static_cast<unsigned int>(currentPos + 1);
+		}
+		// if characters are remaining, save to vector
+		if (prev < str.length()) {
+			tokens.push_back(str.substr(prev, string::npos));
+		}
+		return tokens;
+
 	}
 };
 
@@ -102,146 +141,15 @@ public:
 			source.replace(static_cast<unsigned long>(i), find.length(), replace);
 	}
 
-	static bool isAlpha(char c){
-		return (c >= 'a' && c <= 'z')||(c >= 'A' && c <= 'Z')||c=='_';
+	static bool isAlpha(char c) {
+		return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_';
 	}
 
-	static bool isNumber(const string& s){
+	static bool isNumber(const string &s) {
 		for (char it : s) {
-			if(it <'0' || it >'9') return false;
+			if (it < '0' || it > '9') return false;
 		}
 		return true;
-	}
-};
-
-
-class CodeParser {
-public:
-
-	static string indent(const string &fileName)//Autoindent a file
-	{
-
-		int pos = 0, count = 0, j = 0;
-		string ch;
-		stringstream file(fileName);
-		pos = StringUtils::occCount(fileName, "\n");
-		vector<string> hold(static_cast<unsigned long>(pos + 1));//holds the actual content of the line.
-		vector<int> bracketcount(static_cast<unsigned long>(pos + 1));//keeps track of number of nested brackets
-
-		while (getline(file, hold[count])) {
-			count++;
-		}
-		int endline = count;
-		int p = 0;
-		while (p <= endline) {
-			bracketcount[p] = 0;
-			p++;
-		}
-		count = 0;
-		int len = 0, i = 0, current = 0;
-		while (count < endline) {
-			len = static_cast<int>(hold[count].length());
-			i = 0;
-			while (i <= len) {
-				if (hold[count][i] == '{') {
-					current = count;
-					while (current < endline) {
-						current++;
-						bracketcount[current]++;
-					}
-				}
-				if (hold[count][i] == '}') {
-					current = count;
-					while (current < endline) {
-						bracketcount[current]--;
-						current++;
-					}
-				}
-				i++;
-			}
-			count++;
-		}
-
-
-		stringstream file2;
-		// I'm probably just being overly cautious.
-		vector<string> indents(static_cast<unsigned long>(pos + 1));
-		p = 0;
-		while (p < endline) {
-			count = 0;
-			while (hold[p][count] == '\t')//check if there were already tabs in the file
-			{
-				count++;
-			}
-			while (bracketcount[p] > 0)//tells indents[p] how many indents should be in a line
-			{
-				bracketcount[p]--;
-				indents[p] += "\t";
-			}
-			if (count == 0)//if the line wasn't previously indented in the code
-			{
-				file2 << indents[p] << hold[p] << endl;
-			} else if (count > 0)//If there were already indents in the code then set them to the right amount
-			{
-				file2 << indents[p];
-				len = static_cast<int>(hold[p].length());
-				i = 0;
-				while (i < len - count) {
-					file2 << hold[p][i + count];
-					i++;
-				}
-				file2 << endl;
-			}
-			p++;
-		}
-		return file2.str();
-	}
-
-	static string formatCCode(const string &code) {
-		string formattedCode = code;
-
-		while (StringUtils::replaceAll(formattedCode, " ;", ";"));
-		StringUtils::replaceAll(formattedCode, ";", ";\n");
-		StringUtils::replaceAll(formattedCode, ";\n\n", ";\n");
-
-
-		while (StringUtils::replaceAll(formattedCode, "( ", "("));
-		while (StringUtils::replaceAll(formattedCode, " (", "("));
-		while (StringUtils::replaceAll(formattedCode, ") ", ")"));
-		while (StringUtils::replaceAll(formattedCode, " )", ")"));
-
-		while (StringUtils::replaceAll(formattedCode, "{ ", "{"));
-		while (StringUtils::replaceAll(formattedCode, " {", "{"));
-		while (StringUtils::replaceAll(formattedCode, "} ", "}"));
-		while (StringUtils::replaceAll(formattedCode, " }", "}"));
-
-
-		StringUtils::replaceAll(formattedCode, "{", "\n{\n");
-
-		StringUtils::replaceAll(formattedCode, "}", "\n}\n");
-		while (StringUtils::replaceAll(formattedCode, "\n\n}", "\n}"));
-		while (StringUtils::replaceAll(formattedCode, "}\n\n", "}\n"));
-
-		while (StringUtils::replaceAll(formattedCode, "  = ", " = "));
-		while (StringUtils::replaceAll(formattedCode, " =  ", " = "));
-
-		while (StringUtils::replaceAll(formattedCode, "  == ", " == "));
-		while (StringUtils::replaceAll(formattedCode, " ==  ", " == "));
-
-
-		StringUtils::replaceAll(formattedCode, "(", " ( ");
-		StringUtils::replaceAll(formattedCode, ")", " ) ");
-
-		while (StringUtils::replaceAll(formattedCode, " ++", "++"));
-		while (StringUtils::replaceAll(formattedCode, " --", "--"));
-
-		while (StringUtils::replaceAll(formattedCode, "\n ", "\n"));
-		while (StringUtils::replaceAll(formattedCode, " \n", "\n"));
-		while (StringUtils::replaceAll(formattedCode, "  ", " "));
-
-		if (formattedCode[0] == ' ') StringUtils::replaceFirst(formattedCode," ","");
-//		return indent(formattedCode);
-		return formattedCode;
 	}
 };
 
