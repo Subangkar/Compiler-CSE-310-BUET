@@ -12,7 +12,7 @@
 #define ASM_INT_TYPE " DW "
 
 
-#define FILE_OUTDEC_PROC "Assembly Procedures/Dec16bitOutput.asm"
+#define FILE_OUTDEC_PROC "Dec16bitOutput.asm"
 #define SYMBOL_TABLE_SIZE 73
 
 #include <iostream>
@@ -395,11 +395,11 @@ string funcBodyCode(SymbolInfo *funcSrc, SymbolInfo *cstmt) {
 	code = PROC_START(func->getName());
 	stack<string> memVars;
 	for (int i = 0; i <= maxTemp; ++i) {
-		memVars.push("t"+to_string(i));
+		memVars.push("t" + to_string(i));
 		code += stackOp("PUSH", memVars.top());
 	}
 	for (int i = 0; i <= maxpTemp; ++i) {
-		memVars.push("p"+to_string(i));
+		memVars.push("p" + to_string(i));
 		code += stackOp("PUSH", memVars.top());
 	}
 	for (const string &var:func->memberVars) {
@@ -410,7 +410,7 @@ string funcBodyCode(SymbolInfo *funcSrc, SymbolInfo *cstmt) {
 	code += cstmt->code;
 	code += addLabel(func->getReturnLabel());
 	if (func->getName() != "main") code += stackOp("POP", "AX");
-	while(!memVars.empty()){
+	while (!memVars.empty()) {
 		code += stackOp("POP", memVars.top());
 		memVars.pop();
 	}

@@ -1,11 +1,11 @@
 # Assume your parser(yacc/bison) file with .y extention is named simplecalc.y. The followings are the sequence of commands you need to give to compile your parser and scanner(from previous assignment and modified). Find the details of the commands used here from manual of flex and bison. Some explanations are given here also.
 
-bison -d -y -v GrammarParser.y	# -d creates the header file y.tab.h that helps in communication(i.e. pass tokens) between parser and scanner; -y is something similar to -o y.tab.c, that is it creates the parser; -v creates an .output file containing verbose descriptions of the parser states and all the conflicts, both those resolved by operator precedence and the unresolved ones
+bison -d -y -v 1505015.y	# -d creates the header file y.tab.h that helps in communication(i.e. pass tokens) between parser and scanner; -y is something similar to -o y.tab.c, that is it creates the parser; -v creates an .output file containing verbose descriptions of the parser states and all the conflicts, both those resolved by operator precedence and the unresolved ones
 echo '1'
 g++ -w -c -o y.o y.tab.c	# -w stops the list of warnings from showing; -c compiles and assembles the c code, -o creates the y.o output file
 
 echo '2'
-flex LexAnalyzer.l		#creates the lexical analyzer or scanner named lex.yy.c
+flex 1505015.l		#creates the lexical analyzer or scanner named lex.yy.c
 
 echo '3'
 g++ -w -c -o l.o lex.yy.c
