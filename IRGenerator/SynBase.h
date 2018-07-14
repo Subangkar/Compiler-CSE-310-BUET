@@ -416,6 +416,7 @@ SymbolInfo *getNotOpVal(SymbolInfo *factor) {
 	}
 	SymbolInfo op("==");
 	auto zero = getConstVal("0");
+	deleteTemp(factor);
 	return getReltnOpVal(factor, zero, &op);
 }
 
@@ -431,7 +432,7 @@ SymbolInfo *getUniAddOpVal(SymbolInfo *varVal, SymbolInfo *op) {
 	opVal = getConstVal(opVal, varVal->getVarType());
 	opVal->code = varVal->code;
 	opVal->code += minusMemoryValue(*opVal, *varVal);
-//	deleteTemp(varVal,op);
+	deleteTemp(varVal,op);
 	return opVal;
 }
 
@@ -472,7 +473,7 @@ SymbolInfo *getFuncCallValue(SymbolInfo *funcVal, SymbolInfo *arguments) {
 //		if (func->isVoidFunc()) printErrorLog("Function " + funcVal->getName() + " returns void");
 	}
 	clearFunctionArgs();
-//	deleteTemp(funcVal,arguments);
+	deleteTemp(funcVal,arguments);
 	return retVal;
 }
 

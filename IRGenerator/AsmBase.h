@@ -322,7 +322,6 @@ void printDebug(const string &);
 void printErrorLog(const string &);
 
 void deleteTemp(SymbolInfo *sym1, SymbolInfo *sym2 = nullptr, SymbolInfo *sym3 = nullptr, SymbolInfo *sym4 = nullptr) {
-	return;
 	if (sym1 != nullptr && sym1->getType() == TEMPORARY)delete sym1;
 	if (sym2 != nullptr && sym2->getType() == TEMPORARY)delete sym2;
 	if (sym3 != nullptr && sym3->getType() == TEMPORARY)delete sym3;
