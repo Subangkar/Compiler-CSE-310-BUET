@@ -10,7 +10,7 @@ int l;
 int sumf(int a,int b)
 {   
     int t;
-    if(!a) return 0;
+    if(!a && 1<2) return 0;
     return (a+b)+sumf(a-1,b-1);
 }
 
@@ -29,19 +29,15 @@ int subf(int a,int b)
 int main(){
     int a,b,i;
     int y[3];
-    l=10;
-    a=15;
-    b=21;
     y[2]=4;
     int x;
-    // a=y[2];
-    x=a;
-    // 7&&8;
-    x=a;
+    x=y[2]++;
+    x=x;
+    x=x;
     a=x;
     x=a;
-    x=y[2];
-    x=fact(7);
+    x=sumf(x,x+1);
+    // x=fact(7);
     println(x);
     return 0;
 }

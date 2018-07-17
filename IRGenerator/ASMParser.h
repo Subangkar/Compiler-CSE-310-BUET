@@ -47,7 +47,7 @@ public:
 				vector<string> cmdsDest = StringParser::str_tok(destInst, "\t ,");
 				setOps(cmdsDest, op2, dest2, src2);
 				if (!destInst.empty() && op1 == "MOV" && op2 == "MOV") {
-					if (dest2 == src1 && src2 == dest1) {
+					if ((dest2 == src1 && src2 == dest1) || (dest1 == dest2 && src1 == src2)) {
 						d++;
 						continue;
 					}
